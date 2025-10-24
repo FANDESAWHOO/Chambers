@@ -20,7 +20,7 @@ public class GameTask extends BukkitRunnable {
 		} else if (game.getInvincibilityTime() == 0 && game.getTotalTime() == 60) {
 			Bukkit.broadcastMessage(ChatColor.RED + "Invincibility is now disabled and PvP has now been enabled!");
 		}
-		if (game.getTotalTime() == 30) {
+		if (game.getTotalTime() == 60) {
 			String kothName = game.getKothName();
 			Koth koth = new Koth(kothName == null ? game.getMapName() : kothName, 480);
 			Chambers.getInstance().getKothManager().setKoth(koth);

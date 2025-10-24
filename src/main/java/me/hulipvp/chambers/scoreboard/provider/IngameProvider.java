@@ -36,7 +36,7 @@ public class IngameProvider implements ScoreboardProvider {
 		}
 		case PLAYING: {
 			lines.add("&e&lTeam:&r " + profile.getTeam().getFormattedName());
-			lines.add("&4&lDTR:&c " + profile.getTeam().getDtr());
+			lines.add("&4&lDTR:&c " + profile.getTeam().getFormattedDTR());
 			lines.add("&a&lBalance:&c $" + profile.getBalance());
 			if (plugin.getGameManager().getGame().getInvincibilityTime() > 0) {
 				lines.add("&9&lInvincibility:&c " + formatIntToTime(plugin.getGameManager().getGame().getInvincibilityTime()));

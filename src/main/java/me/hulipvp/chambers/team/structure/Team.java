@@ -13,6 +13,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.text.DecimalFormat;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -57,7 +58,8 @@ public class Team {
 		//	Chambers.getInstance().getClaimManager().addClaim(this.claim);
 		//}
 	}
-	
+
+    
 	protected void runKothCap() {
 	  if (Chambers.getInstance().getDataFile().getString("TEAMS." + "KOTH_CAP" + ".CORNERONE") != null && Chambers.getInstance().getDataFile().getString("TEAMS." + "KOTH_CAP" + ".CORNERTWO") != null) {
           	this.claim = new Claim(LocationUtil.deserializeLocation(Chambers.getInstance().getDataFile().getString("TEAMS." + "KOTH_CAP" + ".CORNERONE")), LocationUtil.deserializeLocation(Chambers.getInstance().getDataFile().getString("TEAMS." + "KOTH_CAP" + ".CORNERTWO")), this);
@@ -83,7 +85,14 @@ public class Team {
 	public String getFormattedName() {
 		return this.type.name().contains("KOTH") ? Chambers.getInstance().getKothManager().getFormattedKothName() : this.type.getColor() + this.type.getName();
 	}
-
+	private String formatDouble(double value) {
+	    return new DecimalFormat("0.#").format(value);
+	}
+	
+	public String getFormattedDTR() {
+		return formatDouble(this.dtr);
+	}
+	
 	/**
 	 * Add a member to the Team
 	 * 

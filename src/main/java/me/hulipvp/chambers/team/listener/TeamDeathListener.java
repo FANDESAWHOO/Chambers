@@ -16,7 +16,7 @@ public class TeamDeathListener implements Listener {
 		if (profile.getTeam() != null) {
 			profile.getTeam().setDtr(profile.getTeam().getDtr() - 1);
 			profile.getTeam().sendMessage(ChatColor.RED + "Member Death: " + ChatColor.RESET + profile.getPlayer().getName());
-			profile.getTeam().sendMessage(ChatColor.RED + "DTR: " + ChatColor.RESET + profile.getTeam().getDtr());
+			profile.getTeam().sendMessage(ChatColor.RED + "DTR: " + ChatColor.RESET + profile.getTeam().getFormattedDTR());
 		}
 	}
 

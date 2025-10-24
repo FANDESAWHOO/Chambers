@@ -27,7 +27,8 @@ public class KothMoveListener implements Listener {
 			if (profile.getProfileStatus() != ProfileStatus.PLAYING) {
 				return;
 			}
-			koth.getCapQueue().add(profile);
+			if (event.getClaim().isY(event.getPlayer().getLocation()))
+				koth.getCapQueue().add(profile);
 		}
 	}
 	
