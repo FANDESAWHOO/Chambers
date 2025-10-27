@@ -1,12 +1,14 @@
 package me.hulipvp.chambers.scoreboard.provider;
 
-import me.hulipvp.chambers.scoreboard.ScoreboardProvider;
+
 import org.bukkit.entity.Player;
+
+import me.hulipvp.chambers.util.scoreboard.AssembleAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class EndProvider implements ScoreboardProvider {
+public class EndProvider implements AssembleAdapter {
 
 	@Override
 	public String getTitle(Player player) {

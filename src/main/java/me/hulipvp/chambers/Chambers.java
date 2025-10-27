@@ -1,9 +1,13 @@
 package me.hulipvp.chambers;
 
+import org.bukkit.Bukkit;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
+
 
 import lombok.Getter;
 import me.hulipvp.chambers.claim.ClaimManager;
+import me.hulipvp.chambers.client.ClientManager;
 import me.hulipvp.chambers.command.ChambersCommand;
 import me.hulipvp.chambers.command.commands.*;
 import me.hulipvp.chambers.config.DataFile;
@@ -13,9 +17,10 @@ import me.hulipvp.chambers.game.command.general.*;
 import me.hulipvp.chambers.koth.KothManager;
 import me.hulipvp.chambers.listener.ListenerManager;
 import me.hulipvp.chambers.map.MapHandler;
+import me.hulipvp.chambers.map.command.MapCommand;
 import me.hulipvp.chambers.profile.ProfileManager;
-import me.hulipvp.chambers.scoreboard.ScoreboardWrapper;
-import me.hulipvp.chambers.scoreboard.provider.ProviderResolver;
+import me.hulipvp.chambers.scoreboard.ProviderResolver;
+import me.hulipvp.chambers.scoreboard.TabProvider;
 import me.hulipvp.chambers.shop.EntityManager;
 import me.hulipvp.chambers.shop.VillagerManager;
 import me.hulipvp.chambers.team.TeamManager;
@@ -28,6 +33,9 @@ import me.hulipvp.chambers.team.command.normal.TeamLocationCommand;
 import me.hulipvp.chambers.team.command.normal.TeamShowCommand;
 import me.hulipvp.chambers.timer.TimerManager;
 import me.hulipvp.chambers.util.commandapi.CommandFramework;
+import me.hulipvp.chambers.util.scoreboard.Assemble;
+import me.hulipvp.chambers.util.scoreboard.AssembleStyle;
+import me.hulipvp.chambers.util.scoreboard.tab.TabHandler;
 
 
 /**
@@ -53,7 +61,9 @@ import me.hulipvp.chambers.util.commandapi.CommandFramework;
  */
 @Getter
 public class Chambers extends JavaPlugin {
-    @Getter
+	
+	/* SINGLE, like me, plugin instance */
+	@Getter
 	private static Chambers instance;
 	
 	/* Game Managers */
@@ -66,9 +76,8 @@ public class Chambers extends JavaPlugin {
 	private VillagerManager villagerManager;
 	private MapHandler mapHandler;
     private TimerManager timerManager;
+    private ClientManager clientManager;
     
-	/* Scoreboard */
-	private ScoreboardWrapper scoreboardWrapper;
 
 	/* Commands & Listeners */
 	private CommandFramework commandFramework;
@@ -88,7 +97,16 @@ public class Chambers extends JavaPlugin {
 		listenerManager = new ListenerManager();
 		villagerManager = new VillagerManager();
         mapHandler = new MapHandler();
-		scoreboardWrapper = new ScoreboardWrapper(this, new ProviderResolver());
+        clientManager = new ClientManager();
+        // Start Instance.
+    	Assemble assemble = new Assemble(this, new ProviderResolver());
+    	
+    	// Set Interval (Tip: 20 ticks = 1 second).
+    	assemble.setTicks(2);
+    	
+    	// Set Custom Style (Tip: This will set the scoreboard scores to range from 8 to -7)
+    	assemble.setAssembleStyle(AssembleStyle.KOHI);
+    	new TabHandler(new TabProvider(), this, 20L);
         timerManager = new TimerManager(this);
 		commandFramework = new CommandFramework(this);
 		getServer().getScheduler().runTaskLater(this, () -> {
@@ -132,8 +150,10 @@ public class Chambers extends JavaPlugin {
 		new TeamLocationCommand();
 		new TeamShowCommand();
 		new EntityManager();
+		new MapCommand();
 	}
 	
-
-	
+	public void registerListener(Listener listener) {
+		Bukkit.getPluginManager().registerEvents(listener, instance);
+	}
 }

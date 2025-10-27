@@ -1,0 +1,153 @@
+package me.hulipvp.chambers.scoreboard;
+
+
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+
+import me.hulipvp.chambers.Chambers;
+import me.hulipvp.chambers.game.GameManager;
+import me.hulipvp.chambers.game.structure.GameStatus;
+import me.hulipvp.chambers.profile.structure.Profile;
+import me.hulipvp.chambers.team.structure.Team;
+import me.hulipvp.chambers.util.BukkitUtils;
+import me.hulipvp.chambers.util.scoreboard.tab.entry.TabElement;
+import me.hulipvp.chambers.util.scoreboard.tab.entry.TabElementHandler;
+
+import java.text.DecimalFormat;
+
+public class TabProvider implements TabElementHandler {
+
+    private final GameManager information = Chambers.getInstance().getGameManager();
+
+    @Override
+    public TabElement getElement(Player player) {
+        TabElement element = new TabElement();
+        Profile profile = Chambers.getInstance().getProfileManager().getProfileByUuid(player.getUniqueId());
+        Team team = Chambers.getInstance().getTeamManager().getTeamByMember(player.getUniqueId());
+        Team green = Chambers.getInstance().getTeamManager().getTeamByName("Green");
+        Team blue = Chambers.getInstance().getTeamManager().getTeamByName("Blue");
+        Team red = Chambers.getInstance().getTeamManager().getTeamByName("Red");
+        Team yellow = Chambers.getInstance().getTeamManager().getTeamByName("Yellow");
+        Team locTeam = Chambers.getInstance().getClaimManager().getTeamAt(player.getLocation());
+        // ==============================
+        // Column 0 - Server & Game Info
+        // ==============================
+        element.add(0,1, "&6Player Info&7:");
+        element.add(0,2,"&7Kills: &f"+profile.getKills());
+        element.add(0,3,"&7Deaths: &f"+profile.getDeaths());
+
+        element.add(0, 5, "&6Location");
+    
+        element.add(0, 6, locTeam.getColor() + locTeam.getName());
+        
+        element.add(0, 7, "(" + player.getLocation().getBlockX() + ", " + player.getLocation().getBlockZ() + ")");
+        
+        // ==============================
+        // Column 1 - Team Info
+        // ==============================
+
+        element.add(1, 1, "&6Team Info");
+
+        if (team != null) {
+            element.add(1, 2 , "&eDTR&7: &f" + team.getFormattedDTR());
+            element.add(1, 3, "&eOnline&7: &f" + team.getMembers().size() + "/5");
+        } else {
+            element.add(1, 2, "&eSelect a team...");
+        }
+        
+
+        element.add(1,5, "&aGreen Team &7[&a"+green.getFormattedDTR()+"&7]");
+        
+        int gree = 6;     
+        for (Player member : green.getOnlinePlayers()) {
+            if (member != null) {
+               element.add(1,gree,"&a" + member.getName());
+               gree++;
+            }
+        }
+        
+        element.add(1,12 , "&9Blue Team &7[&a"+blue.getFormattedDTR()+"&7]");
+        
+        int blu = 13;
+        for (Player member : blue.getOnlinePlayers()) {
+            if (member != null) {
+               element.add(1,blu,"&9" + member.getName());
+               blu++;
+            }
+        }
+        
+        // ==============================
+        // Column 2 - Teams List
+        
+        // ==============================
+        element.add(0,12, "&cRed Team &7[&a"+red.getFormattedDTR()+"&7]");
+        int re = 13;
+        for (Player member : red.getOnlinePlayers()) {
+            if (member != null) {
+                element.add(0,re,"&c" + member.getName());
+                re++;
+            }
+        }
+        // ==============================
+        // Column 3 - Game Info
+        // ==============================
+        element.add(2, 1, "&6Game Info");
+        if (information.getGame().getStatus().equals(GameStatus.LOBBY)) {
+        	element.add(2,2,"&7Map: &fClassic");
+        } else {
+        	element.add(2,2,"&7Game Time: &f"+formatIntToTime(information.getGame().getTotalTime()));
+        }
+    	element.add(2,3,"&7Player: &f"+Bukkit.getOnlinePlayers().size());
+    	
+        String kothInfo = (information.getGame().getTotalTime() < 60) ?
+        "Starts in " + BukkitUtils.niceTime(60 - information.getGame().getTotalTime(), false) :
+        BukkitUtils.niceTime(Chambers.getInstance().getKothManager().getKoth().getMaxCapTime(), false);
+        element.add(2,5,"&6Classic:");
+        element.add(2,6, "&70,0");
+        element.add(2,7, "&7"+ kothInfo);
+
+        element.add(2,12, "&eYellow Team &7[&a"+yellow.getFormattedDTR()+"&7]");
+        
+
+        
+        int yel = 13;
+        for (Player member : yellow.getOnlinePlayers()) {
+            if (member != null) {
+                element.add(2,yel,"&e" + member.getName());
+                yel++;
+            }
+        }
+        
+
+        // ==============================
+        // Column 3 - Admin Info
+        // ==============================
+        if (player.hasPermission("bunkers.admin")) {
+            element.add(3, 1, "&6Server Information");
+            element.add(3, 2, "&eTicks Per Sec&7: &f" + new DecimalFormat("#.##").format(Bukkit.spigot().getTPS()[0]));
+            element.add(3, 3, "&ePerformance&7: &f" + new DecimalFormat("#.##").format(getLag()) + "%");
+            element.add(3, 4, "&eRam&7: &f" + ((Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1048576L) 
+                    + "/" + Runtime.getRuntime().totalMemory() / 1048576L + "MB");
+        }
+
+        return element;
+    }
+    
+    public String formatIntToTime(int i) {
+		if (i < 3600) {
+			int minutes = (i - (i % 60)) / 60;
+			int seconds = i % 60;
+			return ((minutes < 10) ? "0" + minutes : String.valueOf(minutes)) + ":" + ((seconds < 10) ? "0" + seconds : String.valueOf(seconds));
+		} else if (i > 3600 && i < 3600 * 24) {
+			int minutes = (i / 60) % 60;
+			int hours = (i / 60) / 60;
+			int seconds = i % 60;
+			return hours + ":" + ((minutes < 10) ? "0" + minutes : String.valueOf(minutes)) + ":" + ((seconds < 10) ? "0" + seconds : String.valueOf(seconds));
+		}
+		return "00:00";
+	}
+    private double getLag() {
+        double tps = Bukkit.spigot().getTPS()[0];
+        return tps / 20 * 100 > 100 ? 100 : tps / 20 * 100;
+    }
+}

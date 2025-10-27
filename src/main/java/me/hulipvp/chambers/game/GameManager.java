@@ -75,7 +75,7 @@ public class GameManager {
 		            this.cancel(); 
 		        } else if (time == 0) {
 		            for (Player player : Bukkit.getOnlinePlayers()) {
-		                player.kickPlayer("Thanks for playing Chambers beta, join back soon!");
+		                player.kickPlayer("Thanks for playing PurePvP, join back soon!");
 		            }
 		        } else if (time % 2 == 0) {
 		            String msg = (winner == null) 
@@ -122,6 +122,7 @@ public class GameManager {
 		Bukkit.broadcastMessage(" ");
 		Bukkit.broadcastMessage(ChatColor.YELLOW + "The game has now started! Good luck!");
 		Bukkit.broadcastMessage(" ");
+		Chambers.getInstance().getVillagerManager().spawnAllVillagers();
 	}
 
 	/**

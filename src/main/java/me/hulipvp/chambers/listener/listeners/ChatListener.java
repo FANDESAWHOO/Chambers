@@ -24,13 +24,13 @@ public class ChatListener implements Listener {
 			if (profile.getTeam() == null) {
 				event.setFormat(ChatColor.WHITE + event.getPlayer().getName() + ": " + event.getMessage());
 			} else {
-				event.setFormat(getGlobalFormat(event.getPlayer(), profile, message.substring(1)));
+				event.setFormat(getGlobalFormat(event.getPlayer(), profile, message));
 			}
 			return;
 		}
 		
 		if (profile.getTeam() == null) {
-			event.setFormat(getSpectatorFormat(event.getPlayer(), message.substring(1)));
+			event.setFormat(getSpectatorFormat(event.getPlayer(), message));
 			return;
 		}
 		

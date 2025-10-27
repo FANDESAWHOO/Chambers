@@ -2,7 +2,8 @@ package me.hulipvp.chambers.scoreboard.provider;
 
 import me.hulipvp.chambers.game.structure.GameStatus;
 import me.hulipvp.chambers.profile.structure.Profile;
-import me.hulipvp.chambers.scoreboard.ScoreboardProvider;
+import me.hulipvp.chambers.util.scoreboard.AssembleAdapter;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -10,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class LobbyProvider implements ScoreboardProvider {
+public class LobbyProvider implements AssembleAdapter {
 
 	@Override
 	public String getTitle(Player player) {

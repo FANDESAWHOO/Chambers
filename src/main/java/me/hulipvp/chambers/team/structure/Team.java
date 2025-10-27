@@ -32,6 +32,7 @@ public class Team {
 	private double dtr;
 	private Location home;
 	private Claim claim;
+	private UUID uniqueID;
 
 	public Team(TeamType type) {
 		this.type = type;
@@ -41,6 +42,7 @@ public class Team {
 		this.members = new HashSet<>();
 		this.offline = new HashSet<>();
 		this.dtr = 1.1;
+		this.uniqueID = UUID.randomUUID();
         new BukkitRunnable() {
             @Override
             public void run() {

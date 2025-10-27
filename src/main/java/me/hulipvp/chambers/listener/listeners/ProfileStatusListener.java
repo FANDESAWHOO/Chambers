@@ -20,7 +20,7 @@ public class ProfileStatusListener implements Listener {
 			event.setCancelled(true);
 		}
 	}
-	
+		
 	@EventHandler
 	public void onPlace(BlockPlaceEvent event) {
 		Profile profile = Chambers.getInstance().getProfileManager().getProfileByUuid(event.getPlayer().getUniqueId());
@@ -28,6 +28,15 @@ public class ProfileStatusListener implements Listener {
 			event.setCancelled(true);
 		}
 	}
+	
+/*	@EventHandler
+	public void onInteract(PlayerInteractEvent event) {
+		Profile profile = Chambers.getInstance().getProfileManager().getProfileByUuid(event.getPlayer().getUniqueId());
+		if (profile.getProfileStatus() != ProfileStatus.PLAYING) {
+			if (!profile.isBypassMode())
+			event.setCancelled(true);
+		}
+	}*/
 	
 	@EventHandler
 	public void onDrop(PlayerDropItemEvent event) {

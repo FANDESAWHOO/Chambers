@@ -36,9 +36,12 @@ public abstract class PaginatedMenu implements IMenu {
 
 
     public void setPage(int page) {
+        if (page < 0) page = 0;
+        if (page >= getTotalPages()) page = getTotalPages() - 1;
+
         this.page = page;
 
-        for (HumanEntity viewer : getInventory().getViewers()) {
+        for (HumanEntity viewer : inventory.getViewers()) {
             InventoryUtil.changeTitle((Player) viewer, getTitle());
         }
 

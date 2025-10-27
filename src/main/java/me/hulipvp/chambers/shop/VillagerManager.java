@@ -2,11 +2,8 @@ package me.hulipvp.chambers.shop;
 
 import java.util.Arrays;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Villager;
-import org.bukkit.entity.Villager.Profession;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import me.hulipvp.chambers.Chambers;

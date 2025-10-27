@@ -21,14 +21,18 @@ public class KothMoveListener implements Listener {
 			return;
 		}
 		Team team = event.getClaim().getOwner();
+		if (team == null) 
+			return;
+		
 		if (team.getType() == TeamType.KOTH_CAP) {
 			Koth koth = Chambers.getInstance().getKothManager().getKoth();
 			Profile profile = Chambers.getInstance().getProfileManager().getProfileByUuid(event.getPlayer().getUniqueId());
 			if (profile.getProfileStatus() != ProfileStatus.PLAYING) {
 				return;
 			}
-			if (event.getClaim().isY(event.getPlayer().getLocation()))
-				koth.getCapQueue().add(profile);
+			if (!event.getClaim().isYInside(event.getPlayer().getLocation()))
+				return;
+			koth.getCapQueue().add(profile);
 		}
 	}
 	

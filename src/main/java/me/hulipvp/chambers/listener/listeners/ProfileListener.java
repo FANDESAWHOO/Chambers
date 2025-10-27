@@ -17,7 +17,7 @@ import me.hulipvp.chambers.Chambers;
 import me.hulipvp.chambers.game.structure.Game;
 import me.hulipvp.chambers.profile.structure.Profile;
 import me.hulipvp.chambers.profile.structure.ProfileStatus;
-
+// TODO: We need to make the items with ItemBuilder
 public class ProfileListener implements Listener {
 
 	private Chambers plugin = Chambers.getInstance();
@@ -42,6 +42,7 @@ public class ProfileListener implements Listener {
 			inventory.setItem(4, new ItemStack(Material.NETHER_STAR));
 			inventory.setItem(5, new ItemStack(Material.EMERALD));
 			inventory.setItem(6, new ItemStack(Material.GOLD_INGOT));
+			inventory.setItem(8, new ItemStack(Material.EMPTY_MAP));
 			player.updateInventory();
 			event.setJoinMessage(player.getName() + ChatColor.YELLOW + " has joined. " + ChatColor.RED + "(" + Bukkit.getOnlinePlayers().size() + "/20)");
 			plugin.getGameManager().tryStart();

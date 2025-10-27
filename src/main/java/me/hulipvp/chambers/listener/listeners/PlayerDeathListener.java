@@ -35,7 +35,7 @@ public class PlayerDeathListener implements Listener {
 			}
 			profile.setRespawnTime(30);
 			profile.setProfileStatus(ProfileStatus.RESPAWNING);
-			new RespawnTask(profile, player, player.getLocation(), 30).runTaskTimerAsynchronously(Chambers.getInstance(), 0L, 20L);
+			new RespawnTask(profile, player, player.getLocation(), 30).runTaskTimer(Chambers.getInstance(), 0L, 20L);
 		}
 	}
 	

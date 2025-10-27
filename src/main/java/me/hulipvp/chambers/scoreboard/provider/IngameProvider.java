@@ -3,8 +3,8 @@ package me.hulipvp.chambers.scoreboard.provider;
 import me.hulipvp.chambers.listener.listeners.EnderpearlListener;
 import me.hulipvp.chambers.profile.structure.Profile;
 import me.hulipvp.chambers.profile.structure.ProfileStatus;
-import me.hulipvp.chambers.scoreboard.ScoreboardProvider;
 import me.hulipvp.chambers.util.DurationFormatter;
+import me.hulipvp.chambers.util.scoreboard.AssembleAdapter;
 
 import org.bukkit.entity.Player;
 
@@ -12,7 +12,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-public class IngameProvider implements ScoreboardProvider {
+public class IngameProvider implements AssembleAdapter {
 
 	@Override
 	public String getTitle(Player player) {
@@ -57,5 +57,17 @@ public class IngameProvider implements ScoreboardProvider {
 
 		return lines;
 	}
-
+	public String formatIntToTime(int i) {
+		if (i < 3600) {
+			int minutes = (i - (i % 60)) / 60;
+			int seconds = i % 60;
+			return ((minutes < 10) ? "0" + minutes : String.valueOf(minutes)) + ":" + ((seconds < 10) ? "0" + seconds : String.valueOf(seconds));
+		} else if (i > 3600 && i < 3600 * 24) {
+			int minutes = (i / 60) % 60;
+			int hours = (i / 60) / 60;
+			int seconds = i % 60;
+			return hours + ":" + ((minutes < 10) ? "0" + minutes : String.valueOf(minutes)) + ":" + ((seconds < 10) ? "0" + seconds : String.valueOf(seconds));
+		}
+		return "00:00";
+	}
 }

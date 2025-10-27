@@ -3,16 +3,12 @@ package me.hulipvp.chambers.task;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import me.hulipvp.chambers.Chambers;
-import me.hulipvp.chambers.game.structure.GameStatus;
 import me.hulipvp.chambers.koth.structure.Koth;
 import me.hulipvp.chambers.profile.structure.Profile;
-import me.hulipvp.chambers.profile.structure.ProfileStatus;
-import me.hulipvp.chambers.team.structure.Team;
 import me.hulipvp.chambers.util.MathUtil;
 
 public class KothTask extends BukkitRunnable {
@@ -22,9 +18,9 @@ public class KothTask extends BukkitRunnable {
 	public KothTask() {
 		times = new HashMap<>();
 		
-		times.put(300, 300);
-		times.put(1800, 240);
-		times.put(2700, 180);
+		times.put(600, 240);
+		times.put(900, 180);
+		times.put(1200, 120);
 	}
 
 	@Override
@@ -32,20 +28,15 @@ public class KothTask extends BukkitRunnable {
 		if (Chambers.getInstance().getKothManager().getKoth() != null) {
 			Koth koth = Chambers.getInstance().getKothManager().getKoth();
 			if (koth.getCapper() != null) {
-			//	if (koth.getCapper().getProfileStatus().equals(ProfileStatus.SPECTATING) || koth.getCapper().getProfileStatus().equals(ProfileStatus.RESPAWNING)) {
-			//		koth.setCapper(null);			
-			//	}
-				/*if (koth.getTime()  <= 0) {
-				Bukkit.broadcastMessage(Chambers.getInstance().getKothManager().getKothFormat() + " " + koth.getName() + ChatColor.YELLOW + " has been capped by " + koth.getCapper().getPlayer().getName());
-				koth.getCapper().getPlayer().sendMessage(Chambers.getInstance().getKothManager().getKothFormat() + ChatColor.YELLOW +" You controlled the koth "+koth.getName());
-				Chambers.getInstance().getGameManager().stop(koth.getCapper().getTeam());
-				cancel();
-			   }*/
 				koth.setTime(koth.getTime() - 1);
 				if (koth.getTime() % 30 == 0) {
 					Chambers.getInstance().getKothManager().broadcastMessage(ChatColor.BLUE + koth.getName() + ChatColor.YELLOW + " is being controlled. " + ChatColor.RED + "(" + MathUtil.formatIntToTime(koth.getTime()) + ")");
 				}
-			
+	            if (koth.getTime() <= 0) {
+	                handleKothWin(koth);
+	                cancel();
+	                return;
+	            }
 			} else {
 				koth.setTime(koth.getMaxCapTime());
 			}
@@ -58,6 +49,15 @@ public class KothTask extends BukkitRunnable {
 			adjustKothTime(koth);
 		}
 	}
+	
+    private void handleKothWin(Koth koth) {
+        Profile capper = koth.getCapper();
+        Chambers.getInstance().getKothManager().broadcastMessage(ChatColor.GOLD + "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        Chambers.getInstance().getKothManager().broadcastMessage(ChatColor.YELLOW + "The team " + ChatColor.BLUE
+                + capper.getTeam().getName() + ChatColor.YELLOW + " has captured " + ChatColor.BLUE + koth.getName() + ChatColor.YELLOW + "!");
+        Chambers.getInstance().getKothManager().broadcastMessage(ChatColor.GOLD + "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        Chambers.getInstance().getGameManager().stop(koth.getCapper().getTeam());
+    }
 	
 	private void adjustKothTime(Koth koth) {
 		int gameTime = Chambers.getInstance().getGameManager().getGame().getTotalTime();
@@ -72,4 +72,3 @@ public class KothTask extends BukkitRunnable {
 	}
 	
 }
-

@@ -37,9 +37,11 @@ public class EnderpearlListener implements Listener {
 	private int enderpearlCooldownTime;
 	private Set<Material> blockedPearlTypes;
 	private static Map<Player, Long> enderpearlCooldownMap;
+	private static Map<Player, Float> exp;
 
 	public EnderpearlListener() {
 		enderpearlCooldownMap = new HashMap<>();
+		exp = new HashMap<>();
 		enderpearlCooldownTime = 16;
 		blockedPearlTypes = Sets.immutableEnumSet(Material.THIN_GLASS,
 				new Material[] { Material.IRON_FENCE, Material.FENCE, Material.NETHER_FENCE, Material.FENCE_GATE,
@@ -52,12 +54,14 @@ public class EnderpearlListener implements Listener {
 	public void putCooldown(Player player, long time) {
 		long value = System.currentTimeMillis() + time * 1000L;
 		enderpearlCooldownMap.put(player, value);
+		exp.put(player, player.getExp());
 	}
 
 	public void removeCooldown(Player player) {
-		enderpearlCooldownMap.remove(player);
+		enderpearlCooldownMap.remove(player);		
 		player.setLevel(0);
-		player.setExp(0.0F);
+		player.setExp(exp.get(player));
+		exp.remove(player);
 	}
 
 	public static boolean hasCooldown(Player player) {

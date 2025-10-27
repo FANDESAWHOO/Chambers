@@ -2,9 +2,6 @@ package me.hulipvp.chambers.listener;
 
 import java.util.stream.Stream;
 
-import org.bukkit.Bukkit;
-import org.bukkit.plugin.PluginManager;
-
 import me.hulipvp.chambers.Chambers;
 import me.hulipvp.chambers.claim.listener.ClaimInteractListener;
 import me.hulipvp.chambers.claim.listener.ClaimMoveListener;
@@ -38,7 +35,7 @@ public class ListenerManager {
 	 * Registers all of the Listeners on the server
 	 */
 	public void registerListeners() {
-		PluginManager pluginManager = Bukkit.getServer().getPluginManager();
+		
 		Stream.of(
 				new ClaimInteractListener(),
 				new ClaimMoveListener(),
@@ -59,7 +56,7 @@ public class ListenerManager {
 				new CaveListener(),
 				new EnderpearlListener(),
 				new DeathMessageListener()
-		).forEach(listener -> pluginManager.registerEvents(listener, Chambers.getInstance()));
+		).forEach(listener -> Chambers.getInstance().registerListener(listener));
 	}
 
 }

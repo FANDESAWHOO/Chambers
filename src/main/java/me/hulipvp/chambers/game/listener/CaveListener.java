@@ -6,8 +6,11 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.scheduler.BukkitRunnable;
+
 
 import me.hulipvp.chambers.Chambers;
 import me.hulipvp.chambers.game.structure.Game;
@@ -40,26 +43,33 @@ public class CaveListener implements Listener {
             // --- Modificamos el drop ---
             event.setCancelled(true);
             ItemStack drop = null;
+            int exp = 0;
             if (type == Material.IRON_ORE) {
                 drop = new ItemStack(Material.IRON_INGOT, 1);
+                exp = 1;
             } else if (type == Material.GOLD_ORE) {
+            	exp = 2;
                 drop = new ItemStack(Material.GOLD_INGOT, 1);
             } else if (type == Material.COAL_ORE){
+            	exp = 1;
                 drop = new ItemStack(Material.COAL, 1); // otros ores normal
             } else if (type == Material.DIAMOND_ORE) {
+            	exp = 3;
             	drop = new ItemStack(Material.DIAMOND);
             } else {
                 drop = new ItemStack(type);
             }
-            event.getPlayer().getInventory().addItem(drop);
-
-            // Reemplazamos por cobblestone inmediatamente
+            event.getPlayer().giveExp(exp);
+            if (!isEmpty(event.getPlayer().getInventory(), false))
+            	event.getPlayer().getInventory().addItem(drop);
+            else 
+            	event.getBlock().getWorld().dropItemNaturally(block.getLocation(), drop);
             new BukkitRunnable() {
                 @Override
                 public void run() {
                     block.setType(Material.COBBLESTONE);
 
-                    // Restauramos el mineral después de 1 minuto
+
                     new BukkitRunnable() {
                         @Override
                         public void run() {
@@ -73,7 +83,6 @@ public class CaveListener implements Listener {
             }.runTaskLater(Chambers.getInstance(), 2L); // 2 ticks = 0.1 s
         }
 
-        // Restauración de cobble generado
         if (type == Material.COBBLESTONE && regeneratedBlocks.containsKey(key)) {
             Material oreType = regeneratedBlocks.get(key);
             new BukkitRunnable() {
@@ -85,7 +94,31 @@ public class CaveListener implements Listener {
             }.runTaskLater(Chambers.getInstance(), 60 * 20L);
         }
     }
+    
+	public static boolean isEmpty(Inventory inventory) {
+		return isEmpty(inventory, true);
+	}
 
+	public static boolean isEmpty(Inventory inventory, boolean checkArmour) {
+		ItemStack[] contents;
+		boolean result = true;
+		for (ItemStack content2 : contents = inventory.getContents()) {
+			if (content2 == null || content2.getType() == Material.AIR) continue;
+			result = false;
+			break;
+		}
+		if (!result) {
+			return false;
+		}
+		if (checkArmour && inventory instanceof PlayerInventory) {
+			for (ItemStack content2 : contents = ((PlayerInventory) inventory).getArmorContents()) {
+				if (content2 == null || content2.getType() == Material.AIR) continue;
+				result = false;
+				break;
+			}
+		}
+		return result;
+	}
     private String serializeLocation(Block block) {
         return block.getWorld().getName() + "," + block.getX() + "," + block.getY() + "," + block.getZ();
     }
