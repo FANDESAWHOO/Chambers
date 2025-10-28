@@ -20,7 +20,7 @@ public class Game {
 	private int totalTime, countdownTime, invincibilityTime;
 	private Set<String> offline;
 	private Team winner;
-	private String mapName, kothName;
+	private String mapName, kothName; // TODO: change to use Map (Can be nullable until the people vote one.)
 	private Location spawnLocation;
 
 	/**

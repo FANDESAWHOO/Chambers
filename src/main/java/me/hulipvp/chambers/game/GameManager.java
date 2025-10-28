@@ -119,12 +119,12 @@ public class GameManager {
 				player.setAllowFlight(false);
 				player.setFlying(false);
 				player.teleport(team.getHome());
+				Chambers.getInstance().getClientManager().getWaypoint().displayWaypoints(player);
 			});
 		});
 		new GameTask().runTaskTimerAsynchronously(Chambers.getInstance(), 0L, 20L);
 		Bukkit.broadcastMessage(" ");
 		Bukkit.broadcastMessage(ChatColor.YELLOW + "The game has now started! Good luck!");
-		Bukkit.broadcastMessage(" ");
 		Chambers.getInstance().getVillagerManager().spawnAllVillagers();
 	}
 

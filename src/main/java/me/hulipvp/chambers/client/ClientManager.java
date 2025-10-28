@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 
 import lombok.Getter;
 import me.hulipvp.chambers.Chambers;
+import me.hulipvp.chambers.client.listener.WaypointListener;
 import me.hulipvp.chambers.client.task.Nametag;
 import me.hulipvp.chambers.client.task.Teammate;
 import me.hulipvp.chambers.client.type.LunarClient;
@@ -17,6 +18,7 @@ public class ClientManager {
 	private LunarClient lunarClient;
 	private Nametag nametag;
 	private Teammate teammate;
+	private WaypointListener waypoint;
 	
 	public ClientManager() {
 		plugin = Chambers.getInstance();
@@ -28,7 +30,7 @@ public class ClientManager {
 		teammate = new Teammate();
 		lunarClient = new LunarClient();
 	    nametag = new Nametag();
-	    
+	    waypoint = new WaypointListener();
 	    loadTasks();
 	}
 	
