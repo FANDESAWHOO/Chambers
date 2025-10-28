@@ -3,13 +3,14 @@ package me.hulipvp.chambers.util.scoreboard;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 
 import java.util.Collections;
 import java.util.List;
 
-public class AssembleThread extends Thread {
+public class AssembleThread extends BukkitRunnable {
 
 	private final Assemble assemble;
 
@@ -20,20 +21,17 @@ public class AssembleThread extends Thread {
 	 */
 	AssembleThread(Assemble assemble) {
 		this.assemble = assemble;
-		this.start();
+        this.runTaskTimer(assemble.getPlugin(), 0L, assemble.getTicks());
 	}
 
-	@Override
-	public void run() {
-		while (true) {
-			try {
-				tick();
-				sleep(assemble.getTicks() * 50);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-	}
+    @Override
+    public void run() {
+        try {
+            tick();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 	/**
 	 * Tick logic for thread.
@@ -82,13 +80,17 @@ public class AssembleThread extends Thread {
 
 					// Remove excessive amount of board entries.
 					if (board.getEntries().size() > newLines.size()) {
+						
 						for (int i = newLines.size(); i < board.getEntries().size(); i++) {
 							AssembleBoardEntry entry = board.getEntryAtPosition(i);
 
 							if (entry != null) {
 								entry.remove();
 							}
+							
+							
 						}
+						
 					}
 
 					// Update existing entries / add new entries.

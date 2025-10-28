@@ -1,9 +1,10 @@
 package me.hulipvp.chambers.util.scoreboard;
 
+import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
-
+@Getter
 public class AssembleBoardEntry {
 
 	private final AssembleBoard board;
@@ -32,39 +33,19 @@ public class AssembleBoardEntry {
 	 */
 	public void setup() {
 	    final Scoreboard scoreboard = this.board.getScoreboard();
-	    if (scoreboard == null) {
-	        return;
-	    }
+	    if (scoreboard == null) return;
 
-	    String teamName = this.identifier;
-	    // This shouldn't happen, but just in case.
-	    if (teamName.length() > 16) {
-	        teamName = teamName.substring(0, 16);
-	    }
+	    String teamName = this.identifier.length() > 16 ? this.identifier.substring(0, 16) : this.identifier;
 
 	    Team team = scoreboard.getTeam(teamName);
-
-	    
-	    if (team != null && !scoreboard.getTeams().contains(team)) {
-	        team.unregister(); // remove old team 
-	        team = null;
-	    }
-	   // Register the team if it does not exist.
 	    if (team == null) {
 	        team = scoreboard.registerNewTeam(teamName);
 	    }
 
-	   // Add the entry to the team.
-	    try {
-	        if (!team.getEntries().contains(this.identifier)) {
-	            team.addEntry(this.identifier);
-	        }
-	    } catch (IllegalStateException ex) {
-	      
-	        team = scoreboard.registerNewTeam(teamName);
+	    if (!team.getEntries().contains(this.identifier)) {
 	        team.addEntry(this.identifier);
 	    }
-		// Add the entry if it does not exist.
+
 	    if (!this.board.getEntries().contains(this)) {
 	        this.board.getEntries().add(this);
 	    }

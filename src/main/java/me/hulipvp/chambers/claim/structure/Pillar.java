@@ -9,7 +9,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import lombok.Getter;
-
+@SuppressWarnings("deprecation")
 @Getter
 public class Pillar {
 
@@ -24,6 +24,7 @@ public class Pillar {
 		this.location = location;
 		this.material = material;
 	}
+
 
 	public void display() {
 		List<Integer> values = new ArrayList<>();

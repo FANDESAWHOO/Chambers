@@ -17,7 +17,6 @@ import me.hulipvp.chambers.profile.structure.Profile;
 import me.hulipvp.chambers.util.ItemUtil;
 
 public class BuildMenu extends ChestMenu  {
-    private Player player;
     private final ItemStack chest = new ItemUtil(Material.CHEST).amount(16).name("&aChest").setLore("&7&m-------------------", "&716 x Chest", "&7&m-------------------", "&ePrice: &a$50").build();
     private final ItemStack cobblestone = new ItemUtil(Material.COBBLESTONE).amount(16).name("&aCobblestone").setLore("&7&m-------------------", "&716 x Cobblestone", "&7&m-------------------", "&ePrice: &a$50").build();
     private final ItemStack stone = new ItemUtil(Material.STONE).amount(16).name("&aStone").setLore("&7&m-------------------", "&716 x Stone", "&7&m-------------------", "&ePrice: &a$50").build();
@@ -34,8 +33,6 @@ public class BuildMenu extends ChestMenu  {
     
     public BuildMenu(Player player) {
         super(6 * 9);
-        this.player = player;
-
         update();
     }
 

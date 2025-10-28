@@ -16,7 +16,7 @@ public class MapCommand {
 		plugin.getCommandFramework().registerHelp();
 	}
 	
-	@Command(name = "map", description = "The main command for Naos", aliases = { "maps" }, usage = "/<command>",  playerOnly = true, requiresTeam = false, adminsOnly = true)
+	@Command(name = "map", description = "The main command for Naos", aliases = { "maps" }, usage = "/<command>",  playerOnly = true, requiresTeam = false, adminsOnly = false)
 	public void onCommand(CommandArgs commandArgs) {
 		Player player = (Player) commandArgs.getSender();
 		showHelp(player);

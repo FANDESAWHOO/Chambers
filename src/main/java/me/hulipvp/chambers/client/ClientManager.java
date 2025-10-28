@@ -32,6 +32,7 @@ public class ClientManager {
 	    loadTasks();
 	}
 	
+	@SuppressWarnings("deprecation")
 	public void loadTasks() {
 		Bukkit.getScheduler().runTaskTimer(plugin, nametag, 20L, 40L);
 	}

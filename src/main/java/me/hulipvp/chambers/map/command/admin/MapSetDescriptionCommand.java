@@ -1,7 +1,10 @@
 package me.hulipvp.chambers.map.command.admin;
 
 import org.bukkit.ChatColor;
+
+import me.hulipvp.chambers.Chambers;
 import me.hulipvp.chambers.map.command.MapCommand;
+import me.hulipvp.chambers.map.structure.Map;
 import me.hulipvp.chambers.util.commandapi.Command;
 import me.hulipvp.chambers.util.commandapi.CommandArgs;
 
@@ -13,6 +16,16 @@ public class MapSetDescriptionCommand extends MapCommand {
 			commandArgs.getPlayer().sendMessage(ChatColor.RED + "Usage: /" + commandArgs.getLabel() + " <name> <announcement>");
 			return;
 		}
+		String name = commandArgs.getArgs(0);
+        Map map	= Chambers.getInstance().getMapHandler().getMap(name);
+	    
+	    if (map == null) {
+	    	commandArgs.getSender().sendMessage(ChatColor.GREEN + "The map doesnt exist, please provide a valid name.");
+	    	return;
+	    }
+	    
+	    String description = commandArgs.getArgs(1);
+	    map.setDescription(description);
 	}
 
 }

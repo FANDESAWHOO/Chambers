@@ -17,8 +17,6 @@ import me.hulipvp.chambers.util.ItemUtil;
 
 public class CombatMenu extends ChestMenu {
 
-    private final Player player;
-
     // Ítems predefinidos
     private final ItemStack diamondHelmet = new ItemUtil(Material.DIAMOND_HELMET).name("&aDiamond Helmet").setLore("&7&m-------------------", "&71 x Diamond Helmet", "&7&m-------------------", "&7Price: &a$50").build();
     private final ItemStack diamondChestplate = new ItemUtil(Material.DIAMOND_CHESTPLATE).name("&aDiamond Chestplate").setLore("&7&m-------------------", "&71 x Diamond Chestplate", "&7&m-------------------", "&7Price: &a$200").build();
@@ -37,7 +35,6 @@ public class CombatMenu extends ChestMenu {
 
     public CombatMenu(Player player) {
         super(6 * 9);
-        this.player = player;
         update();
     }
 

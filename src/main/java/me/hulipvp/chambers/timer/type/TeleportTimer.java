@@ -20,12 +20,8 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 public class TeleportTimer extends PlayerTimer implements Listener {
-    private final Chambers plugin;
-
-    public TeleportTimer(Chambers plugin) {
+    public TeleportTimer() {
         super("Home", TimeUnit.SECONDS.toMillis(10L), false);
-
-        this.plugin = plugin;
     }
 
     /**

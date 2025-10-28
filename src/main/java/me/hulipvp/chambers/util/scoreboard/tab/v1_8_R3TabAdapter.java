@@ -134,9 +134,7 @@ public class v1_8_R3TabAdapter extends TabAdapter {
      */
     @Override
     public int getMaxElements(Player player) {
-        final int version = 47;
-
-        return version == -1 || version > 5 ? 80 : 60;
+        return 80;
     }
 
     /**

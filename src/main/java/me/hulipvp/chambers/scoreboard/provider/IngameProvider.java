@@ -1,6 +1,5 @@
 package me.hulipvp.chambers.scoreboard.provider;
 
-import me.hulipvp.chambers.listener.listeners.EnderpearlListener;
 import me.hulipvp.chambers.profile.structure.Profile;
 import me.hulipvp.chambers.profile.structure.ProfileStatus;
 import me.hulipvp.chambers.util.DurationFormatter;
@@ -8,7 +7,6 @@ import me.hulipvp.chambers.util.scoreboard.AssembleAdapter;
 
 import org.bukkit.entity.Player;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,8 +42,8 @@ public class IngameProvider implements AssembleAdapter {
 			if (plugin.getTimerManager().getTeleportTimer().getRemaining(player) > 0) {
 				lines.add("&9&lHome: &f" +  DurationFormatter.getRemaining(plugin.getTimerManager().getTeleportTimer().getRemaining(player),true));
 			}
-			if (EnderpearlListener.hasCooldown(player)) {
-				lines.add("&5Enderpearl:&c " + String.valueOf(new DecimalFormat("0.0").format(EnderpearlListener.getMillisecondsLeft(player) / 1000.0)));
+			if (plugin.getTimerManager().getEnderpearlTimer().getRemaining(player) > 0) {
+				lines.add("&5Enderpearl:&c " +  DurationFormatter.getRemaining(plugin.getTimerManager().getEnderpearlTimer().getRemaining(player),true));
 			}
 			break;
 		}

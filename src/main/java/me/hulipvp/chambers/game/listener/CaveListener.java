@@ -99,6 +99,7 @@ public class CaveListener implements Listener {
 		return isEmpty(inventory, true);
 	}
 
+	@SuppressWarnings("unused")
 	public static boolean isEmpty(Inventory inventory, boolean checkArmour) {
 		ItemStack[] contents;
 		boolean result = true;

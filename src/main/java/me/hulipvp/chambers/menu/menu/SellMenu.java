@@ -11,8 +11,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.util.ChatPaginator;
 
 import me.hulipvp.chambers.Chambers;
 import me.hulipvp.chambers.menu.type.ChestMenu;

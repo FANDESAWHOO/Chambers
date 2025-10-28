@@ -27,12 +27,12 @@ public class MapListener implements Listener {
 		if (action.equals(Action.RIGHT_CLICK_AIR) || action.equals(Action.RIGHT_CLICK_BLOCK)) {
 			if (item == null)
 				return;
-			if (!(item.isSimilar(new ItemStack(Material.EMPTY_MAP))))
+			if (!(item.isSimilar(new ItemStack(Material.MAP))))
 				return;
 			if (Chambers.getInstance().getGameManager().getGame().getStatus() != GameStatus.LOBBY)
 				return;
-			event.setCancelled(true);
 			new MapMenu().open(player); 
+			event.setCancelled(true);
 		}
 	}
 	

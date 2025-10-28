@@ -11,7 +11,8 @@ import me.hulipvp.chambers.util.commandapi.CommandArgs;
 
 public class MapAddCommand extends MapCommand {
 
-	@Command(name = "map", description = "The main command for Naos", aliases = { "maps" }, usage = "/<command>",  playerOnly = true, requiresTeam = false, adminsOnly = true)
+	@SuppressWarnings("null")
+	@Command(name = "map.create", description = "The main command for Naos", aliases = { "map.add", "maps.add", "maps.create" }, usage = "/<command>",  playerOnly = true, requiresTeam = false, adminsOnly = true)
 	public void onCommand(CommandArgs commandArgs) {
 		Player player = (Player) commandArgs.getSender();
 		if (commandArgs.length() != 1) {
@@ -19,14 +20,14 @@ public class MapAddCommand extends MapCommand {
 			return;
 		}
 		String name = commandArgs.getArgs(0);
-	    Map map	= Chambers.getInstance().getMapHandler().createMap(name);
+	    Map map	= Chambers.getInstance().getMapHandler().getMap(name);
 	    
-	    if (map == null) {
-	    	player.sendMessage("&aThe map already exists");
+	    if (!(map == null)) {
+	    	player.sendMessage(ChatColor.GREEN + "The map already exist, please select another name.");
 	    	return;
 	    }
-	
-	    player.sendMessage(ChatColor.BLUE + "The map "+map.getName()+" has been succesfully created.");
+	    map	= Chambers.getInstance().getMapHandler().createMap(name);
+	    player.sendMessage(ChatColor.BLUE + "The map "+ map.getName() +" has been succesfully created.");
 	   
 	} 
 	

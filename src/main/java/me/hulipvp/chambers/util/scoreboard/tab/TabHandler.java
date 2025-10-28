@@ -5,7 +5,6 @@ import lombok.SneakyThrows;
 import me.hulipvp.chambers.util.scoreboard.tab.entry.TabElement;
 import me.hulipvp.chambers.util.scoreboard.tab.entry.TabElementHandler;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 

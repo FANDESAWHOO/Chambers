@@ -18,6 +18,10 @@ import me.hulipvp.chambers.koth.KothManager;
 import me.hulipvp.chambers.listener.ListenerManager;
 import me.hulipvp.chambers.map.MapHandler;
 import me.hulipvp.chambers.map.command.MapCommand;
+import me.hulipvp.chambers.map.command.admin.MapAddCommand;
+import me.hulipvp.chambers.map.command.admin.MapRemoveCommand;
+import me.hulipvp.chambers.map.command.admin.MapSetDescriptionCommand;
+import me.hulipvp.chambers.map.command.normal.MapListCommand;
 import me.hulipvp.chambers.profile.ProfileManager;
 import me.hulipvp.chambers.scoreboard.ProviderResolver;
 import me.hulipvp.chambers.scoreboard.TabProvider;
@@ -151,6 +155,10 @@ public class Chambers extends JavaPlugin {
 		new TeamShowCommand();
 		new EntityManager();
 		new MapCommand();
+		new MapListCommand();
+		new MapAddCommand();
+		new MapSetDescriptionCommand();
+		new MapRemoveCommand();
 	}
 	
 	public void registerListener(Listener listener) {

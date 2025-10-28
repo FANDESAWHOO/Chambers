@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import me.hulipvp.chambers.Chambers;
+import me.hulipvp.chambers.game.structure.GameStatus;
 import me.hulipvp.chambers.team.TeamManager;
 import me.hulipvp.chambers.team.structure.Team;
 import me.hulipvp.chambers.util.exception.NoFactionFoundException;
@@ -34,7 +35,8 @@ public class Nametag extends BukkitRunnable {
 
     private void updateNametags(Player viewer, Player target) {
         TeamManager factionManager = plugin.getTeamManager();
-        
+        if (Chambers.getInstance().getGameManager().getGame().getStatus() == GameStatus.LOBBY)
+        	return;
         try {
             Team viewerFaction = getPlayerFactionSafe(viewer, factionManager);
             Team targetFaction = getPlayerFactionSafe(target, factionManager);

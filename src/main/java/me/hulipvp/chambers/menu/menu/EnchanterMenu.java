@@ -1,7 +1,5 @@
 package me.hulipvp.chambers.menu.menu;
 
-
-import org.apache.commons.lang.WordUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -11,8 +9,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.util.ChatPaginator;
 
 import me.hulipvp.chambers.Chambers;
 import me.hulipvp.chambers.menu.type.ChestMenu;
@@ -20,12 +16,8 @@ import me.hulipvp.chambers.profile.structure.Profile;
 import me.hulipvp.chambers.util.ItemUtil;
 
 public class EnchanterMenu extends ChestMenu {
-    private Player player;
-
     public EnchanterMenu(Player player) {
         super(9);
-        this.player = player;
-
         update();
     }
 

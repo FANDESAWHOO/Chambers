@@ -14,7 +14,7 @@ public class Map implements Mongoable {
 	private String name;
 	private final World world;
 	private ItemStack display;
-	private String description;
+	@Setter private String description;
 	@Setter private MapLevel mapLevel;
 	
 	public Map(String name) {

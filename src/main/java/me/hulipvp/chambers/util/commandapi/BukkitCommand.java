@@ -12,7 +12,7 @@ import org.bukkit.plugin.Plugin;
 /**
  * Command Framework - BukkitCommand <br>
  * An implementation of Bukkit's Command class allowing for registering of
- * command without plugin.yml
+ * commands without plugin.yml
  * 
  * @author minnymin3
  * 
@@ -51,7 +51,8 @@ public class BukkitCommand extends org.bukkit.command.Command {
 		try {
 			success = executor.onCommand(sender, this, commandLabel, args);
 		} catch (Throwable ex) {
-			throw new CommandException("Unhandled exception executing command '" + commandLabel + "' in plugin " + owningPlugin.getDescription().getFullName(), ex);
+			throw new CommandException("Unhandled exception executing command '" + commandLabel + "' in plugin "
+					+ owningPlugin.getDescription().getFullName(), ex);
 		}
 
 		if (!success && usageMessage.length() > 0) {
@@ -64,7 +65,8 @@ public class BukkitCommand extends org.bukkit.command.Command {
 	}
 
 	@Override
-	public java.util.List<String> tabComplete(CommandSender sender, String alias, String[] args) throws CommandException, IllegalArgumentException {
+	public java.util.List<String> tabComplete(CommandSender sender, String alias, String[] args)
+			throws CommandException, IllegalArgumentException {
 		Validate.notNull(sender, "Sender cannot be null");
 		Validate.notNull(args, "Arguments cannot be null");
 		Validate.notNull(alias, "Alias cannot be null");

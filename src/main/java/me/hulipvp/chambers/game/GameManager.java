@@ -106,6 +106,9 @@ public class GameManager {
 	 */
 	public void finallyStart() {
 		game.setStatus(GameStatus.INGAME);
+		
+		Chambers.getInstance().getTimerManager().getProtectionTimer().setRemaining(60L, true);
+	
 		Chambers.getInstance().getTeamManager().getAllPlayerTeams().stream().forEach(team -> {
 			if (!team.getHome().getChunk().isLoaded()) {
 				team.getHome().getChunk().load();

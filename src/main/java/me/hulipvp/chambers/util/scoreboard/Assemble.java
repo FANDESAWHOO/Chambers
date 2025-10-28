@@ -3,7 +3,6 @@ package me.hulipvp.chambers.util.scoreboard;
 import lombok.Getter;
 import lombok.Setter;
 import me.hulipvp.chambers.util.scoreboard.events.AssembleBoardCreateEvent;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -18,95 +17,84 @@ import java.util.concurrent.ConcurrentHashMap;
 @Setter
 public class Assemble {
 
-	private final JavaPlugin plugin;
-	private final ChatColor[] chatColorCache = ChatColor.values();
-	private AssembleAdapter adapter;
-	private AssembleThread thread;
-	private AssembleListener listeners;
-	private AssembleStyle assembleStyle = AssembleStyle.MODERN;
-	private Map<UUID, AssembleBoard> boards;
-	private long ticks = 2;
-	private boolean hook = false, debugMode = true, callEvents = true;
+    private final JavaPlugin plugin;
+    private final ChatColor[] chatColorCache = ChatColor.values();
+    private AssembleAdapter adapter;
+    private AssembleThread thread;
+    private AssembleListener listeners;
+    private AssembleStyle assembleStyle = AssembleStyle.MODERN;
+    private final Map<UUID, AssembleBoard> boards = new ConcurrentHashMap<>();
+    private long ticks = 2L;
+    private boolean hook = false;
+    private boolean debugMode = true;
+    private boolean callEvents = true;
 
-	/**
-	 * Assemble.
-	 *
-	 * @param plugin  instance.
-	 * @param adapter that is being provided.
-	 */
-	public Assemble(JavaPlugin plugin, AssembleAdapter adapter) {
-		if (plugin == null) {
-			throw new RuntimeException("Assemble can not be instantiated without a plugin instance!");
-		}
+    /**
+     * Crea una nueva instancia de Assemble.
+     *
+     * @param plugin  El plugin principal.
+     * @param adapter El adaptador para generar el contenido de la scoreboard.
+     */
+    public Assemble(JavaPlugin plugin, AssembleAdapter adapter) {
+        if (plugin == null) {
+            throw new IllegalArgumentException("Assemble no puede instanciarse sin una instancia de plugin!");
+        }
+        this.plugin = plugin;
+        this.adapter = adapter;
+        setup();
+    }
 
-		this.plugin = plugin;
-		this.adapter = adapter;
-		this.boards = new ConcurrentHashMap<>();
+    /**
+     * Inicializa Assemble (listeners + boards + hilo).
+     */
+    public void setup() {
+        // Registrar listeners
+        this.listeners = new AssembleListener(this);
+        plugin.getServer().getPluginManager().registerEvents(listeners, plugin);
 
-		this.setup();
-	}
+        // Asegurarse de que el hilo anterior se detenga
+        if (thread != null) {
+            thread.cancel();
+            thread = null;
+        }
 
-	/**
-	 * Setup Assemble.
-	 */
-	public void setup() {
-		// Register Events.
-		this.listeners = new AssembleListener(this);
-		this.plugin.getServer().getPluginManager().registerEvents(listeners, this.plugin);
+        // Crear scoreboards para jugadores online
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            if (callEvents) {
+                AssembleBoardCreateEvent event = new AssembleBoardCreateEvent(player);
+                Bukkit.getPluginManager().callEvent(event);
+                if (event.isCancelled()) continue;
+            }
+            boards.putIfAbsent(player.getUniqueId(), new AssembleBoard(player, this));
+        }
 
-		// Ensure that the thread has stopped running.
-		if (this.thread != null) {
-			this.thread.stop();
-			this.thread = null;
-		}
+        // Iniciar hilo de actualización
+        thread = new AssembleThread(this);
+    }
 
-		// Register new boards for existing online players.
-		for (Player player : this.getPlugin().getServer().getOnlinePlayers()) {
+    /**
+     * Limpia Assemble completamente.
+     */
+    public void cleanup() {
+        // Detener hilo
+        if (thread != null) {
+            thread.cancel();
+            thread = null;
+        }
 
-			// Call Events if enabled.
-			if (this.isCallEvents()) {
-				AssembleBoardCreateEvent createEvent = new AssembleBoardCreateEvent(player);
+        // Desregistrar listeners
+        if (listeners != null) {
+            HandlerList.unregisterAll(listeners);
+            listeners = null;
+        }
 
-				Bukkit.getPluginManager().callEvent(createEvent);
-				if (createEvent.isCancelled()) {
-					continue;
-				}
-			}
-
-			getBoards().putIfAbsent(player.getUniqueId(), new AssembleBoard(player, this));
-		}
-
-		// Start Thread.
-		this.thread = new AssembleThread(this);
-	}
-
-	/**
-	 * Cleanup Assemble.
-	 */
-	public void cleanup() {
-		// Stop thread.
-		if (this.thread != null) {
-			this.thread.stop();
-			this.thread = null;
-		}
-
-		// Unregister listeners.
-		if (listeners != null) {
-			HandlerList.unregisterAll(listeners);
-			listeners = null;
-		}
-
-		// Destroy player scoreboards.
-		for (UUID uuid : getBoards().keySet()) {
-			Player player = Bukkit.getPlayer(uuid);
-
-			if (player == null || !player.isOnline()) {
-				continue;
-			}
-
-			getBoards().remove(uuid);
-			player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
-		}
-	}
-
+        // Resetear scoreboards
+        for (UUID uuid : boards.keySet()) {
+            Player player = Bukkit.getPlayer(uuid);
+            if (player != null && player.isOnline()) {
+                player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+            }
+        }
+        boards.clear();
+    }
 }

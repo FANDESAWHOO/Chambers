@@ -42,7 +42,7 @@ public class ProfileListener implements Listener {
 			inventory.setItem(4, new ItemStack(Material.NETHER_STAR));
 			inventory.setItem(5, new ItemStack(Material.EMERALD));
 			inventory.setItem(6, new ItemStack(Material.GOLD_INGOT));
-			inventory.setItem(8, new ItemStack(Material.EMPTY_MAP));
+			inventory.setItem(8, new ItemStack(Material.MAP));
 			player.updateInventory();
 			event.setJoinMessage(player.getName() + ChatColor.YELLOW + " has joined. " + ChatColor.RED + "(" + Bukkit.getOnlinePlayers().size() + "/20)");
 			plugin.getGameManager().tryStart();
