@@ -1,5 +1,7 @@
 package me.hulipvp.chambers.map.command.admin;
 
+import java.util.Arrays;
+
 import org.bukkit.ChatColor;
 
 import me.hulipvp.chambers.Chambers;
@@ -24,8 +26,7 @@ public class MapSetDescriptionCommand extends MapCommand {
 	    	return;
 	    }
 	    
-	    String description = commandArgs.getArgs(1);
-	    map.setDescription(description);
+	    map.setDescription(Chambers.SPACE_JOINER.join(Arrays.copyOfRange(commandArgs.getArgs(), 1, commandArgs.getArgs().length)));
 	}
 
 }

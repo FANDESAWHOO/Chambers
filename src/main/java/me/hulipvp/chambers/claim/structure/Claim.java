@@ -17,6 +17,20 @@ public class Claim {
 
 	private Team owner;
 
+	public Location getCenter() {
+	    if (cornerOne == null || cornerTwo == null) {
+	        return null;
+	    }
+
+	    double centerX = (cornerOne.getX() + cornerTwo.getX()) / 2.0;
+	    double centerY = (cornerOne.getY() + cornerTwo.getY()) / 2.0;
+	    double centerZ = (cornerOne.getZ() + cornerTwo.getZ()) / 2.0;
+
+
+	    return new Location(cornerOne.getWorld(), centerX, centerY, centerZ);
+	}
+
+	
 	/**
 	 * Returns <tt>true</tt> if the provided Location is inside the claim.<br>
 	 * However, it returns <tt>false</tt> if the provided Location is not inside

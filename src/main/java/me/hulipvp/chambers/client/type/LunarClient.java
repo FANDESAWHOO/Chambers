@@ -78,6 +78,12 @@ public class LunarClient implements ClientType {
         displayWaypoint(player, waypoint);
 	}
 	
+	public void sendWaypoint(Player player, Waypoint waypoint) {
+		displayWaypoint(player, waypoint);
+	}
+	
+	
+	
     public void displayWaypoint(Player viewer, Waypoint waypoint) {
         Optional<ApolloPlayer> apolloPlayerOpt = Apollo.getPlayerManager().getPlayer(viewer.getUniqueId());
 
@@ -90,6 +96,21 @@ public class LunarClient implements ClientType {
         Optional<ApolloPlayer> apolloPlayerOpt = Apollo.getPlayerManager().getPlayer(viewer.getUniqueId());
         apolloPlayerOpt.ifPresent(apolloPlayer -> this.waypointModule.removeWaypoint(apolloPlayer, waypoint));
     }
+
+	@Override
+	public Waypoint getWaypoint(String name, Location location, Color color) {
+		return Waypoint.builder()
+	                .location(ApolloBlockLocation.builder()
+	                        .world(location.getWorld().getName())
+	                        .x(location.getBlockX())
+	                        .y(location.getBlockY())
+	                        .z(location.getBlockZ())
+	                        .build())
+	                .name(name)
+	                .color(color)
+	                .build();
+		
+	}
 
 
 }

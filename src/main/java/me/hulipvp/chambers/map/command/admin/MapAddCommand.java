@@ -11,7 +11,6 @@ import me.hulipvp.chambers.util.commandapi.CommandArgs;
 
 public class MapAddCommand extends MapCommand {
 
-	@SuppressWarnings("null")
 	@Command(name = "map.create", description = "The main command for Naos", aliases = { "map.add", "maps.add", "maps.create" }, usage = "/<command>",  playerOnly = true, requiresTeam = false, adminsOnly = true)
 	public void onCommand(CommandArgs commandArgs) {
 		Player player = (Player) commandArgs.getSender();

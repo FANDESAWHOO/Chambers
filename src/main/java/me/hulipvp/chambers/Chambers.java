@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.google.common.base.Joiner;
 
 import lombok.Getter;
 import me.hulipvp.chambers.claim.ClaimManager;
@@ -34,7 +35,9 @@ import me.hulipvp.chambers.team.command.normal.TeamChatCommand;
 import me.hulipvp.chambers.team.command.normal.TeamHelpCommand;
 import me.hulipvp.chambers.team.command.normal.TeamHomeCommand;
 import me.hulipvp.chambers.team.command.normal.TeamLocationCommand;
+import me.hulipvp.chambers.team.command.normal.TeamRallyCommand;
 import me.hulipvp.chambers.team.command.normal.TeamShowCommand;
+import me.hulipvp.chambers.team.command.normal.TeamVoteKickCommand;
 import me.hulipvp.chambers.timer.TimerManager;
 import me.hulipvp.chambers.util.commandapi.CommandFramework;
 import me.hulipvp.chambers.util.scoreboard.Assemble;
@@ -82,7 +85,8 @@ public class Chambers extends JavaPlugin {
     private TimerManager timerManager;
     private ClientManager clientManager;
     
-
+    public static final Joiner SPACE_JOINER = Joiner.on(' ');
+    
 	/* Commands & Listeners */
 	private CommandFramework commandFramework;
 
@@ -126,8 +130,10 @@ public class Chambers extends JavaPlugin {
 	}
 	
 	private void registerAllCommands() {
-		new ChambersCommand();
+		// BASIC
+		new ChambersCommand(); 
 		new BalanceCommand();
+		// Staffs command
 		new GameCommand();
 		new GameStartCommand();
 		new GameStopCommand();
@@ -139,6 +145,7 @@ public class Chambers extends JavaPlugin {
 		new PayCommand();
 		new ToggleBoardCommand();
 		new VillagerCommand();
+		// Team's and map commands.
 		new TeamCommand();
 		new TeamBypassCommand();
 		new TeamClaimCommand();
@@ -153,6 +160,8 @@ public class Chambers extends JavaPlugin {
 		new TeamHelpCommand();
 		new TeamLocationCommand();
 		new TeamShowCommand();
+		new TeamVoteKickCommand();
+		new TeamRallyCommand();
 		new EntityManager();
 		new MapCommand();
 		new MapListCommand();

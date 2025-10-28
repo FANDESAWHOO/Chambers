@@ -13,9 +13,13 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import com.lunarclient.apollo.module.waypoint.Waypoint;
+
 import java.text.DecimalFormat;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -33,6 +37,9 @@ public class Team {
 	private Location home;
 	private Claim claim;
 	private UUID uniqueID;
+	private int votesforkick;
+	private Waypoint rally;
+	private final Map<UUID, Set<UUID>> votes = new HashMap<>();
 
 	public Team(TeamType type) {
 		this.type = type;
@@ -43,6 +50,7 @@ public class Team {
 		this.offline = new HashSet<>();
 		this.dtr = 1.1;
 		this.uniqueID = UUID.randomUUID();
+		this.rally = null;
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -61,7 +69,46 @@ public class Team {
 		//}
 	}
 
-    
+	public boolean voteKick(Player voter, Player target) {
+	    if (voter.getUniqueId().equals(target.getUniqueId())) {
+	        voter.sendMessage(ChatColor.RED + "You cannot vote to kick yourself!");
+	        return false;
+	    }
+
+	    if (!members.contains(voter.getUniqueId()) || !members.contains(target.getUniqueId())) {
+	        voter.sendMessage(ChatColor.RED + "You must both be in the same team!");
+	        return false;
+	    }
+
+	    // Obtener o crear set de votantes
+	    Set<UUID> currentVotes = votes.computeIfAbsent(target.getUniqueId(), k -> new HashSet<>());
+
+	    if (currentVotes.contains(voter.getUniqueId())) {
+	        voter.sendMessage(ChatColor.RED + "You already voted to kick " + target.getName() + "!");
+	        return false;
+	    }
+
+	    currentVotes.add(voter.getUniqueId());
+
+	    int needed = getVotesForKick();
+	    int current = currentVotes.size();
+
+	    // Avisar progreso
+	    sendMessage(ChatColor.YELLOW + voter.getName() + ChatColor.GRAY + " voted to kick " + ChatColor.RED + target.getName()
+	            + ChatColor.GRAY + " (" + current + "/" + needed + ")");
+
+	    // Si alcanza el número necesario → kickear
+	    if (current >= needed) {
+	        sendMessage(ChatColor.RED + target.getName() + " has been kicked from the team!");
+	        Profile targetProfile = Chambers.getInstance().getProfileManager().getProfileByUuid(target.getUniqueId());
+	        removeMember(targetProfile);
+	        votes.remove(target.getUniqueId());
+	        return true;
+	    }
+
+	    return false;
+	}
+
 	protected void runKothCap() {
 	  if (Chambers.getInstance().getDataFile().getString("TEAMS." + "KOTH_CAP" + ".CORNERONE") != null && Chambers.getInstance().getDataFile().getString("TEAMS." + "KOTH_CAP" + ".CORNERTWO") != null) {
           	this.claim = new Claim(LocationUtil.deserializeLocation(Chambers.getInstance().getDataFile().getString("TEAMS." + "KOTH_CAP" + ".CORNERONE")), LocationUtil.deserializeLocation(Chambers.getInstance().getDataFile().getString("TEAMS." + "KOTH_CAP" + ".CORNERTWO")), this);
@@ -70,6 +117,10 @@ public class Team {
 		
 	}
 
+	public Integer getVotesForKick() {
+		return this.members.size() - 1;
+	}
+	
 	/**
 	 * Get all of the Players that are online in the Team
 	 * 

@@ -7,6 +7,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import com.lunarclient.apollo.module.cooldown.Cooldown;
+import com.lunarclient.apollo.module.waypoint.Waypoint;
 
 
 public interface ClientType {
@@ -20,6 +21,7 @@ public interface ClientType {
 	void sendWaypoint(Player player, String name, Location location, Color color);
 	
 	void removeWaypoint(Player player, String name);
-		
+	
+	Waypoint getWaypoint(String name, Location location, Color color);
 	
 }
