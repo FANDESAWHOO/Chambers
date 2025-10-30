@@ -10,7 +10,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import me.hulipvp.chambers.Chambers;
 import me.hulipvp.chambers.profile.structure.Profile;
-import me.hulipvp.chambers.profile.structure.ProfileStatus;
 import net.md_5.bungee.api.ChatColor;
 
 @AllArgsConstructor
@@ -45,10 +44,8 @@ public class RespawnTask extends BukkitRunnable {
 			new BukkitRunnable() {
 				@Override
 				public void run() {
-					profile.setProfileStatus(ProfileStatus.PLAYING);
-					player.spigot().respawn();
+                    Chambers.getInstance().getSpectatorMode().removeSpectator(player);
 					player.teleport(profile.getTeam().getHome());
-					Bukkit.getOnlinePlayers().forEach(other -> other.showPlayer(player));
 					Bukkit.getServer().getPluginManager().callEvent(new PlayerRespawnEvent(player, profile.getTeam().getHome(), false));
 					
 				}

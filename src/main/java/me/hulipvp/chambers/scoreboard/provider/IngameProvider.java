@@ -29,28 +29,28 @@ public class IngameProvider implements AssembleAdapter {
 		}
 		case RESPAWNING: {
 			lines.add("&7You are respawning.");
-			lines.add("&6&lRespawning in:&7 " + profile.getRespawnTime());
+			lines.add("&6&lRespawning in&7: " + profile.getRespawnTime());
 			break;
 		}
 		case PLAYING: {
-			lines.add("&e&lTeam:&r " + profile.getTeam().getFormattedName());
-			lines.add("&4&lDTR:&c " + profile.getTeam().getFormattedDTR());
-			lines.add("&a&lBalance:&c $" + profile.getBalance());
+			lines.add("&e&lTeam&7:&r " + profile.getTeam().getFormattedName());
+			lines.add("&4&lDTR&7:&6 " + profile.getTeam().getFormattedDTR());
+			lines.add("&a&lBalance&7:&6 $" + profile.getBalance());
 			if (plugin.getGameManager().getGame().getInvincibilityTime() > 0) {
 				lines.add("&9&lInvincibility:&c " + formatIntToTime(plugin.getGameManager().getGame().getInvincibilityTime()));
 			}
 			if (plugin.getTimerManager().getTeleportTimer().getRemaining(player) > 0) {
-				lines.add("&9&lHome: &f" +  DurationFormatter.getRemaining(plugin.getTimerManager().getTeleportTimer().getRemaining(player),true));
+				lines.add("&9&lHome&7: &6" +  DurationFormatter.getRemaining(plugin.getTimerManager().getTeleportTimer().getRemaining(player),true));
 			}
 			if (plugin.getTimerManager().getEnderpearlTimer().getRemaining(player) > 0) {
-				lines.add("&5Enderpearl:&c " +  DurationFormatter.getRemaining(plugin.getTimerManager().getEnderpearlTimer().getRemaining(player),true));
+				lines.add("&5&lEnderpearl&7:&6 " +  DurationFormatter.getRemaining(plugin.getTimerManager().getEnderpearlTimer().getRemaining(player),true));
 			}
 			break;
 		}
 		}
-		lines.add(profile.getProfileStatus() == ProfileStatus.PLAYING ? 0 : 1, "&6&lGame Time:&c " + formatIntToTime(plugin.getGameManager().getGame().getTotalTime()));
+		lines.add(profile.getProfileStatus() == ProfileStatus.PLAYING ? 0 : 1, "&6&lGame Time&7:&6 " + formatIntToTime(plugin.getGameManager().getGame().getTotalTime()));
 		if (plugin.getKothManager().getKoth() != null) {
-			lines.add("&9&l" + plugin.getKothManager().getKoth().getName() + ":&c " + formatIntToTime(plugin.getKothManager().getKoth().getTime()));
+			lines.add("&9&l" + plugin.getKothManager().getKoth().getName() + "&7:&6 " + formatIntToTime(plugin.getKothManager().getKoth().getTime()));
 		}
 
 		return lines;

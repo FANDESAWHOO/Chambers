@@ -14,7 +14,6 @@ import me.hulipvp.chambers.Chambers;
 import me.hulipvp.chambers.game.structure.Game;
 import me.hulipvp.chambers.game.structure.GameStatus;
 import me.hulipvp.chambers.task.CountdownTask;
-import me.hulipvp.chambers.task.GameTask;
 import me.hulipvp.chambers.team.structure.Team;
 
 @Getter
@@ -107,8 +106,6 @@ public class GameManager {
 	public void finallyStart() {
 		game.setStatus(GameStatus.INGAME);
 		
-		Chambers.getInstance().getTimerManager().getProtectionTimer().setRemaining(60L, true);
-	
 		Chambers.getInstance().getTeamManager().getAllPlayerTeams().stream().forEach(team -> {
 			if (!team.getHome().getChunk().isLoaded()) {
 				team.getHome().getChunk().load();
@@ -122,7 +119,7 @@ public class GameManager {
 				Chambers.getInstance().getClientManager().getWaypoint().displayWaypoints(player);
 			});
 		});
-		new GameTask().runTaskTimerAsynchronously(Chambers.getInstance(), 0L, 20L);
+		//new GameTask().runTaskTimerAsynchronously(Chambers.getInstance(), 0L, 20L);
 		Bukkit.broadcastMessage(" ");
 		Bukkit.broadcastMessage(ChatColor.YELLOW + "The game has now started! Good luck!");
 		Chambers.getInstance().getVillagerManager().spawnAllVillagers();

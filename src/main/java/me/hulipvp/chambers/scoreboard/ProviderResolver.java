@@ -35,7 +35,7 @@ public class ProviderResolver implements AssembleAdapter {
 	
 	@Override
 	public String getTitle(Player player) {
-		return ChatColor.GOLD.toString() + ChatColor.BOLD + "Pure" + ChatColor.YELLOW + " ┃ "+ ChatColor.GOLD + "Bunkers";
+		return ChatColor.GOLD.toString() + ChatColor.BOLD + "Pure" + ChatColor.GOLD + " ┃ "+ ChatColor.GOLD + ChatColor.BOLD + "Bunkers";
 	}
 
 	@Override

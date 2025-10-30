@@ -12,7 +12,7 @@ import me.hulipvp.chambers.Chambers;
 import me.hulipvp.chambers.game.structure.Game;
 
 public class GameDamageListener implements Listener {
-	
+
 	@EventHandler
 	public void onDamage(EntityDamageEvent event) {
 		if (event.getEntity() instanceof Player) {
@@ -45,5 +45,5 @@ public class GameDamageListener implements Listener {
 			event.setCancelled(true);
 		}
 	}
-	
+
 }

@@ -38,16 +38,15 @@ public class Nametag extends BukkitRunnable {
         if (Chambers.getInstance().getGameManager().getGame().getStatus() == GameStatus.LOBBY)
         	return;
         try {
-            Team viewerFaction = getPlayerFactionSafe(viewer, factionManager);
             Team targetFaction = getPlayerFactionSafe(target, factionManager);
             
-            ChatColor color = determineColor(viewer, target, viewerFaction, targetFaction);
+            ChatColor color = targetFaction.getColor();
             
             List<String> coloredNames = new ArrayList<>();
             coloredNames.add(color + target.getName());
             
             if (targetFaction != null) {
-                String factionTag = ChatColor.GOLD + "[" + getFormattedFactionName(targetFaction, viewer) + ChatColor.GOLD + "]";
+                String factionTag = ChatColor.GOLD + "[" + targetFaction.getFormattedName() + ChatColor.GOLD + "]";
                 coloredNames.add(factionTag);
             }
             
@@ -71,16 +70,6 @@ public class Nametag extends BukkitRunnable {
         }
     }
 
-    private ChatColor determineColor(Player viewer, Player target, Team viewerFaction, Team targetFaction) {
-       return viewerFaction.getColor();  
-    }
-
-    private String getFormattedFactionName(Team faction, Player viewer) {
-        try {
-        	return faction.getFormattedName();
-        } catch (Exception e) {
-            return faction.getName();
-        }
-    }
+  
 
 }

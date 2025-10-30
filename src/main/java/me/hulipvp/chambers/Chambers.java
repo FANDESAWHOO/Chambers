@@ -28,6 +28,7 @@ import me.hulipvp.chambers.scoreboard.ProviderResolver;
 import me.hulipvp.chambers.scoreboard.TabProvider;
 import me.hulipvp.chambers.shop.EntityManager;
 import me.hulipvp.chambers.shop.VillagerManager;
+import me.hulipvp.chambers.spectator.SpectatorMode;
 import me.hulipvp.chambers.team.TeamManager;
 import me.hulipvp.chambers.team.command.TeamCommand;
 import me.hulipvp.chambers.team.command.admin.*;
@@ -84,6 +85,7 @@ public class Chambers extends JavaPlugin {
 	private MapHandler mapHandler;
     private TimerManager timerManager;
     private ClientManager clientManager;
+    private SpectatorMode spectatorMode;
     
     public static final Joiner SPACE_JOINER = Joiner.on(' ');
     
@@ -106,6 +108,7 @@ public class Chambers extends JavaPlugin {
 		villagerManager = new VillagerManager();
         mapHandler = new MapHandler();
         clientManager = new ClientManager();
+        spectatorMode = new SpectatorMode();
         // Start Instance.
     	Assemble assemble = new Assemble(this, new ProviderResolver());
     	

@@ -18,10 +18,13 @@ public class SpectatorMode {
 	
 	private final List<UUID> spectators = new ArrayList<>();
 	
-	public void applySpectator(Player player) {
+	public void applySpectator(Player player, boolean spectating) {
 		addToSpectator(player.getUniqueId());
 		Profile profile = Chambers.getInstance().getProfileManager().getProfileByUuid(player.getUniqueId());
-		profile.setProfileStatus(ProfileStatus.SPECTATING);
+		if (spectating)
+		    profile.setProfileStatus(ProfileStatus.SPECTATING);
+		else 
+			profile.setProfileStatus(ProfileStatus.RESPAWNING);
 		Bukkit.getOnlinePlayers().stream().filter(other -> other != player).forEach(other -> other.hidePlayer(player));
 		player.setGameMode(GameMode.CREATIVE);
         player.setHealth(20.0);

@@ -1,7 +1,5 @@
 package me.hulipvp.chambers.listener.listeners;
 
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -40,16 +38,7 @@ public class PlayerDeathListener implements Listener {
 	}
 	
 	private void reset(Player player) {
-		Bukkit.getOnlinePlayers().stream().filter(other -> other != player).forEach(other -> other.hidePlayer(player));
-		player.setGameMode(GameMode.CREATIVE);
-        player.setHealth(20.0);
-        player.setFoodLevel(20);
-        player.getActivePotionEffects().forEach(potionEffect -> player.removePotionEffect(potionEffect.getType()));
-        player.setAllowFlight(true);
-        player.setFlying(true);
-        player.setVelocity(player.getVelocity().setY(1.1));
-        player.getInventory().clear();
-        player.getInventory().setArmorContents(null);
+	 Chambers.getInstance().getSpectatorMode().applySpectator(player, false);
 	}
 
 }

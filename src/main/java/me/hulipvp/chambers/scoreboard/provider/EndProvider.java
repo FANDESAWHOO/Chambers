@@ -19,8 +19,8 @@ public class EndProvider implements AssembleAdapter {
 	public List<String> getLines(Player player) {
 		List<String> lines = new ArrayList<>();
 
-		lines.add("&6&lMap:&7 " + plugin.getGameManager().getGame().getMapName());
-		lines.add("&6&lWinner:&r " + (plugin.getGameManager().getGame().getWinner() == null ? "Forced Win" : plugin.getGameManager().getGame().getWinner().getFormattedName()));
+		lines.add("&6&lMap&7:&6 " + plugin.getGameManager().getGame().getMapName());
+		lines.add("&6&lWinner&7:&6 " + (plugin.getGameManager().getGame().getWinner() == null ? "Forced Win" : plugin.getGameManager().getGame().getWinner().getFormattedName()));
 
 		return lines;
 	}

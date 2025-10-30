@@ -80,7 +80,7 @@ public class Team {
 	        return false;
 	    }
 
-	    // Obtener o crear set de votantes
+
 	    Set<UUID> currentVotes = votes.computeIfAbsent(target.getUniqueId(), k -> new HashSet<>());
 
 	    if (currentVotes.contains(voter.getUniqueId())) {
@@ -93,11 +93,10 @@ public class Team {
 	    int needed = getVotesForKick();
 	    int current = currentVotes.size();
 
-	    // Avisar progreso
+
 	    sendMessage(ChatColor.YELLOW + voter.getName() + ChatColor.GRAY + " voted to kick " + ChatColor.RED + target.getName()
 	            + ChatColor.GRAY + " (" + current + "/" + needed + ")");
 
-	    // Si alcanza el número necesario → kickear
 	    if (current >= needed) {
 	        sendMessage(ChatColor.RED + target.getName() + " has been kicked from the team!");
 	        Profile targetProfile = Chambers.getInstance().getProfileManager().getProfileByUuid(target.getUniqueId());

@@ -34,11 +34,11 @@ public class GameTask extends BukkitRunnable {
             });
         }
 
- /*     if (game.getInvincibilityTime() > 0) {
+          if (game.getInvincibilityTime() > 0) {
             game.setInvincibilityTime(game.getInvincibilityTime() - 1);
         } else if (game.getInvincibilityTime() == 0 && game.getTotalTime() == 60) {
             Bukkit.broadcastMessage(ChatColor.RED + "Invincibility is now disabled and PvP has now been enabled!");
-        }*/
+        }
         
         if (game.getTotalTime() == 60) {
         	String kothName = game.getKothName();

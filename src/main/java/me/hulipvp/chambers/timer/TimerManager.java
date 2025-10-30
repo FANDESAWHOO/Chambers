@@ -4,7 +4,6 @@ package me.hulipvp.chambers.timer;
 import lombok.Getter;
 import me.hulipvp.chambers.Chambers;
 import me.hulipvp.chambers.timer.type.EnderpearlTimer;
-import me.hulipvp.chambers.timer.type.ProtectionTimer;
 import me.hulipvp.chambers.timer.type.TeleportTimer;
 
 import org.bukkit.Bukkit;
@@ -16,7 +15,6 @@ import java.util.Set;
 public class TimerManager {
      private final Chambers plugin;
 
-     private ProtectionTimer protectionTimer;
      private TeleportTimer teleportTimer;
      private EnderpearlTimer enderpearlTimer;
 
@@ -27,7 +25,6 @@ public class TimerManager {
 
         registerTimer(teleportTimer = new TeleportTimer());
         registerTimer(enderpearlTimer = new EnderpearlTimer());
-        registerTimer(protectionTimer = new ProtectionTimer());
     }
 
     public void registerTimer(Timer timer) {
