@@ -12,8 +12,10 @@ import me.hulipvp.chambers.team.structure.Team;
 import me.hulipvp.chambers.util.BukkitUtils;
 import me.hulipvp.chambers.util.scoreboard.tab.entry.TabElement;
 import me.hulipvp.chambers.util.scoreboard.tab.entry.TabElementHandler;
+import net.md_5.bungee.api.ChatColor;
 
 import java.text.DecimalFormat;
+import java.util.List;
 
 public class TabProvider implements TabElementHandler {
 
@@ -59,9 +61,9 @@ public class TabProvider implements TabElementHandler {
         element.add(1,5, "&aGreen Team &7[&a"+green.getFormattedDTR()+"&7]");
         
         int gree = 6;     
-        for (Player member : green.getOnlinePlayers()) {
+        for (Profile member : green.getProfiles()) {
             if (member != null) {
-               element.add(1,gree,"&a" + member.getName());
+               element.add(1,gree, formatPlayerName(member));
                gree++;
             }
         }
@@ -71,7 +73,10 @@ public class TabProvider implements TabElementHandler {
         int blu = 13;
         for (Player member : blue.getOnlinePlayers()) {
             if (member != null) {
-               element.add(1,blu,"&9" + member.getName());
+            	if (Chambers.getInstance().getSpectatorMode().isSpectator(member.getUniqueId()))
+            		element.add(1,blu,"&4" + member.getName());
+            	else 
+            		element.add(1,blu,"&9" + member.getName());
                blu++;
             }
         }
@@ -82,9 +87,9 @@ public class TabProvider implements TabElementHandler {
         // ==============================
         element.add(0,12, "&cRed Team &7[&a"+red.getFormattedDTR()+"&7]");
         int re = 13;
-        for (Player member : red.getOnlinePlayers()) {
+        for (Profile member : red.getProfiles()) {
             if (member != null) {
-                element.add(0,re,"&c" + member.getName());
+            		element.add(0,re, formatPlayerName(member));
                 re++;
             }
         }
@@ -111,9 +116,9 @@ public class TabProvider implements TabElementHandler {
 
         
         int yel = 13;
-        for (Player member : yellow.getOnlinePlayers()) {
+        for (Profile member : yellow.getProfiles()) {
             if (member != null) {
-                element.add(2,yel,"&e" + member.getName());
+            	element.add(2,yel,"&4" + formatPlayerName(member));
                 yel++;
             }
         }
@@ -128,11 +133,39 @@ public class TabProvider implements TabElementHandler {
             element.add(3, 3, "&ePerformance&7: &f" + new DecimalFormat("#.##").format(getLag()) + "%");
             element.add(3, 4, "&eRam&7: &f" + ((Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1048576L) 
                     + "/" + Runtime.getRuntime().totalMemory() / 1048576L + "MB");
+        } else {
+           if (!information.getGame().getStatus().equals(GameStatus.LOBBY)) {
+        	   element.add(3, 1, "&6Leaderboard");
+               List<Profile> top = Chambers.getInstance().getProfileManager().getTop10ByKills();
+               
+       
+               for (int i = 0; i < 10; i++) {
+
+                   int row = 2 + i; 
+
+                   if (i < top.size()) {
+                       Profile p = top.get(i);
+                       element.add(3, row, p.getTeam().getColor() + p.getPlayer().getName() + " &7[" + p.getKills() + "]");
+                   }
+               }
+           }
         }
 
         return element;
     }
-    
+    public String formatPlayerName(Profile profile) {
+    	Player member = profile.getPlayer();
+    	String input = null;
+        if (member.isOnline()) {
+        	if (Chambers.getInstance().getSpectatorMode().isSpectator(member.getUniqueId()))
+        		input = ChatColor.STRIKETHROUGH + "&4" + member.getName();
+        	else 
+        		input = profile.getTeam().getColor() + member.getName();
+        } else {
+        	input = ChatColor.STRIKETHROUGH + "" + ChatColor.GRAY + member.getName();
+        }
+    	return input;
+    }
     public String formatIntToTime(int i) {
 		if (i < 3600) {
 			int minutes = (i - (i % 60)) / 60;

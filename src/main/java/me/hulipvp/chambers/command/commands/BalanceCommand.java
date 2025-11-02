@@ -11,7 +11,7 @@ import me.hulipvp.chambers.util.commandapi.CommandArgs;
 
 public class BalanceCommand extends ChambersCommand {
 	
-	@Command(name = "balance", description = "See how much money a player has", aliases = { "bal", "checkbalance", "money", "checkmoney" }, usage = "/<command> <args>", playerOnly = true, requiresTeam = true)
+	@Command(name = "balance", description = "See how much money a player has", aliases = { "bal", "checkbalance", "money", "checkmoney" }, usage = "/<command> <args>", playerOnly = true, requiresTeam = false, adminsOnly = true)
 	public void onCommand(CommandArgs commandArgs) {
 		if (commandArgs.length() == 0) {
 			Profile profile = plugin.getProfileManager().getProfileByUuid(commandArgs.getPlayer().getUniqueId());
@@ -26,5 +26,6 @@ public class BalanceCommand extends ChambersCommand {
 		Profile profile = plugin.getProfileManager().getProfileByUuid(target.getUniqueId());
 		commandArgs.getPlayer().sendMessage(ChatColor.YELLOW + target.getName() + "'s Balance: " + ChatColor.GREEN + profile.getBalance());
 	}
-
+	
 }
+

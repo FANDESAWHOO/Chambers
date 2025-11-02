@@ -64,7 +64,7 @@ public class TeamShowCommand extends TeamCommand {
 				}
 			}
 			lines.add("&eMembers:&7 " + memberBuilder.toString());
-			lines.add("&eDTR:&7 " + (team.isRaidable() ? ChatColor.RED + String.valueOf(team.getDtr()) + " [Raidable]" : ChatColor.GREEN + String.valueOf(team.getDtr()) + " [Not Raidable]"));
+			lines.add("&eDTR:&7 " + (team.isRaidable() ? ChatColor.RED + String.valueOf(team.getFormattedDTR()) + " [Raidable]" : ChatColor.GREEN + String.valueOf(team.getFormattedDTR()) + " [Not Raidable]"));
 		}
 		
 		lines.add(0, "&7&m-------------------------------------------------------------");

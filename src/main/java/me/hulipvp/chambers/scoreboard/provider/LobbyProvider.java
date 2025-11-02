@@ -22,23 +22,23 @@ public class LobbyProvider implements AssembleAdapter {
 	public List<String> getLines(Player player) {
 		List<String> lines = new ArrayList<>();
 
-		lines.add("&6Game State&7: &6Lobby");
-		lines.add("&6Map&7: &6" + plugin.getGameManager().getGame().getMapName());
+		lines.add("&eGame State&7: &cLobby");
+		lines.add("&eMap&7: &c" + plugin.getGameManager().getGame().getMapName());
 		Profile profile = plugin.getProfileManager().getProfileByUuid(player.getUniqueId());
 		if (profile != null && profile.getTeam() != null) {
-			lines.add("&6Team&7:&6 " + profile.getTeam().getFormattedName());
-			lines.add("&6Members&7:&6");
+			lines.add("&eTeam&7:&c " + profile.getTeam().getFormattedName());
+			lines.add("&eMembers&7:&c ");
 			int count = 1;
 			for (UUID uuid : profile.getTeam().getMembers()) {
 				lines.add(" &7" + count + ". &r" + Bukkit.getPlayer(uuid).getName());
 				++count;
 			}
 		} else {
-			lines.add("&6Team&7: &6Please choose...");
+			lines.add("&eTeam&7: &cPlease choose...");
 		}
 		if (plugin.getGameManager().getGame().getStatus() == GameStatus.STARTING) {
 			lines.add(" ");
-			lines.add("&6Starting in&7:&6 " + plugin.getGameManager().getGame().getCountdownTime());
+			lines.add("&eStarting in&7:&c " + plugin.getGameManager().getGame().getCountdownTime());
 		}
 
 		return lines;

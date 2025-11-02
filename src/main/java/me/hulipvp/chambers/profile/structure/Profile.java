@@ -19,7 +19,7 @@ public class Profile {
 	private ChatStatus chatStatus;
 	private Team team;
 	private int kills, deaths, balance, respawnTime;
-	private boolean hidingScoreboard, bypassMode;
+	private boolean hidingScoreboard, bypassMode, building;
 
 	public Profile(Player player, ProfileStatus profileStatus) {
 		this.id = player.getUniqueId();
@@ -32,6 +32,7 @@ public class Profile {
 		this.respawnTime = 0;
 		this.hidingScoreboard = false;
 		this.bypassMode = false;
+		this.building = false;
 	}
 	
 	/**
@@ -59,6 +60,20 @@ public class Profile {
 	 */
 	public void withdraw(int amount) {
 		this.setBalance(this.getBalance() - amount);
+	}
+	/**
+	 * Set the building status to administrators.
+	 * @param status
+	 */
+	public void setBuilding(boolean status) {
+		this.building = status;
+	}
+	/**
+	 * Useful for the command
+	 * @return the boolean.
+	 */
+	public boolean isBuilding() {
+		return this.building;
 	}
 
 	/**

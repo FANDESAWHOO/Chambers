@@ -12,6 +12,7 @@ import me.hulipvp.chambers.Chambers;
 import me.hulipvp.chambers.game.structure.GameStatus;
 import me.hulipvp.chambers.team.TeamManager;
 import me.hulipvp.chambers.team.structure.Team;
+import me.hulipvp.chambers.util.Color;
 import me.hulipvp.chambers.util.exception.NoFactionFoundException;
 
 
@@ -39,14 +40,15 @@ public class Nametag extends BukkitRunnable {
         	return;
         try {
             Team targetFaction = getPlayerFactionSafe(target, factionManager);
-            
+            Team viewerFaction = getPlayerFactionSafe(viewer, factionManager);
             ChatColor color = targetFaction.getColor();
             
             List<String> coloredNames = new ArrayList<>();
             coloredNames.add(color + target.getName());
             
             if (targetFaction != null) {
-                String factionTag = ChatColor.GOLD + "[" + targetFaction.getFormattedName() + ChatColor.GOLD + "]";
+            	String symbol = Color.color(targetFaction.isMaxDTR() ? "&a◀" : "&c■");
+                String factionTag = ChatColor.GOLD + "[" +symbol+ targetFaction.getFormattedDTR()+ ChatColor.GOLD + "]";
                 coloredNames.add(factionTag);
             }
             
@@ -54,10 +56,9 @@ public class Nametag extends BukkitRunnable {
             Chambers.getInstance().getClientManager().getLunarClient().setNametags(target, viewer, coloredNames);
             
         } catch (Exception e) {
-   
-            if (!(e.getCause() instanceof NoFactionFoundException)) {
-                Bukkit.getLogger().warning("Error updating nametags for " + viewer.getName() + " viewing " + target.getName() + ": " + e.getMessage());
-            }
+            List<String> coloredNames = new ArrayList<>();
+            coloredNames.add(target.getName());
+        	Chambers.getInstance().getClientManager().getLunarClient().setNametags(target, viewer, coloredNames);
         }
     }
 

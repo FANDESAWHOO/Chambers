@@ -29,8 +29,10 @@ public class TeamBlockListener implements Listener {
 			return;
 		}
 		if (profile.getTeam() == null) {
+			if (!event.getBlock().getType().name().endsWith("_ORE")) {
 			event.setCancelled(true);
 			return;
+			}
 		}
 		Team team = Chambers.getInstance().getClaimManager().getTeamAt(location);
 		if (team.isRaidable()) {

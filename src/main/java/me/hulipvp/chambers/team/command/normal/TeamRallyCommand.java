@@ -23,11 +23,11 @@ public class TeamRallyCommand extends TeamCommand {
 		Player player = commandArgs.getPlayer();
 		Location l = player.getLocation();
 		Team team = Chambers.getInstance().getTeamManager().getTeamByMember(player.getUniqueId());
-        team.sendMessage(ChatColor.DARK_AQUA + " has updated the team's rally point, this will last for 5 minutes "+String.format("[%.1f, %.1f, %.1f]", l.getX(), l.getY(), l.getZ()));
+        team.sendMessage(ChatColor.DARK_AQUA + player.getName()+" has updated the team's rally point, this will last for 5 minutes "+String.format("[%.1f, %.1f, %.1f]", l.getX(), l.getY(), l.getZ()));
 	    Waypoint waypoint = Chambers.getInstance().getClientManager().getLunarClient().getWaypoint("Team's rally", l, Color.BLUE);
         team.setRally(waypoint);
         team.getOnlinePlayers().forEach(teammate -> {
-        	Chambers.getInstance().getClientManager().getLunarClient().sendWaypoint(player, waypoint);
+        	Chambers.getInstance().getClientManager().getLunarClient().sendWaypoint(teammate, waypoint);
         });
 	    new BukkitRunnable() {
 

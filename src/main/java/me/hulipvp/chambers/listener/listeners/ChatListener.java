@@ -48,7 +48,8 @@ public class ChatListener implements Listener {
 		if (profile.getChatStatus() == ChatStatus.FACTION) {
 			if (profile.getTeam() != null) {
 				profile.getTeam().sendMessage(getTeamMessageFormat(event.getPlayer(), message));
-			} else {
+				event.setCancelled(true);			
+				} else {
 				profile.setChatStatus(ChatStatus.PUBLIC);
 				profile.setTeam(null);
 				event.setFormat(getSpectatorFormat(event.getPlayer(), message));

@@ -1,6 +1,7 @@
 package me.hulipvp.chambers.profile;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -16,6 +17,20 @@ public class ProfileManager {
 		profiles = new HashSet<>();
 
 	}
+	
+	/**
+	 * Get top 10 profiles ordered by kills (highest to lowest)
+	 *
+	 * @return Set<Profile> - top 10
+	 */
+	public List<Profile> getTop10ByKills() {
+	    return profiles.stream()
+	            .sorted((p1, p2) -> Integer.compare(p2.getKills(), p1.getKills()))
+	            .limit(10)
+	            .collect(Collectors.toList());
+	}
+
+
 	
 	/**
 	 * Get all of the Profiles of the Players that are currently playing the Game
@@ -35,7 +50,7 @@ public class ProfileManager {
 	 * @return Profile - a Profile with the matching UUID as the one provided
 	 */
 	public Profile getProfileByUuid(UUID uuid) {
-		return profiles.stream().filter(profile -> profile.getId() == uuid).findFirst().orElse(null);
+		return profiles.stream().filter(profile -> profile.getId().equals(uuid)).findFirst().orElse(null);
 	}
 
 	/**

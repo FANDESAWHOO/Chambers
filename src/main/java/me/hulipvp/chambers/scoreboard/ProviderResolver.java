@@ -35,7 +35,7 @@ public class ProviderResolver implements AssembleAdapter {
 	
 	@Override
 	public String getTitle(Player player) {
-		return ChatColor.GOLD.toString() + ChatColor.BOLD + "Pure" + ChatColor.GOLD + " ┃ "+ ChatColor.GOLD + ChatColor.BOLD + "Bunkers";
+		return ChatColor.GOLD.toString() + ChatColor.BOLD + "Pure" + ChatColor.GOLD + " ┃ " + ChatColor.BOLD + "Bunkers";
 	}
 
 	@Override
@@ -52,8 +52,8 @@ public class ProviderResolver implements AssembleAdapter {
 		}
 
 		if (!lines.isEmpty()) {
-			lines.add(0, "&7&m------------------");
-			lines.add("&7&m------------------");
+			lines.add(0, "&6&m------------------");
+			lines.add("&6&m------------------");
 		}
 
 		return lines.stream().map(Color::color).collect(Collectors.toList());

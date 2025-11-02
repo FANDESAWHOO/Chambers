@@ -11,7 +11,7 @@ import me.hulipvp.chambers.util.commandapi.CommandArgs;
 
 public class TeamVoteKickCommand extends TeamCommand {
 	
-	@Command(name = "faction.votekick", description = "Vote to kick a teammate.", usage = "/<command> <player>", requiresTeam = true, playerOnly = true)
+	@Command(name = "faction.votekick", description = "Vote to kick a teammate.", aliases = { "f.votekick", "t.votekick", "s.votekick", "team.votekick", "squad.votekick"}, usage = "/<command> <player>", requiresTeam = true, playerOnly = true)
 	public void onCommand(CommandArgs args) {
 	    Player player = args.getPlayer();
 
@@ -41,7 +41,9 @@ public class TeamVoteKickCommand extends TeamCommand {
 	        player.sendMessage(ChatColor.RED + "That player is not online or not in your team.");
 	        return;
 	    }
-
+        if (team.getOnlinePlayers().size() == 2) {
+        	player.sendMessage(ChatColor.RED + "You can't kick your teammate when are less than 3 people");
+        }
 	    team.voteKick(player, target);
 	}
 

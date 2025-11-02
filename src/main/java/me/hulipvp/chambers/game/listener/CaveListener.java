@@ -6,14 +6,13 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.scheduler.BukkitRunnable;
 
 
 import me.hulipvp.chambers.Chambers;
 import me.hulipvp.chambers.game.structure.Game;
+import me.hulipvp.chambers.util.BukkitUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -60,7 +59,7 @@ public class CaveListener implements Listener {
                 drop = new ItemStack(type);
             }
             event.getPlayer().giveExp(exp);
-            if (!isEmpty(event.getPlayer().getInventory(), false))
+            if (!BukkitUtils.isEmpty(event.getPlayer().getInventory(), false))
             	event.getPlayer().getInventory().addItem(drop);
             else 
             	event.getBlock().getWorld().dropItemNaturally(block.getLocation(), drop);
@@ -95,31 +94,6 @@ public class CaveListener implements Listener {
         }
     }
     
-	public static boolean isEmpty(Inventory inventory) {
-		return isEmpty(inventory, true);
-	}
-
-	@SuppressWarnings("unused")
-	public static boolean isEmpty(Inventory inventory, boolean checkArmour) {
-		ItemStack[] contents;
-		boolean result = true;
-		for (ItemStack content2 : contents = inventory.getContents()) {
-			if (content2 == null || content2.getType() == Material.AIR) continue;
-			result = false;
-			break;
-		}
-		if (!result) {
-			return false;
-		}
-		if (checkArmour && inventory instanceof PlayerInventory) {
-			for (ItemStack content2 : contents = ((PlayerInventory) inventory).getArmorContents()) {
-				if (content2 == null || content2.getType() == Material.AIR) continue;
-				result = false;
-				break;
-			}
-		}
-		return result;
-	}
     private String serializeLocation(Block block) {
         return block.getWorld().getName() + "," + block.getX() + "," + block.getY() + "," + block.getZ();
     }

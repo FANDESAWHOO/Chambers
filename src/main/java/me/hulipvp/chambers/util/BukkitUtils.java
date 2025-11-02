@@ -17,6 +17,9 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.entity.ThrownPotion;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.projectiles.ProjectileSource;
@@ -101,6 +104,31 @@ public class BukkitUtils {
         }
         return def;
     }
+	public static boolean isEmpty(Inventory inventory) {
+		return isEmpty(inventory, true);
+	}
+
+
+	public static boolean isEmpty(Inventory inventory, boolean checkArmour) {
+		ItemStack[] contents;
+		boolean result = true;
+		for (ItemStack content2 : contents = inventory.getContents()) {
+			if (content2 == null || content2.getType() == Material.AIR) continue;
+			result = false;
+			break;
+		}
+		if (!result) {
+			return false;
+		}
+		if (checkArmour && inventory instanceof PlayerInventory) {
+			for (ItemStack content2 : contents = ((PlayerInventory) inventory).getArmorContents()) {
+				if (content2 == null || content2.getType() == Material.AIR) continue;
+				result = false;
+				break;
+			}
+		}
+		return result;
+	}
 
     public static boolean isDebuff(PotionEffectType type) {
         return DEBUFF_TYPES.contains(type);

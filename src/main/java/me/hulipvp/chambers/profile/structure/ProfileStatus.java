@@ -4,6 +4,7 @@ public enum ProfileStatus {
 
 	PLAYING, 
 	RESPAWNING,
-	SPECTATING;
+	SPECTATING,
+	BUILDING;
 
 }

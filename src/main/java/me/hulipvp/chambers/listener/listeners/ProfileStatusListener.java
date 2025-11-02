@@ -19,7 +19,7 @@ public class ProfileStatusListener implements Listener {
 	@EventHandler
 	public void onBreak(BlockBreakEvent event) {
 		Profile profile = Chambers.getInstance().getProfileManager().getProfileByUuid(event.getPlayer().getUniqueId());
-		if (profile.getProfileStatus() != ProfileStatus.PLAYING) {
+		if (profile.getProfileStatus() != ProfileStatus.PLAYING && profile.getProfileStatus() != ProfileStatus.BUILDING) {
 			event.setCancelled(true);
 		}
 	}
@@ -27,7 +27,7 @@ public class ProfileStatusListener implements Listener {
 	@EventHandler
 	public void onPlace(BlockPlaceEvent event) {
 		Profile profile = Chambers.getInstance().getProfileManager().getProfileByUuid(event.getPlayer().getUniqueId());
-		if (profile.getProfileStatus() != ProfileStatus.PLAYING) {
+		if (profile.getProfileStatus() != ProfileStatus.PLAYING && profile.getProfileStatus() != ProfileStatus.BUILDING) {
 			event.setCancelled(true);
 		}
 	}
@@ -44,7 +44,7 @@ public class ProfileStatusListener implements Listener {
 	@EventHandler
 	public void onDrop(PlayerDropItemEvent event) {
 		Profile profile = Chambers.getInstance().getProfileManager().getProfileByUuid(event.getPlayer().getUniqueId());
-		if (profile.getProfileStatus() != ProfileStatus.PLAYING) {
+		if (profile.getProfileStatus() != ProfileStatus.PLAYING && profile.getProfileStatus() != ProfileStatus.BUILDING) {
 			event.setCancelled(true);
 		}
 	}
@@ -56,9 +56,9 @@ public class ProfileStatusListener implements Listener {
 		
 		if (event.getEntity() instanceof Player && event.getDamager() instanceof Player) {
 			Profile profile = Chambers.getInstance().getProfileManager().getProfileByUuid(event.getEntity().getUniqueId());
-			if (profile.getProfileStatus() != ProfileStatus.PLAYING) {
+			if (profile.getProfileStatus() != ProfileStatus.PLAYING && profile.getProfileStatus() != ProfileStatus.BUILDING) {
 				Player damager = (Player) event.getDamager();
-				damager.sendMessage(ChatColor.RED + "The invincibility timer is still on.");
+				damager.sendMessage(ChatColor.RED + "You can't damage a player now.");
 				event.setCancelled(true);
 			}
  		}
@@ -66,7 +66,7 @@ public class ProfileStatusListener implements Listener {
 	@EventHandler
 	public void onPickup(PlayerPickupItemEvent event) {
 		Profile profile = Chambers.getInstance().getProfileManager().getProfileByUuid(event.getPlayer().getUniqueId());
-		if (profile.getProfileStatus() != ProfileStatus.PLAYING) {
+		if (profile.getProfileStatus() != ProfileStatus.PLAYING && profile.getProfileStatus() != ProfileStatus.BUILDING) {
 			event.setCancelled(true);
 		}
 	}

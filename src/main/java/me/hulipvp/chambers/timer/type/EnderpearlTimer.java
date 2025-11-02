@@ -1,6 +1,5 @@
 package me.hulipvp.chambers.timer.type;
 
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import org.bukkit.ChatColor;
@@ -17,30 +16,24 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.InventoryHolder;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.scheduler.BukkitRunnable;
 
-import com.google.common.collect.Sets;
 
 import lombok.Getter;
-import me.hulipvp.chambers.Chambers;
 import me.hulipvp.chambers.timer.PlayerTimer;
-import me.hulipvp.chambers.util.Color;
 import me.hulipvp.chambers.util.DurationFormatter;
 @Getter
 public class EnderpearlTimer extends PlayerTimer implements Listener{
 
-	private final Set<Material> blockedPearlTypes;
+//	private final Set<Material> blockedPearlTypes;
 	
 	public EnderpearlTimer() {
 		 super("Enderpearl", TimeUnit.SECONDS.toMillis(16L), false);
-		  blockedPearlTypes = Sets.immutableEnumSet(Material.THIN_GLASS,
+	/*	  blockedPearlTypes = Sets.immutableEnumSet(Material.THIN_GLASS,
 					new Material[] { Material.IRON_FENCE, Material.FENCE, Material.NETHER_FENCE, Material.FENCE_GATE,
 							Material.ACACIA_STAIRS, Material.BIRCH_WOOD_STAIRS, Material.BRICK_STAIRS,
 							Material.COBBLESTONE_STAIRS, Material.DARK_OAK_STAIRS, Material.JUNGLE_WOOD_STAIRS,
 							Material.NETHER_BRICK_STAIRS, Material.QUARTZ_STAIRS, Material.SANDSTONE_STAIRS,
-							Material.SMOOTH_STAIRS, Material.SPRUCE_WOOD_STAIRS, Material.WOOD_STAIRS });
+							Material.SMOOTH_STAIRS, Material.SPRUCE_WOOD_STAIRS, Material.WOOD_STAIRS });*/
 	}
 
 	@Override
@@ -95,27 +88,6 @@ public class EnderpearlTimer extends PlayerTimer implements Listener{
 					player.sendMessage(ChatColor.GOLD + "You must wait " + ChatColor.RESET + String.valueOf(DurationFormatter.getRemaining(getRemaining(player), true)) + ChatColor.GOLD + " seconds.");
 				} else {
 					setCooldown(player);
-					new BukkitRunnable() {
-						public void run() {
-							ItemStack itemStack = player.getItemInHand();
-							if (itemStack != null && itemStack.getType() == Material.ENDER_PEARL
-									&& player.getGameMode() != GameMode.CREATIVE) {
-								if (hasCooldown(player)) {
-									ItemMeta itemMeta = itemStack.getItemMeta();
-									itemMeta.setDisplayName(ChatColor.RED + String.valueOf(DurationFormatter.getRemaining(getRemaining(player), true)));
-									itemStack.setItemMeta(itemMeta);
-								} else if (itemStack.getItemMeta().hasDisplayName()) {
-									ItemMeta itemMeta = itemStack.getItemMeta();
-									itemMeta.setDisplayName(null);
-									itemStack.setItemMeta(itemMeta);
-									player.sendMessage(Color.color("&aYou can now throw a pearl again."));
-									player.setLevel(0);
-									player.setExp(0.0F);
-									this.cancel();
-								}
-							}
-						}
-					}.runTaskTimer(Chambers.getInstance(), 1L, 2L);
 				}
 			}
 		}

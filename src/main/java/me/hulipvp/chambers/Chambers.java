@@ -136,6 +136,7 @@ public class Chambers extends JavaPlugin {
 		// BASIC
 		new ChambersCommand(); 
 		new BalanceCommand();
+		new BuilderCommand();
 		// Staffs command
 		new GameCommand();
 		new GameStartCommand();

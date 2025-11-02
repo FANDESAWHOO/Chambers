@@ -42,6 +42,9 @@ public class KothMoveListener implements Listener {
 			return;
 		}
 		Team team = event.getClaim().getOwner();
+		if (team == null) 
+		    return;
+		
 		if (team.getType() == TeamType.KOTH_CAP) {
 			Koth koth = Chambers.getInstance().getKothManager().getKoth();
 			Profile profile = Chambers.getInstance().getProfileManager().getProfileByUuid(event.getPlayer().getUniqueId());
@@ -51,7 +54,7 @@ public class KothMoveListener implements Listener {
 			if (koth.getCapper() != null && koth.getCapper() == profile) {
 				koth.setCapper(null);
 				if (koth.getTime() <= 180) {
-					Chambers.getInstance().getKothManager().broadcastMessage("The control of " + ChatColor.BLUE + koth.getName() + ChatColor.YELLOW + "has been lost.");
+					Chambers.getInstance().getKothManager().broadcastMessage("The control of " + ChatColor.BLUE + koth.getName() + ChatColor.YELLOW + " has been lost.");
 				}
 				profile.sendMessage(Chambers.getInstance().getKothManager().getKothFormat() + "You have lost control of the KOTH.");
 			}

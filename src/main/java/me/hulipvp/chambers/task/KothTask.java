@@ -43,7 +43,8 @@ public class KothTask extends BukkitRunnable {
 			if (koth.getCapper() == null && koth.getCapQueue().peek() != null) {
 				Profile profile = koth.getCapQueue().poll();
 				koth.setCapper(profile);
-				profile.sendMessage(Chambers.getInstance().getKothManager().getKothFormat() + "Attemptimg to control " + ChatColor.BLUE + koth.getName() + ChatColor.YELLOW + ".");
+				Chambers.getInstance().getKothManager().broadcastMessage("Someone is controlling " + ChatColor.BLUE + koth.getName() + ChatColor.YELLOW + ".");
+	     		profile.sendMessage(Chambers.getInstance().getKothManager().getKothFormat() + "Attemptimg to control " + ChatColor.BLUE + koth.getName() + ChatColor.YELLOW + ".");
 				profile.getTeam().getOnlinePlayers().stream().filter(player -> profile.getPlayer().getUniqueId() != profile.getId()).forEach(player -> player.sendMessage(Chambers.getInstance().getKothManager().getKothFormat() + "Your team has started to control " + ChatColor.BLUE + koth.getName() + ChatColor.YELLOW + "."));
 			}
 			adjustKothTime(koth);

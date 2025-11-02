@@ -37,6 +37,7 @@ public class Team {
 	private Location home;
 	private Claim claim;
 	private UUID uniqueID;
+	private Team focusedFaction;
 	private int votesforkick;
 	private Waypoint rally;
 	private final Map<UUID, Set<UUID>> votes = new HashMap<>();
@@ -48,9 +49,13 @@ public class Team {
 		this.claim = null;
 		this.members = new HashSet<>();
 		this.offline = new HashSet<>();
-		this.dtr = 1.1;
+		if(type.isPlayerTeam())
+			this.dtr = 0.0; // This was a example.
+		else 
+			this.dtr = 1.1;
 		this.uniqueID = UUID.randomUUID();
 		this.rally = null;
+		this.focusedFaction = null;
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -59,14 +64,6 @@ public class Team {
                   }
             }
         }.runTaskLater(Chambers.getInstance(), 20L);
-	//	DataFile data = Chambers.getInstance().getDataFile();
-		//String homePath = "TEAMS." + type.name() + ".HOME";
-		//String homeString = data.getString(homePath);
-		//this.home = (homeString != null) ? LocationUtil.deserializeLocation(homeString) : null;
-		//if (Chambers.getInstance().getDataFile().getString("TEAMS." + type.name() + ".CORNERONE") != null && Chambers.getInstance().getDataFile().getString("TEAMS." + type.name() + ".CORNERTWO") != null) {
-		//	this.claim = new Claim(LocationUtil.deserializeLocation(Chambers.getInstance().getDataFile().getString("TEAMS." + type.name() + ".CORNERONE")), LocationUtil.deserializeLocation(Chambers.getInstance().getDataFile().getString("TEAMS." + type.name() + ".CORNERTWO")), this);
-		//	Chambers.getInstance().getClaimManager().addClaim(this.claim);
-		//}
 	}
 
 	public boolean voteKick(Player voter, Player target) {
@@ -100,6 +97,7 @@ public class Team {
 	    if (current >= needed) {
 	        sendMessage(ChatColor.RED + target.getName() + " has been kicked from the team!");
 	        Profile targetProfile = Chambers.getInstance().getProfileManager().getProfileByUuid(target.getUniqueId());
+	        Chambers.getInstance().getSpectatorMode().applySpectator(targetProfile.getPlayer(), true);
 	        removeMember(targetProfile);
 	        votes.remove(target.getUniqueId());
 	        return true;
@@ -120,6 +118,13 @@ public class Team {
 		return this.members.size() - 1;
 	}
 	
+	public boolean isMaxDTR() {
+		if (this.dtr < (this.members.size() * 1.1)) {
+			return false;
+		}
+		return true;
+	}
+
 	/**
 	 * Get all of the Players that are online in the Team
 	 * 
@@ -144,7 +149,18 @@ public class Team {
 	public String getFormattedDTR() {
 		return formatDouble(this.dtr);
 	}
-	
+	/**
+	 * Get all Profiles of the team (online or offline)
+	 *
+	 * @return List<Profile>
+	 */
+	public List<Profile> getProfiles() {
+	    return this.members.stream()
+	            .map(uuid -> Chambers.getInstance().getProfileManager().getProfileByUuid(uuid))
+	            .filter(profile -> profile != null)
+	            .collect(Collectors.toList());
+	}
+
 	/**
 	 * Add a member to the Team
 	 * 
@@ -159,6 +175,7 @@ public class Team {
 			profile.getTeam().removeMember(profile);
 		}
 		profile.setTeam(this);
+		this.dtr = this.dtr + 1.1;
 		this.members.add(profile.getId());
 	}
 	
@@ -170,6 +187,7 @@ public class Team {
 	public void removeMember(Profile profile) {
 		profile.setTeam(null);
 		this.members.remove(profile.getId());
+		this.dtr = this.dtr - 1.1;
 	}
 
 	/**
