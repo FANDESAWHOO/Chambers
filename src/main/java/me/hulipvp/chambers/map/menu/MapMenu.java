@@ -86,10 +86,11 @@ public class MapMenu extends ChestMenu {
         int index = slot;
         if (index < maps.size()) {
             Map selected = maps.get(index);
-
+            if (votes.containsKey(uuid))
+            	return;
             selected.setVotes(selected.getVotes() + 1);
             votes.put(uuid, selected.getName());
-
+ 
             player.sendMessage(ChatColor.YELLOW + "Votaste por: " + ChatColor.AQUA + selected.getName()
                     + ChatColor.GRAY + " (" + selected.getVotes() + " votos)");
 

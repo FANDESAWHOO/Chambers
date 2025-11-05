@@ -52,7 +52,6 @@ public class Game {
 		this.spawnLocation = map.getSpawnLocation();
 		Chambers.getInstance().getTeamManager().loadTeamHomes();
 		Chambers.getInstance().getTeamManager().getTeamByType(TeamType.KOTH_CAP).load(map);
-		Chambers.getInstance().getKothManager().getKoth().setName(map.getKothName());
 	}
 	
 	/**

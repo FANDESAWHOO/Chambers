@@ -114,11 +114,11 @@ public class TabProvider implements TabElementHandler {
         	element.add(2,2,"&7Game Time: &f"+formatIntToTime(information.getGame().getTotalTime()));
         }
     	element.add(2,3,"&7Player: &f"+Bukkit.getOnlinePlayers().size());
-    	
+    	String kothName = information.getGame().getKothName() == null ? "Not selected" : information.getGame().getKothName();
         String kothInfo = (information.getGame().getTotalTime() < 60) ?
         "Starts in " + BukkitUtils.niceTime(60 - information.getGame().getTotalTime(), false) :
         BukkitUtils.niceTime(Chambers.getInstance().getKothManager().getKoth().getTime(), false);
-        element.add(2,5,"&6"+information.getGame().getKothName()+":");
+        element.add(2,5,"&6"+kothName+":");
         element.add(2,6, "&70,0");
         element.add(2,7, "&7"+ kothInfo);
 
