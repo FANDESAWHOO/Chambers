@@ -9,7 +9,9 @@ import org.bukkit.Location;
 import lombok.Getter;
 import lombok.Setter;
 import me.hulipvp.chambers.Chambers;
+import me.hulipvp.chambers.map.structure.Map;
 import me.hulipvp.chambers.team.structure.Team;
+import me.hulipvp.chambers.team.structure.TeamType;
 import me.hulipvp.chambers.util.LocationUtil;
 
 @Getter
@@ -20,7 +22,8 @@ public class Game {
 	private int totalTime, countdownTime, invincibilityTime;
 	private Set<String> offline;
 	private Team winner;
-	private String mapName, kothName; // TODO: change to use Map (Can be nullable until the people vote one.)
+	private String mapName, kothName;
+	private Map map;
 	private Location spawnLocation;
 
 	/**
@@ -35,11 +38,23 @@ public class Game {
 		this.invincibilityTime = 60;
 		this.offline = new HashSet<>();
 		this.winner = null;
+		this.mapName = "Select one map.";
+		this.kothName = "Map doesn't exist so koth too.";
 		this.mapName = Chambers.getInstance().getDataFile().getString("MAP_NAME");
 		this.kothName = Chambers.getInstance().getDataFile().getString("KOTH_NAME");
 		this.spawnLocation = Chambers.getInstance().getDataFile().getString("SPAWN_LOCATION") == null ? Bukkit.getWorlds().get(0).getSpawnLocation() : LocationUtil.deserializeLocation(Chambers.getInstance().getDataFile().getString("SPAWN_LOCATION"));
 	}
-
+	
+	public void setupGame(Map map) {
+		this.map = map;
+		this.mapName = map.getName();
+		this.kothName = map.getKothName();
+		this.spawnLocation = map.getSpawnLocation();
+		Chambers.getInstance().getTeamManager().loadTeamHomes();
+		Chambers.getInstance().getTeamManager().getTeamByType(TeamType.KOTH_CAP).load(map);
+		Chambers.getInstance().getKothManager().getKoth().setName(map.getKothName());
+	}
+	
 	/**
 	 * Check if the Game has started or not
 	 * 

@@ -4,6 +4,8 @@ import java.util.Arrays;
 
 import org.bukkit.ChatColor;
 
+import me.hulipvp.chambers.Chambers;
+import me.hulipvp.chambers.config.MapFile;
 import me.hulipvp.chambers.shop.structure.ShopType;
 import me.hulipvp.chambers.team.command.TeamCommand;
 import me.hulipvp.chambers.team.structure.Team;
@@ -35,9 +37,16 @@ public class TeamSetVillagerCommand extends TeamCommand {
 			commandArgs.getPlayer().sendMessage(ChatColor.RED + "You are in the wrong territory.");
 			return;
 		}
+		if (Chambers.getInstance().getMapHandler().getMap(commandArgs.getPlayer().getWorld().getName()) == null) {
 		plugin.getDataFile().getConfiguration().set("TEAMS." + team.getType().name() + "." + villagerType.name(), LocationUtil.serializeLocation(commandArgs.getPlayer().getLocation()));
 		plugin.getDataFile().save();
 		plugin.getDataFile().load();
+		} else {
+		MapFile mapFile = Chambers.getInstance().getMapHandler().getMap(commandArgs.getPlayer().getWorld().getName()).getMapFile();	
+		mapFile.getConfiguration().set("TEAMS." + team.getType().name() + "." + villagerType.name(), LocationUtil.serializeLocation(commandArgs.getPlayer().getLocation()));
+		mapFile.save();
+		mapFile.load();
+		}
 		commandArgs.getPlayer().sendMessage(ChatColor.GRAY + "Set villager location for Team: " + team.getFormattedName() + ChatColor.GRAY + " - " + villagerType.getFormattedName());
 		return;
 	}

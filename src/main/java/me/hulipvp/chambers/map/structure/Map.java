@@ -2,14 +2,18 @@ package me.hulipvp.chambers.map.structure;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 
 import lombok.Getter;
+import lombok.Setter;
 import me.hulipvp.chambers.Chambers;
 import me.hulipvp.chambers.config.MapFile;
 import me.hulipvp.chambers.util.ItemBuilder;
+import me.hulipvp.chambers.util.LocationUtil;
 
 @Getter
 public class Map  {
@@ -20,17 +24,22 @@ public class Map  {
 	private String description;
 	private MapLevel mapLevel;
 	private MapFile mapFile; // this is where the infrimation is located
+	private Location spawnLocation;
+	private String kothName;
+	@Setter private Integer votes = 0;
 	
 	public Map(String name) {
 		this.name = name;
 		this.world = null;
-		this.display = null;
+		this.display = ItemBuilder.of(Material.DIAMOND_AXE, name, "").build();
 		this.description = null;
 		this.mapLevel = MapLevel.NORMAL;
+		this.spawnLocation = null;
+		this.kothName = null;
 		manageData();
 	}
 	
-	public Map(World world, String name) {
+/*	public Map(World world, String name) {
 		this.world = world;
 		this.name = name;
 		this.display = null;
@@ -55,7 +64,7 @@ public class Map  {
 		this.description = description;
 		this.mapLevel = MapLevel.NORMAL;
 		manageData();
-	}
+	}*/
 	
 	public void manageData() {
 		mapFile = new MapFile(Chambers.getInstance(), name);
@@ -76,6 +85,12 @@ public class Map  {
 			String itemString = mapFile.getString(path + "item");
 			if (itemString != null && !itemString.isEmpty())
 				this.display = ItemBuilder.fromString(itemString).make();
+			String koth = mapFile.getString(path + "koth");
+			if (koth != null && !koth.isEmpty())
+				this.kothName = koth;
+			String location = mapFile.getString(path + "spawn");
+			if (location != null && !location.isEmpty())
+				this.spawnLocation = LocationUtil.deserializeLocation(location);
 		}
 	}
 	
@@ -94,7 +109,7 @@ public class Map  {
 	    sender.sendMessage(ChatColor.GRAY + "");
 	    sender.sendMessage(ChatColor.GRAY + "" + ChatColor.STRIKETHROUGH + "-----------------------------------------");
 	}
-	
+
 	public void delete() {
 	    String path = name + ".";
 	    mapFile.getConfiguration().set(path, null);
@@ -109,12 +124,15 @@ public class Map  {
 	public void saveData() {
 		String path = name + ".";
 
-		if (world != null)
-			mapFile.getConfiguration().set(path + "world", world.getName());
+		if (name != null)
+			mapFile.getConfiguration().set(path + "world", name);
 
 		mapFile.getConfiguration().set(path + "description", description);
 		mapFile.getConfiguration().set(path + "level", mapLevel.name());
-
+		if (kothName != null)
+        mapFile.getConfiguration().set(path + "koth", this.kothName);
+		if (spawnLocation != null)
+        mapFile.getConfiguration().set(path + "spawn", LocationUtil.serializeLocation(spawnLocation));
 		// item serialize
 		if (display != null)
 			mapFile.getConfiguration().set(path + "item", ItemBuilder.toString(display));

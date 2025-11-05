@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 
 import me.hulipvp.chambers.Chambers;
 import me.hulipvp.chambers.game.GameManager;
+import me.hulipvp.chambers.game.structure.Game;
 import me.hulipvp.chambers.game.structure.GameStatus;
 import me.hulipvp.chambers.profile.structure.Profile;
 import me.hulipvp.chambers.team.structure.Team;
@@ -16,6 +17,7 @@ import net.md_5.bungee.api.ChatColor;
 
 import java.text.DecimalFormat;
 import java.util.List;
+import java.util.Optional;
 
 public class TabProvider implements TabElementHandler {
 
@@ -40,7 +42,13 @@ public class TabProvider implements TabElementHandler {
 
         element.add(0, 5, "&6Location");
     
-        element.add(0, 6, locTeam.getColor() + locTeam.getName());
+    
+        if (locTeam == null) {
+            element.add(0,6,"&4WarZone");
+        } else {
+            element.add(0, 6, locTeam.getColor() + locTeam.getName());
+        }
+
         
         element.add(0, 7, "(" + player.getLocation().getBlockX() + ", " + player.getLocation().getBlockZ() + ")");
         
@@ -98,7 +106,10 @@ public class TabProvider implements TabElementHandler {
         // ==============================
         element.add(2, 1, "&6Game Info");
         if (information.getGame().getStatus().equals(GameStatus.LOBBY)) {
-        	element.add(2,2,"&7Map: &fClassic");
+    		String name = Optional.ofNullable(information.getGame())
+    		        .map(Game::getMapName)
+    		        .orElse("Map not selected");
+        	element.add(2,2,"&7Map: &f"+name);
         } else {
         	element.add(2,2,"&7Game Time: &f"+formatIntToTime(information.getGame().getTotalTime()));
         }
@@ -106,8 +117,8 @@ public class TabProvider implements TabElementHandler {
     	
         String kothInfo = (information.getGame().getTotalTime() < 60) ?
         "Starts in " + BukkitUtils.niceTime(60 - information.getGame().getTotalTime(), false) :
-        BukkitUtils.niceTime(Chambers.getInstance().getKothManager().getKoth().getMaxCapTime(), false);
-        element.add(2,5,"&6Classic:");
+        BukkitUtils.niceTime(Chambers.getInstance().getKothManager().getKoth().getTime(), false);
+        element.add(2,5,"&6"+information.getGame().getKothName()+":");
         element.add(2,6, "&70,0");
         element.add(2,7, "&7"+ kothInfo);
 

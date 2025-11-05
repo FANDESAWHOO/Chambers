@@ -1,5 +1,7 @@
 package me.hulipvp.chambers.game.command.general;
 
+import me.hulipvp.chambers.Chambers;
+import me.hulipvp.chambers.config.MapFile;
 import me.hulipvp.chambers.game.command.GameCommand;
 import me.hulipvp.chambers.game.structure.Game;
 import me.hulipvp.chambers.util.commandapi.Command;
@@ -16,10 +18,17 @@ public class GameSetKothNameCommand extends GameCommand {
             return;
         }
         String kothName = commandArgs.getArgs(0);
-        game.setKothName(kothName);
+        if (Chambers.getInstance().getMapHandler().getMap(commandArgs.getPlayer().getWorld().getName()) == null) {
+        
         plugin.getDataFile().getConfiguration().set("KOTH_NAME", kothName);
-        saveDataFile();
+        saveDataFile();       
+      } else {
+    	 MapFile mapFile = Chambers.getInstance().getMapHandler().getMap(commandArgs.getPlayer().getWorld().getName()).getMapFile();
+    	 mapFile.getConfiguration().set(commandArgs.getPlayer().getWorld().getName()+".koth", kothName);
+    	 mapFile.save();
+      }
         commandArgs.getSender().sendMessage(ChatColor.YELLOW + "The Koth name has been set to " + ChatColor.GREEN + kothName + ChatColor.YELLOW + ".");
+        game.setKothName(kothName);
     }
 
 }

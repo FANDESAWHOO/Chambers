@@ -31,7 +31,7 @@ public class VillagerCommand extends ChambersCommand {
 			}
 			plugin.getTeamManager().getAllPlayerTeams().forEach(team -> {	
 				if (plugin.getDataFile().getString("TEAMS." + team.getType().name() + "." + villagerType.name()) != null) {
-					Chambers.getInstance().getVillagerManager().spawnVillager(villagerType, LocationUtil.deserializeLocation(plugin.getDataFile().getString("TEAMS." + team.getType().name() + "." + villagerType.name())), team);
+					Chambers.getInstance().getVillagerManager().spawnVillager(villagerType, LocationUtil.deserializeLocation(plugin.getGameManager().getGame().getMap().getMapFile().getString("TEAMS." + team.getType().name() + "." + villagerType.name())), team);
 				}
 			});
 		}

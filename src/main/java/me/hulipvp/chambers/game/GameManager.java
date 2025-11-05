@@ -93,7 +93,7 @@ public class GameManager {
 	 * Attempts to start the Game
 	 */
 	public void tryStart() {
-		if (Bukkit.getOnlinePlayers().size() == 20) {
+		if (Bukkit.getOnlinePlayers().size() == 4) { // FOR BETA 
 			start();
 		}
 	}

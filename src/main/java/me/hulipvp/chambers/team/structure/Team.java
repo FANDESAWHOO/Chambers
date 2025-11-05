@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import me.hulipvp.chambers.Chambers;
 import me.hulipvp.chambers.claim.structure.Claim;
+import me.hulipvp.chambers.config.MapFile;
 import me.hulipvp.chambers.profile.structure.Profile;
 import me.hulipvp.chambers.util.LocationUtil;
 
@@ -56,19 +57,9 @@ public class Team {
 		this.uniqueID = UUID.randomUUID();
 		this.rally = null;
 		this.focusedFaction = null;
-		load();
 	}
 
-	public void load() {
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-            	  if(type.equals(TeamType.KOTH_CAP)) {
-                  	runKothCap();
-                  }
-            }
-        }.runTaskLater(Chambers.getInstance(), 20L);
-	}
+
 	
 	public boolean voteKick(Player voter, Player target) {
 	    if (voter.getUniqueId().equals(target.getUniqueId())) {
@@ -109,12 +100,20 @@ public class Team {
 
 	    return false;
 	}
-
-	protected void runKothCap() {
-	  if (Chambers.getInstance().getDataFile().getString("TEAMS." + "KOTH_CAP" + ".CORNERONE") != null && Chambers.getInstance().getDataFile().getString("TEAMS." + "KOTH_CAP" + ".CORNERTWO") != null) {
-          	this.claim = new Claim(LocationUtil.deserializeLocation(Chambers.getInstance().getDataFile().getString("TEAMS." + "KOTH_CAP" + ".CORNERONE")), LocationUtil.deserializeLocation(Chambers.getInstance().getDataFile().getString("TEAMS." + "KOTH_CAP" + ".CORNERTWO")), this);
-          	Chambers.getInstance().getClaimManager().addClaim(claim);
-     }
+	
+	protected void runKothCap(me.hulipvp.chambers.map.structure.Map name) {
+	 if (name == null) {
+		 if (Chambers.getInstance().getDataFile().getString("TEAMS." + "KOTH_CAP" + ".CORNERONE") != null && Chambers.getInstance().getDataFile().getString("TEAMS." + "KOTH_CAP" + ".CORNERTWO") != null) {
+	          	this.claim = new Claim(LocationUtil.deserializeLocation(Chambers.getInstance().getDataFile().getString("TEAMS." + "KOTH_CAP" + ".CORNERONE")), LocationUtil.deserializeLocation(Chambers.getInstance().getDataFile().getString("TEAMS." + "KOTH_CAP" + ".CORNERTWO")), this);
+	          	Chambers.getInstance().getClaimManager().addClaim(claim);
+	     }
+	 } else {
+		 MapFile map = name.getMapFile(); 
+		 if (map.getString("TEAMS." + "KOTH_CAP" + ".CORNERONE") != null && map.getString("TEAMS." + "KOTH_CAP" + ".CORNERTWO") != null) {
+	          	this.claim = new Claim(LocationUtil.deserializeLocation(map.getString("TEAMS." + "KOTH_CAP" + ".CORNERONE")), LocationUtil.deserializeLocation(map.getString("TEAMS." + "KOTH_CAP" + ".CORNERTWO")), this);
+	          	Chambers.getInstance().getClaimManager().addClaim(claim);
+	     }
+	 }
 		
 	}
 
@@ -181,6 +180,18 @@ public class Team {
 		profile.setTeam(this);
 		this.dtr = this.dtr + 1.1;
 		this.members.add(profile.getId());
+	}
+	public void load(me.hulipvp.chambers.map.structure.Map map) {
+		 new BukkitRunnable() {
+
+				@Override
+				public void run() {
+					  if(type.equals(TeamType.KOTH_CAP)) {
+					        runKothCap(map);
+					      }
+				}
+		    	   
+		       }.runTaskLater(Chambers.getInstance(), 20L);
 	}
 	
 	/**

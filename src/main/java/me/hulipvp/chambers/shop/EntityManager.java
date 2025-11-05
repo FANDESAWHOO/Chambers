@@ -73,7 +73,7 @@ public class EntityManager implements Listener {
     }
 
     @EventHandler
-    public void onEntityDeath(EntityDeathEvent event) {
+    public void onEntityDeath(EntityDeathEvent event) { // TODO: Team need to have already initializated the location from villagers.
         if (event.getEntity() instanceof Villager && event.getEntity().getCustomName() != null) {
             if (event.getEntity().getCustomName().toLowerCase().contains("combat") || event.getEntity().getCustomName().toLowerCase().contains("enchant") || event.getEntity().getCustomName().toLowerCase().contains("build") || event.getEntity().getCustomName().toLowerCase().contains("sell")) {
                 final int[] counter = {15};

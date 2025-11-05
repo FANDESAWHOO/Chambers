@@ -2,8 +2,8 @@ package me.hulipvp.chambers.map.menu;
 
 import me.hulipvp.chambers.Chambers;
 import me.hulipvp.chambers.map.structure.Map;
+import me.hulipvp.chambers.menu.type.ChestMenu;
 
-import me.hulipvp.chambers.menu.type.PaginatedMenu;
 import me.hulipvp.chambers.util.ItemBuilder;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -11,47 +11,60 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-public class MapMenu extends PaginatedMenu {
+public class MapMenu extends ChestMenu {
 
-    private final List<Map> maps;
+    private final List<Map> maps = new ArrayList<>();
     private final Chambers plugin = Chambers.getInstance();
 
+
+    private final java.util.Map<UUID, String> votes = new HashMap<>();
+
     public MapMenu() {
-        super(54, 0); 
-        this.maps = new ArrayList<>(plugin.getMapHandler().getMaps());
+        super(18);
+        
+        // More robust map loading
+        if (plugin.getMapHandler() != null && plugin.getMapHandler().getMaps() != null) {
+            for (me.hulipvp.chambers.map.structure.Map map : plugin.getMapHandler().getMaps()) {
+                if (map != null && map.getName() != null) { // Additional validation
+                    this.maps.add(map);
+                }
+            }
+        }
+        updateContents();
     }
 
-    @Override
-    public String getTitle() {
-        return ChatColor.DARK_AQUA + "Map Browser " + ChatColor.GRAY + "(Page " + (getPage() + 1) + ")";
-    }
 
-    @Override
+
     public void updateContents() {
+        if (getInventory() == null) {
+            return; // Inventory not initialized yet
+        }
+        
         getInventory().clear();
 
-        int start = getPage() * 45;
-        int end = Math.min(start + 45, maps.size());
-        List<Map> subList = maps.subList(start, end);
-
-        int index = 0;
-        for (Map map : subList) {
-            ItemStack display = map.getDisplay() != null
-                    ? map.getDisplay()
-                    : new ItemBuilder(Material.MAP)
-                        .name(ChatColor.YELLOW + map.getName())
-                        .lore(ChatColor.GRAY + (map.getDescription() != null ? map.getDescription() : "No description"))
-                        .build();
-            getInventory().setItem(index++, display);
+        if (maps.isEmpty()) {
+            // Optionally add a placeholder item when no maps are available
+            getInventory().setItem(4, new ItemBuilder(Material.BARRIER)
+                    .name(ChatColor.RED + "No maps available")
+                    .lore(ChatColor.GRAY + "There are no maps to display.")
+                    .build());
+            return;
+        }
+        int slot = 0;
+        for (Map map : maps) {
+            if (map == null) continue;
+            
+            ItemStack display = new ItemBuilder(Material.MAP)
+                    .name(ChatColor.YELLOW + map.getName())
+                    .lore(ChatColor.GRAY + (map.getDescription() != null ? map.getDescription() : "No description"),
+                            ChatColor.AQUA + "Votes: " + map.getVotes())
+                    .build();      
+            getInventory().setItem(slot, display);
+            slot++;
         }
 
-        if (getPage() > 0)
-            getInventory().setItem(45, new ItemBuilder(Material.ARROW).name(ChatColor.GREEN + "← Previous").build());
-        if (getPage() < getTotalPages() - 1)
-            getInventory().setItem(53, new ItemBuilder(Material.ARROW).name(ChatColor.GREEN + "Next →").build());
     }
 
     @Override
@@ -59,31 +72,54 @@ public class MapMenu extends PaginatedMenu {
         event.setCancelled(true);
 
         Player player = (Player) event.getWhoClicked();
+        UUID uuid = player.getUniqueId();
         int slot = event.getRawSlot();
 
-        if (slot == 45 && getPage() > 0) {
-            setPage(getPage() - 1);
-            player.playSound(player.getLocation(), "CLICK", 1, 1);
+        // bloqueo doble voto
+        if (votes.containsKey(uuid)) {
+            player.sendMessage(ChatColor.RED + "Ya votaste un mapa.");
             return;
         }
 
-        if (slot == 53 && getPage() < getTotalPages() - 1) {
-            setPage(getPage() + 1);
-            player.playSound(player.getLocation(), "CLICK", 1, 1);
-            return;
-        }
+   
 
-        // Seleccionar mapa
-        int index = getPage() * 45 + slot;
+        int index = slot;
         if (index < maps.size()) {
             Map selected = maps.get(index);
-            player.sendMessage(ChatColor.YELLOW + "Selected map: " + ChatColor.AQUA + selected.getName());
+
+            selected.setVotes(selected.getVotes() + 1);
+            votes.put(uuid, selected.getName());
+
+            player.sendMessage(ChatColor.YELLOW + "Votaste por: " + ChatColor.AQUA + selected.getName()
+                    + ChatColor.GRAY + " (" + selected.getVotes() + " votos)");
+
             player.closeInventory();
+
+            // ---- chequear inicio ----
+
+            int online = plugin.getServer().getOnlinePlayers().size();
+            int needed = (int) Math.ceil(online * (2.0 / 3.0));
+
+            if (selected.getVotes() >= needed) {
+                for (Player p : plugin.getServer().getOnlinePlayers()) {
+                    p.sendMessage("§aEl mapa " + selected.getName() + " alcanzó 2/3 de los votos! Iniciando juego...");
+                    p.closeInventory();
+                }
+
+                plugin.getGameManager().getGame().setupGame(selected);
+                plugin.getGameManager().start();
+            }
         }
     }
 
-    @Override
-    public int getTotalPages() {
-        return (int) Math.ceil((double) maps.size() / 45.0);
+    public void vote(Player player, Map map) {
+    	
     }
+    
+    @Override
+    public String getTitle() {
+        return ChatColor.DARK_AQUA + "Map Browser ";
+    }
+
+  
 }

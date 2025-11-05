@@ -25,6 +25,7 @@ import me.hulipvp.chambers.map.command.admin.MapSetDescriptionCommand;
 import me.hulipvp.chambers.map.command.admin.MapSetLevelCommand;
 import me.hulipvp.chambers.map.command.normal.MapInformationCommand;
 import me.hulipvp.chambers.map.command.normal.MapListCommand;
+import me.hulipvp.chambers.map.listener.MapListener;
 import me.hulipvp.chambers.profile.ProfileManager;
 import me.hulipvp.chambers.pvpclass.PvPClassHandler;
 import me.hulipvp.chambers.scoreboard.ProviderResolver;
@@ -121,16 +122,13 @@ public class Chambers extends JavaPlugin {
     	
     	assemble.setTicks(2);
     	assemble.setAssembleStyle(AssembleStyle.KOHI);
-		getServer().getScheduler().runTaskLater(this, () -> {
-	        teamManager.loadTeamHomes();
-	    }, 20L);
 		registerAllCommands();
 		
 	}
 	
 	public void onDisable() {
 		gameManager.clearAllMobs();
-		mapHandler.saveMaps();
+     	mapHandler.saveMaps();
 		instance = null;
 	}
 	
@@ -176,6 +174,7 @@ public class Chambers extends JavaPlugin {
 		new MapRemoveCommand();
 		new MapSetLevelCommand();
 		new MapInformationCommand();
+		new MapListener();
 	}
 	
 	public void registerListener(Listener listener) {

@@ -18,12 +18,12 @@ import me.hulipvp.chambers.util.LocationUtil;
 public class VillagerManager {
 
     public VillagerManager() {
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                spawnAllVillagers();
-            }
-        }.runTaskLater(Chambers.getInstance(), 20L);
+ //       new BukkitRunnable() {
+    //        @Override
+    //        public void run() {
+    //            spawnAllVillagers();
+    //        }
+    //    }.runTaskLater(Chambers.getInstance(), 20L);
     }
 
     /**
@@ -66,7 +66,7 @@ public class VillagerManager {
         plugin.getTeamManager().getAllPlayerTeams().forEach(team -> {
             Arrays.stream(ShopType.values()).forEach(type -> {
                 String path = "TEAMS." + team.getType().name() + "." + type.name();
-                String serialized = plugin.getDataFile().getString(path);
+                String serialized = plugin.getGameManager().getGame().getMap().getMapFile().getString(path);
 
                 if (serialized != null) {
                     Location loc = LocationUtil.deserializeLocation(serialized);

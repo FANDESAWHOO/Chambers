@@ -2,6 +2,8 @@ package me.hulipvp.chambers.team.command.admin;
 
 import org.bukkit.ChatColor;
 
+import me.hulipvp.chambers.Chambers;
+import me.hulipvp.chambers.config.MapFile;
 import me.hulipvp.chambers.team.command.TeamCommand;
 import me.hulipvp.chambers.team.structure.Team;
 import me.hulipvp.chambers.util.LocationUtil;
@@ -27,9 +29,16 @@ public class TeamSetHomeCommand extends TeamCommand {
 			return;
 		}
 		team.setHome(commandArgs.getPlayer().getLocation());
-		plugin.getDataFile().getConfiguration().set("TEAMS." + team.getType().name() + ".HOME", LocationUtil.serializeLocation(team.getHome()));
-		plugin.getDataFile().save();
-		plugin.getDataFile().load();
+        if (Chambers.getInstance().getMapHandler().getMap(commandArgs.getPlayer().getWorld().getName()) == null) {
+    		plugin.getDataFile().getConfiguration().set("TEAMS." + team.getType().name() + ".HOME", LocationUtil.serializeLocation(team.getHome()));
+    		plugin.getDataFile().save();
+    		plugin.getDataFile().load();
+        } else {
+        	MapFile mapFile = Chambers.getInstance().getMapHandler().getMap(commandArgs.getPlayer().getWorld().getName()).getMapFile();
+        	mapFile.getConfiguration().set("TEAMS." + team.getType().name() + ".HOME", LocationUtil.serializeLocation(team.getHome()));
+        	mapFile.save();
+    		mapFile.load();
+        }
 		commandArgs.getPlayer().sendMessage(ChatColor.GRAY + "Set the Team home for " + team.getFormattedName() + ChatColor.GRAY + ".");
 	}
 

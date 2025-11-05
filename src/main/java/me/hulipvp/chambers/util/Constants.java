@@ -12,7 +12,7 @@ public final class Constants {
 	public static final ItemStack red = ItemBuilder.of(Material.REDSTONE, "&9Select Red team", "Right click to choose red team.").make();
 	public static final ItemStack green = ItemBuilder.of(Material.EMERALD, "&9Select Green team", "Right click to choose green team.").make();
 	public static final ItemStack random = ItemBuilder.of(Material.NETHER_STAR, "&9Select a random team", "Right click to choose a random team.").make();
-	public static final ItemStack map = ItemBuilder.of(Material.MAP, "&9Vote map menu", "Right click to vote a map.").make();
+	public static final ItemStack map = ItemBuilder.of(Material.RED_ROSE, "&9Vote map menu", "Right click to vote a map.").make();
 	
 	public static void giveItems(Player player) {
 		Inventory inventory = player.getInventory();

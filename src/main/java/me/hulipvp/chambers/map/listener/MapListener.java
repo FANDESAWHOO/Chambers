@@ -29,7 +29,7 @@ public class MapListener implements Listener {
 				return;
 			if (!(item.isSimilar(Constants.map)))
 				return;
-			if (Chambers.getInstance().getGameManager().getGame().getStatus() != GameStatus.LOBBY)
+			if (!Chambers.getInstance().getGameManager().getGame().getStatus().equals(GameStatus.LOBBY))
 				return;
 			new MapMenu().open(player); 
 			event.setCancelled(true);

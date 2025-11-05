@@ -26,6 +26,7 @@ public class IngameProvider implements AssembleAdapter {
 		List<String> lines = new ArrayList<>();
 
 		Profile profile = plugin.getProfileManager().getProfileByUuid(player.getUniqueId());
+		if (profile == null) return lines;
 		switch (profile.getProfileStatus()) {
 		case SPECTATING: {
 			lines.add("&7You are a spectator.");

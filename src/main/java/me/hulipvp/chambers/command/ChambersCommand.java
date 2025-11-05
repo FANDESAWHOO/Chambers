@@ -14,9 +14,9 @@ public class ChambersCommand {
 		plugin.getCommandFramework().registerHelp();
 	}
 
-	@Command(name = "chambers", description = "Get information about the plugin", aliases = { "bunkers" }, usage = "/<command>")
+	@Command(name = "chambers", description = "Get information about the plugin", aliases = { "bunkers","squad" }, usage = "/<command>")
 	public void onCommand(CommandArgs commandArgs) {
-		commandArgs.getSender().sendMessage(Color.color("&e" + plugin.getDescription().getName() + " " + plugin.getDescription().getVersion() + "&f by " + "&eHuliPvP"));
+		commandArgs.getSender().sendMessage(Color.color("&eBunkers"  + " " + plugin.getDescription().getVersion() + "&f by " + "&ePizie"));
 	}
 
 }
