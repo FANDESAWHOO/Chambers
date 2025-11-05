@@ -1,6 +1,5 @@
 package me.hulipvp.chambers.map.listener;
 
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -11,6 +10,7 @@ import org.bukkit.inventory.ItemStack;
 import me.hulipvp.chambers.Chambers;
 import me.hulipvp.chambers.game.structure.GameStatus;
 import me.hulipvp.chambers.map.menu.MapMenu;
+import me.hulipvp.chambers.util.Constants;
 
 public class MapListener implements Listener {
 	
@@ -27,7 +27,7 @@ public class MapListener implements Listener {
 		if (action.equals(Action.RIGHT_CLICK_AIR) || action.equals(Action.RIGHT_CLICK_BLOCK)) {
 			if (item == null)
 				return;
-			if (!(item.isSimilar(new ItemStack(Material.MAP))))
+			if (!(item.isSimilar(Constants.map)))
 				return;
 			if (Chambers.getInstance().getGameManager().getGame().getStatus() != GameStatus.LOBBY)
 				return;

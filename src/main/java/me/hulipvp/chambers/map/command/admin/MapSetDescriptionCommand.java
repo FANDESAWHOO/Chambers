@@ -12,7 +12,7 @@ import me.hulipvp.chambers.util.commandapi.CommandArgs;
 
 public class MapSetDescriptionCommand extends MapCommand {
 	
-	@Command(name = "map.setdescription", description = "Set description of a map.", aliases = { "maps.announcement" }, usage = "/<command> setdescription",  playerOnly = true, requiresTeam = false, adminsOnly = true)
+	@Command(name = "map.setdescription", description = "Set the description from a map.", aliases = { "maps.announcement" }, usage = "/<command> setdescription",  playerOnly = true, requiresTeam = false, adminsOnly = true)
 	public void onCommand(CommandArgs commandArgs) {
 		if (commandArgs.length() != 2) {
 			commandArgs.getPlayer().sendMessage(ChatColor.RED + "Usage: /" + commandArgs.getLabel() + " <name> <announcement>");
@@ -27,6 +27,7 @@ public class MapSetDescriptionCommand extends MapCommand {
 	    }
 	    
 	    map.setDescription(Chambers.SPACE_JOINER.join(Arrays.copyOfRange(commandArgs.getArgs(), 1, commandArgs.getArgs().length)));
+	    map.save();
 	}
 
 }

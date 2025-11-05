@@ -1,21 +1,25 @@
 package me.hulipvp.chambers.map.structure;
 
-import org.bson.Document;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.World;
+import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 
 import lombok.Getter;
-import lombok.Setter;
-import me.hulipvp.chambers.util.Mongoable;
+import me.hulipvp.chambers.Chambers;
+import me.hulipvp.chambers.config.MapFile;
+import me.hulipvp.chambers.util.ItemBuilder;
 
 @Getter
-public class Map implements Mongoable {
+public class Map  {
 	
 	private String name;
-	private final World world;
+	private World world;
 	private ItemStack display;
-	@Setter private String description;
-	@Setter private MapLevel mapLevel;
+	private String description;
+	private MapLevel mapLevel;
+	private MapFile mapFile; // this is where the infrimation is located
 	
 	public Map(String name) {
 		this.name = name;
@@ -23,6 +27,7 @@ public class Map implements Mongoable {
 		this.display = null;
 		this.description = null;
 		this.mapLevel = MapLevel.NORMAL;
+		manageData();
 	}
 	
 	public Map(World world, String name) {
@@ -31,6 +36,7 @@ public class Map implements Mongoable {
 		this.display = null;
 		this.description = null;
 		this.mapLevel = MapLevel.NORMAL;
+		manageData();
 	}
 	
 	public Map(World world, String name, ItemStack display) {
@@ -39,6 +45,7 @@ public class Map implements Mongoable {
 		this.display = display;
 		this.description = null;
 		this.mapLevel = MapLevel.NORMAL;
+		manageData();
 	}
 
 	public Map(World world, String name, ItemStack display, String description) {
@@ -47,14 +54,73 @@ public class Map implements Mongoable {
 		this.display = display;
 		this.description = description;
 		this.mapLevel = MapLevel.NORMAL;
+		manageData();
 	}
 	
-	@Override
-	public Document toDocument() {
-		Document document = new Document();
-		document.append("name", name);
-		document.append("item", display);
-		return document;
+	public void manageData() {
+		mapFile = new MapFile(Chambers.getInstance(), name);
+		String path = name + ".";
+
+		if (mapFile.getConfiguration().getConfigurationSection(name) != null) {
+
+			String worldName = mapFile.getString(path + "world");
+			if (worldName != null)
+				this.world = Bukkit.getWorld(worldName);
+
+			this.description = mapFile.getString(path + "description");
+
+			String lvl = mapFile.getString(path + "level");
+			if (lvl != null)
+				this.mapLevel = MapLevel.valueOf(lvl);
+
+			String itemString = mapFile.getString(path + "item");
+			if (itemString != null && !itemString.isEmpty())
+				this.display = ItemBuilder.fromString(itemString).make();
+		}
+	}
+	
+	public void setWorld(World world) { this.world = world; }
+	public void setDisplay(ItemStack display) { this.display = display; }
+	public void setDescription(String desc) { this.description = desc; }
+	public void setMapLevel(MapLevel lvl) { this.mapLevel = lvl; }
+	
+	public void sendInformation(CommandSender sender) {
+	    sender.sendMessage(ChatColor.GRAY + "" + ChatColor.STRIKETHROUGH + "-----------------------------------------");
+	    sender.sendMessage(ChatColor.AQUA + ChatColor.BOLD.toString() + "Map Information " + ChatColor.GRAY + "(" + name + ")");
+	    sender.sendMessage(ChatColor.GRAY + "");
+	    sender.sendMessage(ChatColor.YELLOW + "World: " + ChatColor.WHITE + (world != null ? world.getName() : "Not set"));
+	    sender.sendMessage(ChatColor.YELLOW + "Level: " + ChatColor.WHITE + mapLevel.name());
+	    sender.sendMessage(ChatColor.YELLOW + "Description: " + ChatColor.WHITE + (description != null ? description : "Not set"));
+	    sender.sendMessage(ChatColor.GRAY + "");
+	    sender.sendMessage(ChatColor.GRAY + "" + ChatColor.STRIKETHROUGH + "-----------------------------------------");
+	}
+	
+	public void delete() {
+	    String path = name + ".";
+	    mapFile.getConfiguration().set(path, null);
+	    mapFile.save();
+	    mapFile.getFile().delete();
 	}
 
+	public void save() {
+	    saveData();
+	}
+
+	public void saveData() {
+		String path = name + ".";
+
+		if (world != null)
+			mapFile.getConfiguration().set(path + "world", world.getName());
+
+		mapFile.getConfiguration().set(path + "description", description);
+		mapFile.getConfiguration().set(path + "level", mapLevel.name());
+
+		// item serialize
+		if (display != null)
+			mapFile.getConfiguration().set(path + "item", ItemBuilder.toString(display));
+
+		mapFile.save();
+	}
+
+	
 }

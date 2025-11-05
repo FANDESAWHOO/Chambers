@@ -1,10 +1,14 @@
 package me.hulipvp.chambers.scoreboard.provider;
 
+import me.hulipvp.chambers.Chambers;
 import me.hulipvp.chambers.profile.structure.Profile;
 import me.hulipvp.chambers.profile.structure.ProfileStatus;
+import me.hulipvp.chambers.pvpclass.PvPClass;
+import me.hulipvp.chambers.pvpclass.PvPClassHandler;
+import me.hulipvp.chambers.pvpclass.classes.BardClass;
 import me.hulipvp.chambers.util.DurationFormatter;
 import me.hulipvp.chambers.util.scoreboard.AssembleAdapter;
-
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -42,15 +46,29 @@ public class IngameProvider implements AssembleAdapter {
 			if (plugin.getTimerManager().getTeleportTimer().getRemaining(player) > 0) {
 				lines.add("&9&lHome&7: &c" +  DurationFormatter.getRemaining(plugin.getTimerManager().getTeleportTimer().getRemaining(player),true));
 			}
+			if (plugin.getTimerManager().getCombatTimer().getRemaining(player) > 0) {
+				lines.add("&c&lPvP Tag&7: &c" +  DurationFormatter.getRemaining(plugin.getTimerManager().getCombatTimer().getRemaining(player),true));
+			}
 			if (plugin.getTimerManager().getEnderpearlTimer().getRemaining(player) > 0) {
 				lines.add("&5&lEnderpearl&7:&c " +  DurationFormatter.getRemaining(plugin.getTimerManager().getEnderpearlTimer().getRemaining(player),true));
 			}
+			PvPClass pvpClass = PvPClassHandler.getPvPClass(player);
+			if (pvpClass != null) {
+				lines.add(ChatColor.GOLD + " \u00bb " + ChatColor.LIGHT_PURPLE + "Energy" + ChatColor.GRAY + ": " + ChatColor.WHITE +
+						getBardEnergyScore(player));
+				if (Chambers.getInstance().getTimerManager().getBardCooldown().getRemaining(player) > 0L) {
+					long remaining = Chambers.getInstance().getTimerManager().getBardCooldown().getRemaining(player);
+					lines.add(ChatColor.GOLD.toString() + " \u00bb " + ChatColor.LIGHT_PURPLE + "Buff Delay" +
+							ChatColor.GRAY + ": " + ChatColor.WHITE + DurationFormatter.getRemaining(remaining, true));
+				}
+			}
+			
 			break;
 		}
 		default:
 			break;
 		}
-		lines.add(profile.getProfileStatus() == ProfileStatus.PLAYING ? 0 : 1, "&d&lGame Time&7:&c " + formatIntToTime(plugin.getGameManager().getGame().getTotalTime()));
+		lines.add(profile.getProfileStatus() == ProfileStatus.PLAYING ? 0 : 1, "&6&lGame Time&7:&c " + formatIntToTime(plugin.getGameManager().getGame().getTotalTime()));
 		if (plugin.getKothManager().getKoth() != null) {
 			lines.add("&9&l" + plugin.getKothManager().getKoth().getName() + "&7:&c " + formatIntToTime(plugin.getKothManager().getKoth().getTime()));
 		}
@@ -70,4 +88,16 @@ public class IngameProvider implements AssembleAdapter {
 		}
 		return "00:00";
 	}
+	 private String getBardEnergyScore(Player player) {
+	        if (BardClass.getEnergy().containsKey(player.getName())) {
+	            int energy = BardClass.getEnergy().get(player.getName()).intValue();
+
+	            if (energy > 0) {
+	                // No function here, as it's a "raw" value.
+	                return (String.valueOf(BardClass.getEnergy().get(player.getName())));
+	            }
+	        }
+
+	        return "0";
+	    }
 }

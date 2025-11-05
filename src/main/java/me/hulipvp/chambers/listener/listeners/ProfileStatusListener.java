@@ -4,10 +4,12 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 
 import me.hulipvp.chambers.Chambers;
@@ -32,14 +34,16 @@ public class ProfileStatusListener implements Listener {
 		}
 	}
 	
-/*	@EventHandler
+	@EventHandler
 	public void onInteract(PlayerInteractEvent event) {
 		Profile profile = Chambers.getInstance().getProfileManager().getProfileByUuid(event.getPlayer().getUniqueId());
 		if (profile.getProfileStatus() != ProfileStatus.PLAYING) {
-			if (!profile.isBypassMode())
+			if (!event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) 
+				return;
+			if (!profile.isBypassMode() && !profile.isBuilding())
 			event.setCancelled(true);
 		}
-	}*/
+	}
 	
 	@EventHandler
 	public void onDrop(PlayerDropItemEvent event) {

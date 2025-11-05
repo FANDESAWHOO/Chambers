@@ -4,9 +4,10 @@
 
   <artifactId>Chambers</artifactId>
   <groupId>me.hulipvp.chambers</groupId>
-  <version>0.0.5-SNAPSHOT</version>
+  <version>0.0.7-SNAPSHOT</version>
 
   <properties>
+    <spigot-api-systemPath>C:/Users/Andreita/Documents/HCG/Core/lib/wspigot.jar</spigot-api-systemPath>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
@@ -40,6 +41,13 @@
   </repositories>
 
   <dependencies>
+     <dependency>
+        <groupId>org.spigotmc</groupId>
+        <artifactId>spigot-api</artifactId>
+        <version>1.8.8-R0.1-SNAPSHOT</version>
+        <scope>system</scope>
+        <systemPath>${spigot-api-systemPath}</systemPath>  
+    </dependency>
     <dependency>
         <groupId>com.lunarclient</groupId>
         <artifactId>apollo-api</artifactId>
@@ -53,12 +61,12 @@
         <version>1.2.0</version>
         <scope>provided</scope>
     </dependency>
-    <dependency>
+    <!-- <dependency>
       <groupId>com.github.Wind-Development</groupId>
       <artifactId>WindSpigot</artifactId>
       <version>v2.1.2-hotfix</version>
     </dependency>
-    <!-- https://mvnrepository.com/artifact/org.mongodb/mongo-java-driver -->
+    https://mvnrepository.com/artifact/org.mongodb/mongo-java-driver -->
     <dependency>
       <groupId>org.mongodb</groupId>
       <artifactId>mongo-java-driver</artifactId>

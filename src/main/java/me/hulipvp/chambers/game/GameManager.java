@@ -117,14 +117,25 @@ public class GameManager {
 				player.setAllowFlight(false);
 				player.setFlying(false);
 				player.teleport(team.getHome());
-				Chambers.getInstance().getClientManager().getWaypoint().displayWaypoints(player);
 			});
 		});
 		new GameTask().runTaskTimerAsynchronously(Chambers.getInstance(), 0L, 20L);
 		Bukkit.broadcastMessage(" ");
 		Bukkit.broadcastMessage(ChatColor.YELLOW + "The game has now started! Good luck!");
-		Chambers.getInstance().getVillagerManager().spawnAllVillagers();
-	}
+       new BukkitRunnable() {
+
+		@Override
+		public void run() {
+			Chambers.getInstance().getVillagerManager().spawnAllVillagers();	
+			Chambers.getInstance().getTeamManager().getAllPlayerTeams().stream().forEach(team -> { // TODO: Move this to Team method, and call here.
+				team.getOnlinePlayers().stream().forEach(player -> {
+			Chambers.getInstance().getClientManager().getWaypoint().displayWaypoints(player);
+				});
+			});
+		}
+    	   
+       }.runTaskLater(Chambers.getInstance(), 20L);
+ 	}
 
 	/**
 	 * Give a player their starting items

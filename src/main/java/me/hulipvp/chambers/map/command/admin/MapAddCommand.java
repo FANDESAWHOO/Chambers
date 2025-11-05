@@ -6,12 +6,13 @@ import org.bukkit.entity.Player;
 import me.hulipvp.chambers.Chambers;
 import me.hulipvp.chambers.map.command.MapCommand;
 import me.hulipvp.chambers.map.structure.Map;
+import me.hulipvp.chambers.map.structure.MapLevel;
 import me.hulipvp.chambers.util.commandapi.Command;
 import me.hulipvp.chambers.util.commandapi.CommandArgs;
 
 public class MapAddCommand extends MapCommand {
 
-	@Command(name = "map.create", description = "The main command for Naos", aliases = { "map.add", "maps.add", "maps.create" }, usage = "/<command>",  playerOnly = true, requiresTeam = false, adminsOnly = true)
+	@Command(name = "map.create", description = "Create a map with this command.", aliases = { "map.add", "maps.add", "maps.create" }, usage = "/<command>",  playerOnly = true, requiresTeam = false, adminsOnly = true)
 	public void onCommand(CommandArgs commandArgs) {
 		Player player = (Player) commandArgs.getSender();
 		if (commandArgs.length() != 1) {
@@ -27,7 +28,8 @@ public class MapAddCommand extends MapCommand {
 	    }
 	    map	= Chambers.getInstance().getMapHandler().createMap(name);
 	    player.sendMessage(ChatColor.BLUE + "The map "+ map.getName() +" has been succesfully created.");
-	   
+	    map.setDescription("Please provide a description to this map");
+	    map.setMapLevel(MapLevel.NORMAL);
 	} 
 	
 }

@@ -22,8 +22,11 @@ import me.hulipvp.chambers.map.command.MapCommand;
 import me.hulipvp.chambers.map.command.admin.MapAddCommand;
 import me.hulipvp.chambers.map.command.admin.MapRemoveCommand;
 import me.hulipvp.chambers.map.command.admin.MapSetDescriptionCommand;
+import me.hulipvp.chambers.map.command.admin.MapSetLevelCommand;
+import me.hulipvp.chambers.map.command.normal.MapInformationCommand;
 import me.hulipvp.chambers.map.command.normal.MapListCommand;
 import me.hulipvp.chambers.profile.ProfileManager;
+import me.hulipvp.chambers.pvpclass.PvPClassHandler;
 import me.hulipvp.chambers.scoreboard.ProviderResolver;
 import me.hulipvp.chambers.scoreboard.TabProvider;
 import me.hulipvp.chambers.shop.EntityManager;
@@ -86,6 +89,7 @@ public class Chambers extends JavaPlugin {
     private TimerManager timerManager;
     private ClientManager clientManager;
     private SpectatorMode spectatorMode;
+    private PvPClassHandler pvpClassHandler;
     
     public static final Joiner SPACE_JOINER = Joiner.on(' ');
     
@@ -109,17 +113,14 @@ public class Chambers extends JavaPlugin {
         mapHandler = new MapHandler();
         clientManager = new ClientManager();
         spectatorMode = new SpectatorMode();
-        // Start Instance.
-    	Assemble assemble = new Assemble(this, new ProviderResolver());
-    	
-    	// Set Interval (Tip: 20 ticks = 1 second).
-    	assemble.setTicks(2);
-    	
-    	// Set Custom Style (Tip: This will set the scoreboard scores to range from 8 to -7)
-    	assemble.setAssembleStyle(AssembleStyle.KOHI);
+        pvpClassHandler = new PvPClassHandler();
     	new TabHandler(new TabProvider(), this, 20L);
         timerManager = new TimerManager(this);
-		commandFramework = new CommandFramework(this);
+		commandFramework = new CommandFramework(this);           
+    	Assemble assemble = new Assemble(this, new ProviderResolver());
+    	
+    	assemble.setTicks(2);
+    	assemble.setAssembleStyle(AssembleStyle.KOHI);
 		getServer().getScheduler().runTaskLater(this, () -> {
 	        teamManager.loadTeamHomes();
 	    }, 20L);
@@ -129,6 +130,7 @@ public class Chambers extends JavaPlugin {
 	
 	public void onDisable() {
 		gameManager.clearAllMobs();
+		mapHandler.saveMaps();
 		instance = null;
 	}
 	
@@ -172,6 +174,8 @@ public class Chambers extends JavaPlugin {
 		new MapAddCommand();
 		new MapSetDescriptionCommand();
 		new MapRemoveCommand();
+		new MapSetLevelCommand();
+		new MapInformationCommand();
 	}
 	
 	public void registerListener(Listener listener) {

@@ -4,6 +4,7 @@ import lombok.Getter;
 
 import me.hulipvp.chambers.Chambers;
 
+import java.io.File;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -53,10 +54,16 @@ public class MapHandler {
         Bukkit.getLogger().info("[Chambers] Created map: " + name);
         return map;
     }
+    
+    public void removeMap(String name) {
+    	me.hulipvp.chambers.map.structure.Map map = mapCache.remove(name);
+        if (map != null)
+            map.delete();
+    }
 
-    /**
+ /*   /**
      * Elimina un mapa por nombre.
-     */
+     
     public boolean removeMap(String name) {
         String key = name.toLowerCase();
         me.hulipvp.chambers.map.structure.Map removed = mapCache.remove(key);
@@ -66,7 +73,7 @@ public class MapHandler {
             return true;
         }
         return false;
-    }
+    }*/
 
     /**
      * Devuelve todos los mapas en una lista inmutable.
@@ -75,36 +82,33 @@ public class MapHandler {
         return Collections.unmodifiableCollection(mapCache.values());
     }
 
-    /**
-     * Carga los mapas desde Mongo o archivo.
-     */
+
     public void loadMaps() {
         mapCache.clear();
 
-        // 🔧 Si usás Mongo, podés reemplazar esto con tu propia lógica:
-        // Ejemplo simulado:
-        /*
-        List<Document> docs = plugin.getMongoManager().getCollection("maps").find().into(new ArrayList<>());
-        for (Document doc : docs) {
-            Map map = Map.fromDocument(doc);
-            mapCache.put(map.getName().toLowerCase(), map);
+
+        File folder = new File(plugin.getDataFolder(), "maps");
+        if (!folder.exists()) folder.mkdirs();
+
+        File[] files = folder.listFiles((dir, name) -> name.endsWith(".yml"));
+        if (files == null) return;
+
+        for (File file : files) {
+            String fileName = file.getName();
+            String mapName = fileName.substring(0, fileName.length() - 4);
+
+            me.hulipvp.chambers.map.structure.Map map = new me.hulipvp.chambers.map.structure.Map(mapName);
+            mapCache.put(mapName.toLowerCase(), map);
         }
-        */
 
         Bukkit.getLogger().info("[Chambers] Loaded " + mapCache.size() + " maps.");
     }
 
-    /**
-     * Guarda todos los mapas en Mongo o archivo.
-     */
     public void saveMaps() {
-        // 🔧 Ejemplo simulado:
-        /*
-        MongoCollection<Document> col = plugin.getMongoManager().getCollection("maps");
-        for (Map map : mapCache.values()) {
-            col.replaceOne(Filters.eq("name", map.getName()), map.toDocument(), new ReplaceOptions().upsert(true));
+        for (me.hulipvp.chambers.map.structure.Map map : mapCache.values()) {
+            map.saveData();
         }
-        */
         Bukkit.getLogger().info("[Chambers] Saved " + mapCache.size() + " maps.");
     }
+
 }

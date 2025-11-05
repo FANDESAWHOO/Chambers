@@ -16,7 +16,7 @@ public class MapCommand {
 		plugin.getCommandFramework().registerHelp();
 	}
 	
-	@Command(name = "map", description = "The main command for Naos", aliases = { "maps" }, usage = "/<command>",  playerOnly = true, requiresTeam = false, adminsOnly = false)
+	@Command(name = "map", description = "The main command for Maps", aliases = { "maps" }, usage = "/<command>",  playerOnly = true, requiresTeam = false, adminsOnly = false)
 	public void onCommand(CommandArgs commandArgs) {
 		Player player = (Player) commandArgs.getSender();
 		showHelp(player);
@@ -24,16 +24,18 @@ public class MapCommand {
 	
 	public void showHelp(Player player) {
 		player.sendMessage(Color.color("&6&m-----------------------------------------------------"));
-		player.sendMessage(Color.color("&d&lMap Help&7 - &fInformation on how to use map command"));
+		player.sendMessage(Color.color("&d&lMap Help &7- &fInformation about the /map command"));
 		player.sendMessage(Color.color("&6&m-----------------------------------------------------"));
 		player.sendMessage(Color.color("&9General Commands:"));
 		player.sendMessage(Color.color("&e/map create <name> &7- Create a map."));
-		player.sendMessage(Color.color("&e/map setlevel <type> &7- Set the level of the map."));
+		player.sendMessage(Color.color("&e/map setlevel <name> <type> &7- Set the level of a map."));
+		player.sendMessage(Color.color("&e/map setdescription <name> <description> &7- Set the map's description."));
 		player.sendMessage(Color.color(" "));
 		player.sendMessage(Color.color("&9Information Commands:"));
-		player.sendMessage(Color.color("&e/map help &7- Displays this help menu"));
-		player.sendMessage(Color.color("&e/map show [map]&7 - Display map information"));
+		player.sendMessage(Color.color("&e/map help &7- Display this help menu."));
+		player.sendMessage(Color.color("&e/map show <name> &7- Display information for a map."));
 		player.sendMessage(Color.color("&6&m-----------------------------------------------------"));
+
 	}
 	
 }

@@ -140,16 +140,88 @@ public class ItemBuilder {
         return text == null ? null : text.replace('&', '§');
     }
 
-    // -------------------------------
-    // Example: debug/test
-    // -------------------------------
-    public static void exampleGive(Player player) {
-        ItemStack sword = ItemBuilder.of(Material.DIAMOND_SWORD, "&bEspada Legendaria", "&7Una espada con poder antiguo")
-                .enchant(Enchantment.DAMAGE_ALL, 5)
-                .flag(ItemFlag.HIDE_ENCHANTS)
-                .unbreakable(true)
-                .make();
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
 
-        player.getInventory().addItem(sword);
+        sb.append(item.getType().name()).append(";");
+        sb.append(item.getAmount()).append(";");
+
+        if (meta.hasDisplayName())
+            sb.append(meta.getDisplayName().replace("§", "&"));
+        sb.append(";");
+
+        if (meta.hasLore()) {
+            sb.append(String.join("|", meta.getLore()).replace("§", "&"));
+        }
+        sb.append(";");
+
+        if (!meta.getEnchants().isEmpty()) {
+            List<String> list = new ArrayList<>();
+            meta.getEnchants().forEach((e,l)-> list.add(e.getName() + ":" + l));
+            sb.append(String.join(",", list));
+        }
+
+        return sb.toString();
     }
+    
+    public static String toString(ItemStack item) {
+        if (item == null) return "";
+
+        ItemMeta meta = item.getItemMeta();
+
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(item.getType().name()).append(";");
+        sb.append(item.getAmount()).append(";");
+
+        // name
+        if (meta != null && meta.hasDisplayName())
+            sb.append(meta.getDisplayName().replace("§", "&"));
+        sb.append(";");
+
+        // lore
+        if (meta != null && meta.hasLore())
+            sb.append(String.join("|", meta.getLore()).replace("§", "&"));
+        sb.append(";");
+
+        // enchants
+        if (meta != null && !meta.getEnchants().isEmpty()) {
+            List<String> list = new ArrayList<>();
+            meta.getEnchants().forEach((e, l) -> list.add(e.getName() + ":" + l));
+            sb.append(String.join(",", list));
+        }
+
+        return sb.toString();
+    }
+
+    
+    public static ItemBuilder fromString(String data) {
+        String[] a = data.split(";", -1);
+
+        Material mat = Material.matchMaterial(a[0]);
+        int amount = Integer.parseInt(a[1]);
+
+        ItemBuilder ib = new ItemBuilder(mat, amount);
+
+        if (!a[2].isEmpty()) ib.name(a[2]);
+
+        if (!a[3].isEmpty()) {
+            String[] lore = a[3].split("\\|");
+            ib.lore(lore);
+        }
+
+        if (!a[4].isEmpty()) {
+            String[] ench = a[4].split(",");
+            for (String s : ench) {
+                String[] kv = s.split(":");
+                Enchantment e = Enchantment.getByName(kv[0]);
+                int lvl = Integer.parseInt(kv[1]);
+                if (e != null) ib.enchant(e, lvl);
+            }
+        }
+
+        return ib;
+    }
+
+    
 }

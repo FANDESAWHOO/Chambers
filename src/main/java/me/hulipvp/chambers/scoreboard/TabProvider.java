@@ -154,18 +154,27 @@ public class TabProvider implements TabElementHandler {
         return element;
     }
     public String formatPlayerName(Profile profile) {
-    	Player member = profile.getPlayer();
-    	String input = null;
-        if (member.isOnline()) {
-        	if (Chambers.getInstance().getSpectatorMode().isSpectator(member.getUniqueId()))
-        		input = ChatColor.STRIKETHROUGH + "&4" + member.getName();
-        	else 
-        		input = profile.getTeam().getColor() + member.getName();
-        } else {
-        	input = ChatColor.STRIKETHROUGH + "" + ChatColor.GRAY + member.getName();
+        Player member = profile.getPlayer(); 
+        String name = member != null ? member.getName() : profile.getName();
+
+   
+        if (member != null && member.isOnline()) {
+          
+            if (Chambers.getInstance().getSpectatorMode().isSpectator(profile.getId()))
+                return  ChatColor.DARK_RED.toString()+ChatColor.STRIKETHROUGH  + name;
+
+       
+            if (profile.getTeam() != null)
+                return profile.getTeam().getColor() + name;
+
+     
+            return ChatColor.WHITE + name;
         }
-    	return input;
+
+       
+        return   ChatColor.GRAY.toString() +ChatColor.STRIKETHROUGH  + name;
     }
+
     public String formatIntToTime(int i) {
 		if (i < 3600) {
 			int minutes = (i - (i % 60)) / 60;

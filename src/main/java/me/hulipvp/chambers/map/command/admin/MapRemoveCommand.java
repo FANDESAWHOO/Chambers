@@ -11,7 +11,7 @@ import me.hulipvp.chambers.util.commandapi.CommandArgs;
 
 public class MapRemoveCommand extends MapCommand {
 	
-	@Command(name = "map.remove", description = "remove of a map.", aliases = { "maps.blacklist" }, usage = "/<command> remove",  playerOnly = false, requiresTeam = false, adminsOnly = true)
+	@Command(name = "map.remove", description = "Remove a map from the database.", aliases = { "maps.blacklist" }, usage = "/<command> remove",  playerOnly = false, requiresTeam = false, adminsOnly = true)
 	public void onCommand(CommandArgs commandArgs) {
 		CommandSender sender = commandArgs.getSender();
 		if (commandArgs.length() != 2) {

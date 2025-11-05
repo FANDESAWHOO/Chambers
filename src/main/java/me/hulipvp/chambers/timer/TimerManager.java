@@ -3,6 +3,8 @@ package me.hulipvp.chambers.timer;
 
 import lombok.Getter;
 import me.hulipvp.chambers.Chambers;
+import me.hulipvp.chambers.timer.type.BardCooldown;
+import me.hulipvp.chambers.timer.type.CombatTimer;
 import me.hulipvp.chambers.timer.type.EnderpearlTimer;
 import me.hulipvp.chambers.timer.type.TeleportTimer;
 
@@ -17,14 +19,18 @@ public class TimerManager {
 
      private TeleportTimer teleportTimer;
      private EnderpearlTimer enderpearlTimer;
+     private CombatTimer combatTimer;
+     private BardCooldown bardCooldown;
 
      private final Set<Timer> timers = new LinkedHashSet<>();
 
     public TimerManager(Chambers plugin) {
         this.plugin = plugin;
 
+        bardCooldown = new BardCooldown();
         registerTimer(teleportTimer = new TeleportTimer());
         registerTimer(enderpearlTimer = new EnderpearlTimer());
+        registerTimer(combatTimer = new CombatTimer());
     }
 
     public void registerTimer(Timer timer) {

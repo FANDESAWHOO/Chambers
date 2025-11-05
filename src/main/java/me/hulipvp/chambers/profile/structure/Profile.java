@@ -15,6 +15,7 @@ import me.hulipvp.chambers.team.structure.Team;
 public class Profile {
 
 	private UUID id;
+	private String name;
 	private ProfileStatus profileStatus;
 	private ChatStatus chatStatus;
 	private Team team;
@@ -26,6 +27,7 @@ public class Profile {
 		this.profileStatus = profileStatus;
 		this.chatStatus = ChatStatus.FACTION;
 		this.team = null;
+		this.name = player.getName();
 		this.kills = 0;
 		this.deaths = 0;
 		this.balance = 500;
