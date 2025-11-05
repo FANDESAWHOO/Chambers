@@ -40,7 +40,6 @@ public class Nametag extends BukkitRunnable {
         	return;
         try {
             Team targetFaction = getPlayerFactionSafe(target, factionManager);
-            Team viewerFaction = getPlayerFactionSafe(viewer, factionManager);
             ChatColor color = targetFaction.getColor();
             
             List<String> coloredNames = new ArrayList<>();

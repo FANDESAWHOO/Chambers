@@ -12,6 +12,8 @@ import me.hulipvp.chambers.Chambers;
 import me.hulipvp.chambers.claim.structure.Claim;
 import me.hulipvp.chambers.claim.structure.ClaimProfile;
 import me.hulipvp.chambers.claim.structure.Pillar;
+import me.hulipvp.chambers.config.MapFile;
+import me.hulipvp.chambers.map.structure.Map;
 import me.hulipvp.chambers.profile.structure.Profile;
 import me.hulipvp.chambers.util.LocationUtil;
 
@@ -77,19 +79,37 @@ public class ClaimInteractListener implements Listener {
 
 		        claimProfile.clearPillars();
 		        Claim claim = new Claim(claimProfile.getCornerOne(), claimProfile.getCornerTwo(), profile.getTeam());
-		        profile.getTeam().setClaim(claim);
-		        Chambers.getInstance().getClaimManager().addClaim(claim);
-		        Chambers.getInstance().getDataFile().getConfiguration().set(
-		            "TEAMS." + profile.getTeam().getType().name() + ".CORNERONE",
-		            LocationUtil.serializeLocation(claimProfile.getCornerOne())
-		        );
-		        Chambers.getInstance().getDataFile().getConfiguration().set(
-		            "TEAMS." + profile.getTeam().getType().name() + ".CORNERTWO",
-		            LocationUtil.serializeLocation(claimProfile.getCornerTwo())
-		        );
+		        String name = claim.getCornerOne().getWorld().getName();
+		        if (Chambers.getInstance().getMapHandler().getMap(name) == null) {
+
+			        profile.getTeam().setClaim(claim);
+			        Chambers.getInstance().getClaimManager().addClaim(claim);
+			        Chambers.getInstance().getDataFile().getConfiguration().set(
+			        "TEAMS." + profile.getTeam().getType().name() + ".CORNERONE",
+			            LocationUtil.serializeLocation(claimProfile.getCornerOne())
+			        );
+			        Chambers.getInstance().getDataFile().getConfiguration().set(
+			        "TEAMS." + profile.getTeam().getType().name() + ".CORNERTWO",
+			            LocationUtil.serializeLocation(claimProfile.getCornerTwo())
+			        );			       
 		        Chambers.getInstance().getDataFile().save();
 		        Chambers.getInstance().getDataFile().load();
+		        } else {
+		        	 profile.getTeam().setClaim(claim);
+		        	 Map map = Chambers.getInstance().getMapHandler().getMap(name);
+		        	 MapFile config = map.getMapFile();
+				     Chambers.getInstance().getClaimManager().addClaim(claim);
+				     config.getConfiguration().set(
+				        "TEAMS." + profile.getTeam().getType().name() + ".CORNERONE",
+				            LocationUtil.serializeLocation(claimProfile.getCornerOne())
+				        );
+				     config.getConfiguration().set(
+				        "TEAMS." + profile.getTeam().getType().name() + ".CORNERTWO",
+				            LocationUtil.serializeLocation(claimProfile.getCornerTwo())
+				        );			  
+		        }
 		        Chambers.getInstance().getClaimManager().removeClaimProfile(profile);
+		        
 		        player.getInventory().removeItem(Chambers.getInstance().getClaimManager().getClaimingWand());
 		        player.sendMessage(ChatColor.GRAY + "Selection claimed for " + profile.getTeam().getFormattedName() + ChatColor.GRAY + ".");
 		    }

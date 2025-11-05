@@ -110,7 +110,7 @@ public class TeamManager {
 	}
 	
 	public void loadTeamHomes() {
-	    for (Team team : this.teams) { // <-- en lugar de this.teams.values()
+	    for (Team team : this.teams) { 
 	        String rawHome = Chambers.getInstance().getDataFile()
 	                .getString("TEAMS." + team.getType().name() + ".HOME");
 	        if (rawHome != null) {

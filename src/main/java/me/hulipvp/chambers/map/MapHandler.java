@@ -14,7 +14,7 @@ import org.bukkit.Bukkit;
 
 
 
-@Getter
+@Getter // TODO: we need to load the claims and home when the map is selected, so we need a votemap XD
 public class MapHandler {
 
     /** Cache principal de mapas (nombre → mapa) */

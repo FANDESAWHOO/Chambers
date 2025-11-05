@@ -56,6 +56,10 @@ public class Team {
 		this.uniqueID = UUID.randomUUID();
 		this.rally = null;
 		this.focusedFaction = null;
+		load();
+	}
+
+	public void load() {
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -65,7 +69,7 @@ public class Team {
             }
         }.runTaskLater(Chambers.getInstance(), 20L);
 	}
-
+	
 	public boolean voteKick(Player voter, Player target) {
 	    if (voter.getUniqueId().equals(target.getUniqueId())) {
 	        voter.sendMessage(ChatColor.RED + "You cannot vote to kick yourself!");
