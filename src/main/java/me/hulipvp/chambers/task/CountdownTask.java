@@ -24,7 +24,7 @@ public class CountdownTask extends BukkitRunnable {
 	    for (Player player : Bukkit.getOnlinePlayers()) {
 	    	Profile profile = Chambers.getInstance().getProfileManager().getProfileByUuid(player.getUniqueId());
 	    	if (profile.getTeam() == null) {
-	    		profile.setTeam(Chambers.getInstance().getTeamManager().getSmallestTeam());
+	    		Chambers.getInstance().getTeamManager().getRandomTeam().addMember(profile);
 	    		player.sendMessage(ChatColor.BLUE + "We selected a random team for you, because you wasn't having they.");
 	    	}
 	    }
