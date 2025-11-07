@@ -13,6 +13,7 @@ import me.hulipvp.chambers.game.listener.GameProtectionListener;
 import me.hulipvp.chambers.koth.listener.KothMoveListener;
 import me.hulipvp.chambers.listener.listeners.ChatListener;
 import me.hulipvp.chambers.listener.listeners.DeathMessageListener;
+import me.hulipvp.chambers.listener.listeners.FireListener;
 import me.hulipvp.chambers.listener.listeners.FoodListener;
 import me.hulipvp.chambers.listener.listeners.PlayerDeathListener;
 import me.hulipvp.chambers.listener.listeners.PlayerRespawnListener;
@@ -55,7 +56,8 @@ public class ListenerManager {
 				new ProfileStatusListener(),
 				new CaveListener(),
 				new DeathMessageListener(),
-				new FoodListener()
+				new FoodListener(),
+				new FireListener()
 		).forEach(listener -> Chambers.getInstance().registerListener(listener));
 	}
 

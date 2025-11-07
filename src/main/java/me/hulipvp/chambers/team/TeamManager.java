@@ -14,6 +14,7 @@ import org.bukkit.Location;
 
 import me.hulipvp.chambers.Chambers;
 import me.hulipvp.chambers.claim.structure.Claim;
+import me.hulipvp.chambers.map.structure.Map;
 import me.hulipvp.chambers.shop.type.BuildEntity;
 import me.hulipvp.chambers.shop.type.CombatEntity;
 import me.hulipvp.chambers.shop.type.EnchantEntity;
@@ -32,41 +33,7 @@ public class TeamManager {
 		teams = new HashSet<>();
 
 		registerAllTeamTypes();
-		
-		 for (Team team : teams) {
-			 String sellString = Chambers.getInstance().getDataFile()
-					    .getString("TEAMS." + team.getType().name() + ".SELLER");
-					Location sell = sellString != null ? LocationUtil.deserializeLocation(sellString) : null;
-
-					String toolsString = Chambers.getInstance().getDataFile()
-					    .getString("TEAMS." + team.getType().name() + ".TOOLS");
-					Location tools = toolsString != null ? LocationUtil.deserializeLocation(toolsString) : null;
-
-					String enchanterString = Chambers.getInstance().getDataFile()
-					    .getString("TEAMS." + team.getType().name() + ".ENCHANTER");
-					Location enchanter = enchanterString != null ? LocationUtil.deserializeLocation(enchanterString) : null;
-
-					String combatString = Chambers.getInstance().getDataFile()
-					    .getString("TEAMS." + team.getType().name() + ".COMBAT");
-					Location combat = combatString != null ? LocationUtil.deserializeLocation(combatString) : null;
-
-	            if (tools != null) {
-	                new BuildEntity(team, tools);
-	            }
-
-	            if (sell != null) {
-	                new SellEntity(team, sell);
-	            }
-
-	            if (enchanter != null) {
-	                new EnchantEntity(team, enchanter);
-	            }
-
-	            if (combat != null) {
-	                new CombatEntity(team, combat);
-	            }
-	        }
-		
+				
 	}
 	
 	/**
@@ -109,7 +76,81 @@ public class TeamManager {
 		return teams.stream().filter(team -> team.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
 	}
 	
-	public void loadTeamHomes() {
+	public void loadVillagers(Map map) {
+		if (map == null) {
+		for (Team team : teams) {
+			 String sellString = Chambers.getInstance().getDataFile()
+					    .getString("TEAMS." + team.getType().name() + ".SELLER");
+					Location sell = sellString != null ? LocationUtil.deserializeLocation(sellString) : null;
+
+					String toolsString = Chambers.getInstance().getDataFile()
+					    .getString("TEAMS." + team.getType().name() + ".TOOLS");
+					Location tools = toolsString != null ? LocationUtil.deserializeLocation(toolsString) : null;
+
+					String enchanterString = Chambers.getInstance().getDataFile()
+					    .getString("TEAMS." + team.getType().name() + ".ENCHANTER");
+					Location enchanter = enchanterString != null ? LocationUtil.deserializeLocation(enchanterString) : null;
+
+					String combatString = Chambers.getInstance().getDataFile()
+					    .getString("TEAMS." + team.getType().name() + ".COMBAT");
+					Location combat = combatString != null ? LocationUtil.deserializeLocation(combatString) : null;
+
+	            if (tools != null) {
+	                new BuildEntity(team, tools);
+	            }
+
+	            if (sell != null) {
+	                new SellEntity(team, sell);
+	            }
+
+	            if (enchanter != null) {
+	                new EnchantEntity(team, enchanter);
+	            }
+
+	            if (combat != null) {
+	                new CombatEntity(team, combat);
+	            }
+	        }
+		} else {
+			for (Team team : teams) {
+			String sellString = map.getMapFile()
+				    .getString("TEAMS." + team.getType().name() + ".SELLER");
+				Location sell = sellString != null ? LocationUtil.deserializeLocation(sellString) : null;
+
+				String toolsString = map.getMapFile()
+				    .getString("TEAMS." + team.getType().name() + ".TOOLS");
+				Location tools = toolsString != null ? LocationUtil.deserializeLocation(toolsString) : null;
+
+				String enchanterString = map.getMapFile()
+				    .getString("TEAMS." + team.getType().name() + ".ENCHANTER");
+				Location enchanter = enchanterString != null ? LocationUtil.deserializeLocation(enchanterString) : null;
+
+				String combatString = map.getMapFile()
+				    .getString("TEAMS." + team.getType().name() + ".COMBAT");
+				Location combat = combatString != null ? LocationUtil.deserializeLocation(combatString) : null;
+
+            if (tools != null) {
+                new BuildEntity(team, tools);
+            }
+
+            if (sell != null) {
+                new SellEntity(team, sell);
+            }
+
+            if (enchanter != null) {
+                new EnchantEntity(team, enchanter);
+            }
+
+            if (combat != null) {
+                new CombatEntity(team, combat);
+            }
+         }
+		
+		}
+	}
+	
+	public void loadTeamHomes(Map map) {
+		if (map == null) {
 	    for (Team team : this.teams) { 
 	        String rawHome = Chambers.getInstance().getDataFile()
 	                .getString("TEAMS." + team.getType().name() + ".HOME");
@@ -123,6 +164,21 @@ public class TeamManager {
 				Chambers.getInstance().getClaimManager().addClaim(claim);
 			}
 	    }
+	} else {
+	 for (Team team : this.teams) { 
+        String rawHome = map.getMapFile()
+                .getString("TEAMS." + team.getType().name() + ".HOME");
+        if (rawHome != null) {
+            team.setHome(LocationUtil.deserializeLocation(rawHome));
+        }
+        String type = team.getType().name();
+        Claim claim = null;
+		if (map.getMapFile().getString("TEAMS." + type + ".CORNERONE") != null && map.getMapFile().getString("TEAMS." + type + ".CORNERTWO") != null) {
+			claim = new Claim(LocationUtil.deserializeLocation(map.getMapFile().getString("TEAMS." + type + ".CORNERONE")), LocationUtil.deserializeLocation(map.getMapFile().getString("TEAMS." + type + ".CORNERTWO")), team);
+			Chambers.getInstance().getClaimManager().addClaim(claim);
+		}
+    }	
+	}
 	    Bukkit.getLogger().info("[Chambers] Homes de los equipos cargados correctamente.");
 	}
 

@@ -10,6 +10,7 @@ import me.hulipvp.chambers.game.structure.Game;
 import me.hulipvp.chambers.game.structure.GameStatus;
 import me.hulipvp.chambers.profile.structure.Profile;
 import me.hulipvp.chambers.team.structure.Team;
+import me.hulipvp.chambers.team.structure.TeamType;
 import me.hulipvp.chambers.util.BukkitUtils;
 import me.hulipvp.chambers.util.scoreboard.tab.entry.TabElement;
 import me.hulipvp.chambers.util.scoreboard.tab.entry.TabElementHandler;
@@ -28,10 +29,10 @@ public class TabProvider implements TabElementHandler {
         TabElement element = new TabElement();
         Profile profile = Chambers.getInstance().getProfileManager().getProfileByUuid(player.getUniqueId());
         Team team = Chambers.getInstance().getTeamManager().getTeamByMember(player.getUniqueId());
-        Team green = Chambers.getInstance().getTeamManager().getTeamByName("Green");
-        Team blue = Chambers.getInstance().getTeamManager().getTeamByName("Blue");
-        Team red = Chambers.getInstance().getTeamManager().getTeamByName("Red");
-        Team yellow = Chambers.getInstance().getTeamManager().getTeamByName("Yellow");
+        Team green = Chambers.getInstance().getTeamManager().getTeamByType(TeamType.GREEN);
+        Team blue = Chambers.getInstance().getTeamManager().getTeamByType(TeamType.BLUE);
+        Team red = Chambers.getInstance().getTeamManager().getTeamByType(TeamType.RED);
+        Team yellow = Chambers.getInstance().getTeamManager().getTeamByType(TeamType.YELLOW);
         Team locTeam = Chambers.getInstance().getClaimManager().getTeamAt(player.getLocation());
         // ==============================
         // Column 0 - Server & Game Info

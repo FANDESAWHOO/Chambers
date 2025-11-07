@@ -9,6 +9,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 import me.hulipvp.chambers.Chambers;
 import me.hulipvp.chambers.koth.structure.Koth;
 import me.hulipvp.chambers.profile.structure.Profile;
+import me.hulipvp.chambers.profile.structure.ProfileStatus;
+import me.hulipvp.chambers.team.structure.TeamType;
 import me.hulipvp.chambers.util.MathUtil;
 
 public class KothTask extends BukkitRunnable {
@@ -29,6 +31,11 @@ public class KothTask extends BukkitRunnable {
 			Koth koth = Chambers.getInstance().getKothManager().getKoth();
 			if (koth.getCapper() != null) {
 				koth.setTime(koth.getTime() - 1);
+				if (koth.getCapper().getProfileStatus().equals(ProfileStatus.RESPAWNING)) 
+					koth.setCapper(null);
+				
+				if (!Chambers.getInstance().getTeamManager().getTeamByType(TeamType.KOTH_CAP).getClaim().isInsideClaim(koth.getCapper().getPlayer()))
+					koth.setCapper(null);
 				if (koth.getTime() % 30 == 0) {
 					Chambers.getInstance().getKothManager().broadcastMessage(ChatColor.BLUE + koth.getName() + ChatColor.YELLOW + " is being controlled. " + ChatColor.RED + "(" + MathUtil.formatIntToTime(koth.getTime()) + ")");
 				}

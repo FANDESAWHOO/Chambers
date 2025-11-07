@@ -46,12 +46,13 @@ public class Game {
 	}
 	
 	public void setupGame(Map map) {
-		this.map = map;
-		this.mapName = map.getName();
-		this.kothName = map.getKothName();
-		this.spawnLocation = map.getSpawnLocation();
-		Chambers.getInstance().getTeamManager().loadTeamHomes();
+		setMap(map);
+		setMapName(map.getName());
+		setKothName(map.getKothName());
+		setSpawnLocation(map.getSpawnLocation());
+		Chambers.getInstance().getTeamManager().loadTeamHomes(map);
 		Chambers.getInstance().getTeamManager().getTeamByType(TeamType.KOTH_CAP).load(map);
+		Chambers.getInstance().getTeamManager().getTeamByType(TeamType.KOTH).setName(kothName);
 	}
 	
 	/**

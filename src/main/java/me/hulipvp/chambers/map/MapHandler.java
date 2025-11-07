@@ -7,8 +7,10 @@ import me.hulipvp.chambers.Chambers;
 import java.io.File;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 
@@ -21,6 +23,15 @@ public class MapHandler {
     private final Map<String, me.hulipvp.chambers.map.structure.Map> mapCache = new LinkedHashMap<>();
 
     private final Chambers plugin = Chambers.getInstance();
+    private final Map<UUID, String> votes = new HashMap<>();
+
+    public boolean hasVoted(UUID uuid) {
+        return votes.containsKey(uuid);
+    }
+
+    public void putVote(UUID uuid, String mapName) {
+        votes.put(uuid, mapName);
+    }
 
     public MapHandler() {
         loadMaps();

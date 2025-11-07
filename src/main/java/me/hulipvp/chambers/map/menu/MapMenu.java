@@ -19,8 +19,6 @@ public class MapMenu extends ChestMenu {
     private final Chambers plugin = Chambers.getInstance();
 
 
-    private final java.util.Map<UUID, String> votes = new HashMap<>();
-
     public MapMenu() {
         super(18);
         
@@ -75,22 +73,21 @@ public class MapMenu extends ChestMenu {
         UUID uuid = player.getUniqueId();
         int slot = event.getRawSlot();
 
-        // bloqueo doble voto
-        if (votes.containsKey(uuid)) {
-            player.sendMessage(ChatColor.RED + "Ya votaste un mapa.");
-            return;
-        }
+
+      // bloqueo doble voto global
+       if (plugin.getMapHandler().hasVoted(uuid)) {
+         player.sendMessage(ChatColor.RED + "Ya votaste un mapa.");
+         return;
+     }
 
    
 
         int index = slot;
         if (index < maps.size()) {
             Map selected = maps.get(index);
-            if (votes.containsKey(uuid))
-            	return;
             selected.setVotes(selected.getVotes() + 1);
-            votes.put(uuid, selected.getName());
- 
+            plugin.getMapHandler().putVote(uuid, selected.getName());
+
             player.sendMessage(ChatColor.YELLOW + "Votaste por: " + ChatColor.AQUA + selected.getName()
                     + ChatColor.GRAY + " (" + selected.getVotes() + " votos)");
 
