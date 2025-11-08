@@ -39,15 +39,15 @@ public class CombatMenu extends ChestMenu {
     private final ItemStack poisonPotion = new ItemUtil(Material.POTION).durability(16388).name("&aPoison Potion").setLore("&7&m-------------------", "&71 x Poison Potion", "&7&m-------------------", "&7Price: &a$150").build();
     private final ItemStack slownessPotion = new ItemUtil(Material.POTION).durability(16426).name("&aSlowness Potion").setLore("&7&m-------------------", "&71 x Slowness Potion", "&7&m-------------------", "&7Price: &a$150").build();
     private final ItemStack invisPotion = new ItemUtil(Material.POTION).durability(8238).name("&aInvisibility Potion").setLore("&7&m-------------------", "&71 x Invisibility Potion", "&7&m-------------------", "&7Price: &a$300").build();
-    private final ItemStack antidote = new ItemUtil(Material.POTION).name("&aAntidote").setLore("&7&m-------------------", "&71 x Antidote", "&7&m-------------------", "&7Price: &a$150").build();
+    private final ItemStack antidote = new ItemUtil(Material.POTION).name("&aAntidote").setLore("&7&m-------------------", "&71 x Antidote Potion", "&7&m-------------------", "&7Price: &a$150").build();
     // full set 
     private final ItemStack fullSet = new ItemUtil(Material.DIAMOND).name("&aFull Diamond Set").setLore("&7&m-------------------", "&71 x Full Diamond Set", "&7&m-------------------", "&7Price: &a$600").build();
     private final ItemStack bardSet = new ItemUtil(Material.GOLD_INGOT).name("&aFull Bard Set").setLore("&7&m-------------------", "&71 x Full Bard Set", "&7&m-------------------", "&7Price: &a$600").build();
     // EFFECTS BARD
-    private final ItemStack strength = new ItemUtil(Material.BLAZE_POWDER).name("&aBlaze Powder").setLore("&7&m-------------------", "&71 x Blaze Powder", "&7&m-------------------", "&7Price: &a$30").build();
-    private final ItemStack regeneration = new ItemUtil(Material.GHAST_TEAR).name("&aGhast Tear").setLore("&7&m-------------------", "&71 x Ghast Tear", "&7&m-------------------", "&7Price: &a$30").build();
-    private final ItemStack jumpboost = new ItemUtil(Material.FEATHER).name("&aFeather").setLore("&7&m-------------------", "&71 x Feather", "&7&m-------------------", "&7Price: &a$15").build();
-    private final ItemStack speed = new ItemUtil(Material.SUGAR).name("&aSugar").setLore("&7&m-------------------", "&71 x Sugar", "&7&m-------------------", "&7Price: &a$15").build();
+    private final ItemStack strength = new ItemUtil(Material.BLAZE_POWDER).name("&aBlaze Powder").setLore("&7&m-------------------", "&71 x Blaze Powder Bard", "&7&m-------------------", "&7Price: &a$30").build();
+    private final ItemStack regeneration = new ItemUtil(Material.GHAST_TEAR).name("&aGhast Tear").setLore("&7&m-------------------", "&71 x Ghast Tear Bard", "&7&m-------------------", "&7Price: &a$30").build();
+    private final ItemStack jumpboost = new ItemUtil(Material.FEATHER).name("&aFeather").setLore("&7&m-------------------", "&71 x Feather Bard", "&7&m-------------------", "&7Price: &a$15").build();
+    private final ItemStack speed = new ItemUtil(Material.SUGAR).name("&aSugar").setLore("&7&m-------------------", "&71 x Sugar Bard", "&7&m-------------------", "&7Price: &a$15").build();
     public CombatMenu(Player player) {
         super(6 * 9);
         update();
@@ -64,9 +64,9 @@ public class CombatMenu extends ChestMenu {
         inventory.setItem(9, diamondHelmet);
         inventory.setItem(18, diamondChestplate);
         inventory.setItem(27, diamondLeggings);
-        inventory.setItem(35, diamondBoots);
+        inventory.setItem(36, diamondBoots);
         inventory.setItem(19, diamondSword);
-        inventory.setItem(24, fullSet);
+        inventory.setItem(20, fullSet);
         // potions no debuff
         inventory.setItem(5, speedPotion);
         inventory.setItem(4, healPotion);
@@ -88,9 +88,9 @@ public class CombatMenu extends ChestMenu {
         // BARD HERE
         inventory.setItem(17, goldHelmet);
         inventory.setItem(26, goldChestplate);
-        inventory.setItem(35, goldLeggings);
+        inventory.setItem(34, goldLeggings);
         inventory.setItem(45, goldBoots);
-        inventory.setItem(22, bardSet);
+        inventory.setItem(24, bardSet);
         for (int i = 0; i < 6 * 9; i++) {
             if (inventory.getItem(i) != null) continue;
             inventory.setItem(i, new ItemUtil(Material.STAINED_GLASS_PANE).durability(7).name(" ").build());
@@ -141,7 +141,7 @@ public class CombatMenu extends ChestMenu {
                 player.sendMessage(ChatColor.GREEN + "You bought a full diamond set for $" + cost);
                 return;
             }
-        } else if (ItemUtil.hasLore(current, "Bard")) {
+        } else if (ItemUtil.hasLore(current, "Gold")) {
             if (current.isSimilar(goldHelmet)) {
                 cost = 50; toGive = new ItemStack(Material.GOLD_HELMET);
             } else if (current.isSimilar(goldChestplate)) {
@@ -169,6 +169,8 @@ public class CombatMenu extends ChestMenu {
                 cost = 15; toGive = new ItemStack(Material.POTION, 1, (short) 8226);
             } else if (current.isSimilar(firePotion)) {
                 cost = 25; toGive = new ItemStack(Material.POTION, 1, (short) 8227);
+            } else if (current.isSimilar(antidote)) {
+                cost = 150; toGive = new ItemUtil(Material.POTION).name("&aAntidote").lore("Consume the antidote to battle the debuff.").build();
             } else if (current.isSimilar(healPotion)) {
                 if (event.getClick() == ClickType.RIGHT) {
                     int emptySlots = 0;
@@ -189,15 +191,23 @@ public class CombatMenu extends ChestMenu {
                 } else {
                     cost = 5; toGive = new ItemStack(Material.POTION, 1, (short) 16421);
                 }
-            } else if (current.isSimilar(antidote)) {
-                cost = 150; toGive = new ItemUtil(Material.POTION).name("&aAntidote").lore("Consume the antidote to battle the debuff.").build();
-            } else if (current.isSimilar(poisonPotion)) {
+            }  else if (current.isSimilar(poisonPotion)) {
             	 cost = 150; toGive = new ItemUtil(Material.POTION).durability(16388).name("&aPoison Potion").build();
             } else if (current.isSimilar(slownessPotion)) {
             	 cost = 150; toGive = new ItemUtil(Material.POTION).durability(16426).name("&aSlowness Potion").build();
             } else if (current.isSimilar(invisPotion)) {
             	cost = 300; toGive = new ItemUtil(Material.POTION).durability(8238).name("&aInvisibility Potion").build();
             }
+        } else if (ItemUtil.hasLore(current, "Bard")) {
+        	if (current.isSimilar(speed)) {
+        		cost = 15; toGive = new ItemStack(Material.SUGAR);
+        	} else if (current.isSimilar(strength)) {
+        		cost = 30; toGive = new ItemStack(Material.BLAZE_POWDER);
+        	} else if (current.isSimilar(regeneration)) {
+        		cost = 30; toGive = new ItemStack(Material.GHAST_TEAR);
+        	} else if (current.isSimilar(jumpboost)) {
+        		cost = 15; toGive = new ItemStack(Material.FEATHER);
+        	}
         } else if (ItemUtil.hasLore(current, "Bow")) {
         	   cost = 150; toGive = new ItemStack(Material.BOW);
         } else if (ItemUtil.hasLore(current, "Arrow")) {
@@ -210,6 +220,7 @@ public class CombatMenu extends ChestMenu {
             cost = (event.getClick() == ClickType.RIGHT) ? 5 * 16 : 5;
             toGive = new ItemStack(Material.COOKED_BEEF, (event.getClick() == ClickType.RIGHT) ? 16 : 1);
         }
+        
 
         if (toGive == null) return;
         if (balance < cost) {

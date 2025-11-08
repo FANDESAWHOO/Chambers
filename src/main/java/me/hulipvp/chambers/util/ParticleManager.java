@@ -1,6 +1,7 @@
 package me.hulipvp.chambers.util;
 
 import org.bukkit.Location;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 
@@ -27,7 +28,28 @@ public class ParticleManager {
             player.sendMessage("§cError al mostrar partículas de corazón");
         }
     }
-    
+    public static void sendHeartsToLocation(Player player) {
+        try {
+         for (Entity teammate : player.getNearbyEntities(25, 25 / 2, 25)) {
+        	 if (teammate instanceof Player) {
+                 // Mostrar partículas de corazón alrededor del jugador
+                 ParticleEffect.HEART.display(
+                     0.5f,  // offsetX - dispersión horizontal
+                     0.5f,  // offsetY - dispersión vertical  
+                     0.5f,  // offsetZ - dispersión profunda
+                     0,     // speed - velocidad de las partículas (0 para estáticas)
+                     10,    // amount - cantidad de partículas
+                     player.getLocation(), // ubicación donde aparecerán
+                     (Player) teammate    // jugador que verá las partículas
+                 );
+        	   }
+        	 }
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            player.sendMessage("§cError al mostrar partículas de corazón");
+        }
+    }
     // Método alternativo con más personalización
     public static void sendCustomHearts(Player player, int cantidad, float dispersion) {
         try {

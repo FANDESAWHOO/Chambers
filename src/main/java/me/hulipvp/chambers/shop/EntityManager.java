@@ -76,7 +76,7 @@ public class EntityManager implements Listener {
     public void onEntityDeath(EntityDeathEvent event) { // TODO: Team need to have already initializated the location from villagers.
         if (event.getEntity() instanceof Villager && event.getEntity().getCustomName() != null) {
             if (event.getEntity().getCustomName().toLowerCase().contains("combat") || event.getEntity().getCustomName().toLowerCase().contains("enchant") || event.getEntity().getCustomName().toLowerCase().contains("build") || event.getEntity().getCustomName().toLowerCase().contains("sell")) {
-                final int[] counter = {15};
+                final int[] counter = {90};
                 ShopType type = null;
 
                 if (event.getEntity().getCustomName().toLowerCase().contains("combat")) type = ShopType.COMBAT;
@@ -102,13 +102,13 @@ public class EntityManager implements Listener {
                         if (counter[0] <= 0) {
                             Team team = Chambers.getInstance().getTeamManager().getByColor(ChatColor.getByChar(ChatColor.getLastColors(event.getEntity().getCustomName()).replace("§", "").replace("&", "")));
                             if (killedVillagers.get(event.getEntity()) == ShopType.SELLER) {
-                                new SellEntity(team, LocationUtil.getLocation(Chambers.getInstance().getDataFile().getString("TEAMS." + team.getType().name() + "." + "SELLER")));
+                                new SellEntity(team, LocationUtil.getLocation(Chambers.getInstance().getGameManager().getGame().getMap().getMapFile().getString("TEAMS." + team.getType().name() + "." + "SELLER")));
                             } else if (killedVillagers.get(event.getEntity()) == ShopType.TOOLS) {
-                                new BuildEntity(team, LocationUtil.getLocation(Chambers.getInstance().getDataFile().getString("TEAMS." + team.getType().name() + "." + "TOOLS")));
+                                new BuildEntity(team, LocationUtil.getLocation(Chambers.getInstance().getGameManager().getGame().getMap().getMapFile().getString("TEAMS." + team.getType().name() + "." + "TOOLS")));
                             } else if (killedVillagers.get(event.getEntity()) == ShopType.ENCHANTER) {
-                                new EnchantEntity(team, LocationUtil.getLocation(Chambers.getInstance().getDataFile().getString("TEAMS." + team.getType().name() + "." + "ENCHANTER")));
+                                new EnchantEntity(team, LocationUtil.getLocation(Chambers.getInstance().getGameManager().getGame().getMap().getMapFile().getString("TEAMS." + team.getType().name() + "." + "ENCHANTER")));
                             } else if (killedVillagers.get(event.getEntity()) == ShopType.COMBAT) {
-                                new CombatEntity(team, LocationUtil.getLocation(Chambers.getInstance().getDataFile().getString("TEAMS." + team.getType().name() + "." + "COMBAT")));
+                                new CombatEntity(team, LocationUtil.getLocation(Chambers.getInstance().getGameManager().getGame().getMap().getMapFile().getString("TEAMS." + team.getType().name() + "." + "COMBAT")));
                             }
 
                             killedVillagers.remove(event.getEntity());

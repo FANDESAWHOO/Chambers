@@ -58,10 +58,10 @@ public class IngameProvider implements AssembleAdapter {
 			}
 			PvPClass pvpClass = PvPClassHandler.getPvPClass(player);
 			if (pvpClass != null) {
-				lines.add(ChatColor.AQUA+ "" + ChatColor.BOLD + "Bard energy" + ChatColor.GRAY + ": " + ChatColor.WHITE + getBardEnergyScore(player));
+				lines.add(ChatColor.AQUA+ "" + ChatColor.BOLD + "Bard energy" + ChatColor.GRAY + ": " + ChatColor.RED + getBardEnergyScore(player));
 				if (Chambers.getInstance().getTimerManager().getBardCooldown().getRemaining(player) > 0L) {
 					long remaining = Chambers.getInstance().getTimerManager().getBardCooldown().getRemaining(player);
-					lines.add(ChatColor.AQUA + "" + ChatColor.BOLD + "Buff Delay" + ChatColor.GRAY + ": " + ChatColor.WHITE + DurationFormatter.getRemaining(remaining, true));
+					lines.add(ChatColor.AQUA + "" + ChatColor.BOLD + "Buff Delay" + ChatColor.GRAY + ": " + ChatColor.RED + DurationFormatter.getRemaining(remaining, true));
 				}
 			}
 			

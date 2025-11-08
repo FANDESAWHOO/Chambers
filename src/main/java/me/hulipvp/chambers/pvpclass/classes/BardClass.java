@@ -211,7 +211,7 @@ public class BardClass extends PvPClass implements Listener {
         Chambers.getInstance().getTimerManager().getBardCooldown().setCooldown(event.getPlayer(), event.getPlayer().getUniqueId(), EFFECT_COOLDOWN, false);
         getLastEffectUsage().put(event.getPlayer().getName(), System.currentTimeMillis() + EFFECT_COOLDOWN);
         Chambers.getInstance().getTimerManager().getCombatTimer().setCooldown(event.getPlayer(), event.getPlayer().getUniqueId(), 30L, false);
-        ParticleManager.sendHeartsToPlayer(event.getPlayer());
+        ParticleManager.sendHeartsToLocation(event.getPlayer());
         giveBardEffect(event.getPlayer(), bardEffect, !negative, true);
         if (event.getPlayer().getItemInHand().getAmount() == 1) {
             event.getPlayer().setItemInHand(new ItemStack(Material.AIR));
