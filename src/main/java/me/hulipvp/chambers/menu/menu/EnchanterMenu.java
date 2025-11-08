@@ -68,8 +68,8 @@ public class EnchanterMenu extends ChestMenu {
                             for (ItemStack itemStack : player.getInventory().getContents()) {
                                 if (itemStack != null && itemStack.getType() == Material.DIAMOND_SWORD && counter == 0) {
                                     itemStack.addEnchantment(Enchantment.DAMAGE_ALL, 1);
-
                                     counter++;
+                                    profile.withdraw(cost);
                                 }
                             }
                         } else if (event.getCurrentItem().getItemMeta().getDisplayName().contains("Feather")) {
@@ -77,15 +77,9 @@ public class EnchanterMenu extends ChestMenu {
 
                             for (ItemStack itemStack : player.getInventory().getContents()) {
                                 if (itemStack != null && itemStack.getType() == Material.DIAMOND_BOOTS && counter == 0) {
-                                    itemStack.addEnchantment(Enchantment.PROTECTION_FALL, 1);
-
+                                    itemStack.addEnchantment(Enchantment.PROTECTION_FALL, 4);
                                     counter++;
-                                } else if (itemStack == null) {
-                                	for (ItemStack stack : player.getInventory().getArmorContents()) {
-                                		if ((stack.getType() == Material.DIAMOND_HELMET || stack.getType() == Material.DIAMOND_CHESTPLATE || stack.getType() == Material.DIAMOND_LEGGINGS || stack.getType() == Material.DIAMOND_BOOTS))
-                                		 stack.addEnchantment(Enchantment.PROTECTION_FALL, 1);
-                                		counter++;
-                                	}
+                                    profile.withdraw(cost);
                                 }
                             }
                         } else if (event.getCurrentItem().getItemMeta().getDisplayName().contains("Protection")) {
@@ -93,17 +87,12 @@ public class EnchanterMenu extends ChestMenu {
                             for (ItemStack itemStack : player.getInventory().getContents()) {
                                 if (itemStack != null && (itemStack.getType() == Material.DIAMOND_HELMET || itemStack.getType() == Material.DIAMOND_CHESTPLATE || itemStack.getType() == Material.DIAMOND_LEGGINGS || itemStack.getType() == Material.DIAMOND_BOOTS)) {
                                     itemStack.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
-                                } else if (itemStack == null) {
-                                	for (ItemStack stack : player.getInventory().getArmorContents()) {
-                                		if ((stack.getType() == Material.DIAMOND_HELMET || stack.getType() == Material.DIAMOND_CHESTPLATE || stack.getType() == Material.DIAMOND_LEGGINGS || stack.getType() == Material.DIAMOND_BOOTS))
-                                		 stack.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
-                                	}
-                                }
-                                
+                                    profile.withdraw(cost);
+                                }                              
                             }
                         }
                         
-                        profile.withdraw(cost);
+          
                     }
                 }
             }

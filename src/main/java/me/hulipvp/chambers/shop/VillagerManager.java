@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
-import org.bukkit.scheduler.BukkitRunnable;
+
 
 import me.hulipvp.chambers.Chambers;
 import me.hulipvp.chambers.shop.structure.ShopType;

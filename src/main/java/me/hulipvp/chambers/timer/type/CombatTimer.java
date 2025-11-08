@@ -1,6 +1,9 @@
 package me.hulipvp.chambers.timer.type;
 
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 
@@ -15,6 +18,8 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
 import me.hulipvp.chambers.timer.PlayerTimer;
+import me.hulipvp.chambers.timer.events.TimerClearEvent;
+import me.hulipvp.chambers.timer.events.TimerExpireEvent;
 import me.hulipvp.chambers.timer.events.TimerStartEvent;
 import me.hulipvp.chambers.util.BukkitUtils;
 import me.hulipvp.chambers.util.Color;
@@ -24,6 +29,8 @@ import me.hulipvp.chambers.util.Color;
  */
 public class CombatTimer extends PlayerTimer implements Listener {
 
+	private final List<UUID> players = new ArrayList<UUID>();
+	
 	public CombatTimer() {
 		super("Combat", TimeUnit.SECONDS.toMillis(30L));
 
@@ -71,10 +78,31 @@ public class CombatTimer extends PlayerTimer implements Listener {
 	public void onTimerStart(TimerStartEvent event) {
 		if (event.getTimer() == this) {
 				Player player = event.getPlayer().get();
-				player.sendMessage(Color.color("&eYou have been spawn tagged for &c30 &eseconds."));
+			    if (!players.contains(player.getUniqueId())) {
+					player.sendMessage(Color.color("&eYou have been spawn tagged for &c30 &eseconds."));
+					players.add(player.getUniqueId());
+			    }
+			}
+		}
+	@EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
+	public void onTimerExpire(TimerExpireEvent event) {
+		if (event.getTimer() == this) {
+				UUID uniqueID = event.getUserUUID().get();
+			    if (players.contains(uniqueID)) {
+					players.remove(uniqueID);
+			    }
 			}
 		}
 	
+	@EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
+	public void onTimerExpire(TimerClearEvent event) {
+		if (event.getTimer() == this) {
+				UUID uniqueID = event.getUserUUID().get();
+			    if (players.contains(uniqueID)) {
+					players.remove(uniqueID);
+			    }
+			}
+		}
 
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
 	public void onPlayerRespawn(PlayerRespawnEvent event) {

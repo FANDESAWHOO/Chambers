@@ -51,6 +51,7 @@ public class KothMoveListener implements Listener {
 			if (profile.getProfileStatus() != ProfileStatus.PLAYING) {
 				return;
 			}
+			if (koth != null) {
 			if (koth.getCapper() != null && koth.getCapper() == profile) {
 				koth.setCapper(null);
 				if (koth.getTime() <= 180) {
@@ -62,6 +63,7 @@ public class KothMoveListener implements Listener {
 				koth.getCapQueue().remove(profile);
 			}
 		}
+	  }
 	}
 
 }

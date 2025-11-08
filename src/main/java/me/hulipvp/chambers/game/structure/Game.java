@@ -39,7 +39,7 @@ public class Game {
 		this.offline = new HashSet<>();
 		this.winner = null;
 		this.mapName = "Select one map.";
-		this.kothName = "Map doesn't exist so koth too.";
+		this.kothName = "Palace";
 		this.mapName = Chambers.getInstance().getDataFile().getString("MAP_NAME");
 		this.kothName = Chambers.getInstance().getDataFile().getString("KOTH_NAME");
 		this.spawnLocation = Chambers.getInstance().getDataFile().getString("SPAWN_LOCATION") == null ? Bukkit.getWorlds().get(0).getSpawnLocation() : LocationUtil.deserializeLocation(Chambers.getInstance().getDataFile().getString("SPAWN_LOCATION"));
@@ -48,11 +48,13 @@ public class Game {
 	public void setupGame(Map map) {
 		setMap(map);
 		setMapName(map.getName());
+		if (map.getKothName() != null)
 		setKothName(map.getKothName());
 		setSpawnLocation(map.getSpawnLocation());
+		String kothName = getKothName();
+		Chambers.getInstance().getTeamManager().getTeamByType(TeamType.KOTH).setName(kothName == null ? getMapName() : kothName);
 		Chambers.getInstance().getTeamManager().loadTeamHomes(map);
 		Chambers.getInstance().getTeamManager().getTeamByType(TeamType.KOTH_CAP).load(map);
-		Chambers.getInstance().getTeamManager().getTeamByType(TeamType.KOTH).setName(kothName);
 	}
 	
 	/**

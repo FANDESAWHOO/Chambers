@@ -53,14 +53,15 @@ public class IngameProvider implements AssembleAdapter {
 			if (plugin.getTimerManager().getEnderpearlTimer().getRemaining(player) > 0) {
 				lines.add("&5&lEnderpearl&7:&c " +  DurationFormatter.getRemaining(plugin.getTimerManager().getEnderpearlTimer().getRemaining(player),true));
 			}
+			if (plugin.getTimerManager().getAntidoteTimer().getRemaining(player) > 0) {
+				lines.add("&5&lAntidote&7:&c " +  DurationFormatter.getRemaining(plugin.getTimerManager().getAntidoteTimer().getRemaining(player),true));
+			}
 			PvPClass pvpClass = PvPClassHandler.getPvPClass(player);
 			if (pvpClass != null) {
-				lines.add(ChatColor.GOLD + " \u00bb " + ChatColor.LIGHT_PURPLE + "Energy" + ChatColor.GRAY + ": " + ChatColor.WHITE +
-						getBardEnergyScore(player));
+				lines.add(ChatColor.AQUA+ "" + ChatColor.BOLD + "Bard energy" + ChatColor.GRAY + ": " + ChatColor.WHITE + getBardEnergyScore(player));
 				if (Chambers.getInstance().getTimerManager().getBardCooldown().getRemaining(player) > 0L) {
 					long remaining = Chambers.getInstance().getTimerManager().getBardCooldown().getRemaining(player);
-					lines.add(ChatColor.GOLD.toString() + " \u00bb " + ChatColor.LIGHT_PURPLE + "Buff Delay" +
-							ChatColor.GRAY + ": " + ChatColor.WHITE + DurationFormatter.getRemaining(remaining, true));
+					lines.add(ChatColor.AQUA + "" + ChatColor.BOLD + "Buff Delay" + ChatColor.GRAY + ": " + ChatColor.WHITE + DurationFormatter.getRemaining(remaining, true));
 				}
 			}
 			

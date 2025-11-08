@@ -11,7 +11,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
-  <build>
+<build>
     <sourceDirectory>src/main/java</sourceDirectory>
     <resources>
       <resource>
@@ -20,6 +20,7 @@
       </resource>
     </resources>
   </build>
+
 
   <repositories>
     <repository>

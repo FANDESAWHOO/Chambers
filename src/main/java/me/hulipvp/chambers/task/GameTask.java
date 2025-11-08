@@ -41,9 +41,8 @@ public class GameTask extends BukkitRunnable {
         }
         
         if (game.getTotalTime() == 60) {
-        	String kothName = game.getKothName();
-        	Koth koth = new Koth(kothName == null ? game.getMapName() : kothName, 360);
-        	koth.setName(kothName);
+			String kothName = game.getKothName();
+			Koth koth = new Koth(kothName == null ? game.getMapName() : kothName, 480);
 			Chambers.getInstance().getKothManager().setKoth(koth);
 			new KothTask().runTaskTimerAsynchronously(Chambers.getInstance(), 0L, 20L);
 			Chambers.getInstance().getKothManager().broadcastMessage(ChatColor.BLUE + koth.getName() + ChatColor.YELLOW + " can now be contested.");

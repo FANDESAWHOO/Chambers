@@ -31,6 +31,8 @@ import me.hulipvp.chambers.pvpclass.PvPClassHandler;
 import me.hulipvp.chambers.pvpclass.bard.BardEffect;
 import me.hulipvp.chambers.team.structure.Team;
 import me.hulipvp.chambers.util.Color;
+import me.hulipvp.chambers.util.ParticleManager;
+
 
 public class BardClass extends PvPClass implements Listener {
 
@@ -193,15 +195,15 @@ public class BardClass extends PvPClass implements Listener {
         if (event.getItem().getType() == Material.FEATHER) effect = "Jump Boost VII";
 
         int teammates = getNearbyPlayers(event.getPlayer(), true).size();
-        
+        int nearby = getNearbyPlayers(event.getPlayer(), true).size();
        for(Player teammate : getNearbyPlayers(event.getPlayer(), true)) {
     	   if (teammates <= 1) {
                event.getPlayer().sendMessage(Color.color("&eYou cast " + effect + " to yourself."));
     	   } else if (teammates > 1) {
-               event.getPlayer().sendMessage(Color.color("&eYou cast " + effect + " (0:06) on " + teammates + " friendly players."));
                teammate.sendMessage(Color.color("&eYou received "+ effect+ " (0:06)" +"."));
            }
        }
+        event.getPlayer().sendMessage(Color.color("&eYou cast " + effect + " (0:06) on " + nearby+ " friendly players."));
 
         energy.put(event.getPlayer().getName(), energy.get(event.getPlayer().getName()) - bardEffect.getEnergy());
 
@@ -209,9 +211,8 @@ public class BardClass extends PvPClass implements Listener {
         Chambers.getInstance().getTimerManager().getBardCooldown().setCooldown(event.getPlayer(), event.getPlayer().getUniqueId(), EFFECT_COOLDOWN, false);
         getLastEffectUsage().put(event.getPlayer().getName(), System.currentTimeMillis() + EFFECT_COOLDOWN);
         Chambers.getInstance().getTimerManager().getCombatTimer().setCooldown(event.getPlayer(), event.getPlayer().getUniqueId(), 30L, false);
-
+        ParticleManager.sendHeartsToPlayer(event.getPlayer());
         giveBardEffect(event.getPlayer(), bardEffect, !negative, true);
-
         if (event.getPlayer().getItemInHand().getAmount() == 1) {
             event.getPlayer().setItemInHand(new ItemStack(Material.AIR));
             event.getPlayer().updateInventory();
@@ -234,7 +235,7 @@ public class BardClass extends PvPClass implements Listener {
             }
         }
     }
-    
+
     @EventHandler
     public void onItemHeld(PlayerItemHeldEvent event) {
         Player player = event.getPlayer();

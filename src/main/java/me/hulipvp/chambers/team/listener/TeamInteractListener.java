@@ -35,7 +35,7 @@ public class TeamInteractListener implements Listener {
 			event.setCancelled(true);
 			return;
 		}
-		if (material.name().contains("FENCE") || material.name().contains("DOOR") || material.name().contains("CHEST") || material.name().contains("PLATE")) {
+		if (material.name().contains("FENCE") || material.name().contains("PLATE") || material.name().contains("DOOR") || material.name().contains("CHEST") || material.name().contains("PLATE")) {
 			Team team = Chambers.getInstance().getClaimManager().getTeamAt(location);
 			if (team.isRaidable()) {
 				event.setCancelled(false);

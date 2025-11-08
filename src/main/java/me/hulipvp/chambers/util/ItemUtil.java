@@ -60,6 +60,19 @@ public class ItemUtil {
 		is.setAmount(amount);
 		return this;
 	}
+	
+	public static boolean hasLore(ItemStack stack, String contains) {
+	    if (stack == null || !stack.hasItemMeta()) return false;
+	    ItemMeta meta = stack.getItemMeta();
+	    if (!meta.hasLore()) return false;
+	    for (String line : meta.getLore()) {
+	        if (ChatColor.stripColor(line).contains(ChatColor.stripColor(contains))) {
+	            return true;
+	        }
+	    }
+	    return false;
+	}
+
 	public ItemUtil addLore(String lore) {
 		ItemMeta itemMeta = is.getItemMeta();
 

@@ -16,6 +16,7 @@ import me.hulipvp.chambers.game.structure.GameStatus;
 import me.hulipvp.chambers.task.CountdownTask;
 import me.hulipvp.chambers.task.GameTask;
 import me.hulipvp.chambers.team.structure.Team;
+import me.hulipvp.chambers.team.structure.TeamType;
 
 @Getter
 public class GameManager {
@@ -93,7 +94,7 @@ public class GameManager {
 	 * Attempts to start the Game
 	 */
 	public void tryStart() {
-		if (Bukkit.getOnlinePlayers().size() == 4) { // FOR BETA 
+		if (Bukkit.getOnlinePlayers().size() == 20) { // FOR BETA 
 			start();
 		}
 	}
@@ -119,6 +120,7 @@ public class GameManager {
 				player.teleport(team.getHome());
 			});
 		});
+		Chambers.getInstance().getTeamManager().getTeamByType(TeamType.KOTH).setName(game.getKothName() == null ? game.getMapName() : game.getKothName());
 		new GameTask().runTaskTimerAsynchronously(Chambers.getInstance(), 0L, 20L);
 		Bukkit.broadcastMessage(" ");
 		Bukkit.broadcastMessage(ChatColor.YELLOW + "The game has now started! Good luck!");

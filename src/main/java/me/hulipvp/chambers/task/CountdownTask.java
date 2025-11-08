@@ -8,6 +8,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import me.hulipvp.chambers.Chambers;
 import me.hulipvp.chambers.game.structure.Game;
 import me.hulipvp.chambers.profile.structure.Profile;
+import me.hulipvp.chambers.team.structure.TeamType;
 
 public class CountdownTask extends BukkitRunnable {
 
@@ -15,6 +16,9 @@ public class CountdownTask extends BukkitRunnable {
 	public void run() {
 		Game game = Chambers.getInstance().getGameManager().getGame();
 		game.setCountdownTime(game.getCountdownTime() - 1);
+		if (game.getCountdownTime() == 14) {
+			Chambers.getInstance().getTeamManager().getTeamByType(TeamType.KOTH).setName(game.getMapName());
+		}
 		if (game.getCountdownTime() <= 0) {
 			Chambers.getInstance().getGameManager().finallyStart();
 			cancel();

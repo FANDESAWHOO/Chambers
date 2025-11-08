@@ -3,7 +3,6 @@ package me.hulipvp.chambers.map.structure;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
@@ -30,13 +29,37 @@ public class Map  {
 	
 	public Map(String name) {
 		this.name = name;
-		this.world = null;
-		this.display = ItemBuilder.of(Material.DIAMOND_AXE, name, "").build();
-		this.description = null;
-		this.mapLevel = MapLevel.NORMAL;
-		this.spawnLocation = null;
-		this.kothName = null;
-		manageData();
+		mapFile = new MapFile(Chambers.getInstance(), name);
+		String path = name + ".";
+
+		if (mapFile.getConfiguration().getConfigurationSection(name) != null) {
+
+			String worldName = mapFile.getString(path + "world");
+			if (worldName != null)
+				this.world = Bukkit.getWorld(worldName);
+
+			this.description = mapFile.getString(path + "description");
+
+			String lvl = mapFile.getString(path + "level");
+			if (lvl != null)
+				this.mapLevel = MapLevel.valueOf(lvl);
+
+			String itemString = mapFile.getString(path + "item");
+			if (itemString != null && !itemString.isEmpty())
+				this.display = ItemBuilder.fromString(itemString).make();
+			String koth = mapFile.getString(path + "koth");
+			if (koth != null && !koth.isEmpty())
+				this.kothName = koth;
+			String location = mapFile.getString(path + "spawn");
+			if (location != null && !location.isEmpty())
+				this.spawnLocation = LocationUtil.deserializeLocation(location);
+		}
+	//	this.world = null;
+	//	this.display = ItemBuilder.of(Material.DIAMOND_AXE, name, "").build();
+	//	this.description = null;
+	//	this.mapLevel = MapLevel.NORMAL;
+	//	this.spawnLocation = null;
+//		this.kothName = "Palace";
 	}
 	
 /*	public Map(World world, String name) {
@@ -65,35 +88,7 @@ public class Map  {
 		this.mapLevel = MapLevel.NORMAL;
 		manageData();
 	}*/
-	
-	public void manageData() {
-		mapFile = new MapFile(Chambers.getInstance(), name);
-		String path = name + ".";
-
-		if (mapFile.getConfiguration().getConfigurationSection(name) != null) {
-
-			String worldName = mapFile.getString(path + "world");
-			if (worldName != null)
-				this.world = Bukkit.getWorld(worldName);
-
-			this.description = mapFile.getString(path + "description");
-
-			String lvl = mapFile.getString(path + "level");
-			if (lvl != null)
-				this.mapLevel = MapLevel.valueOf(lvl);
-
-			String itemString = mapFile.getString(path + "item");
-			if (itemString != null && !itemString.isEmpty())
-				this.display = ItemBuilder.fromString(itemString).make();
-			String koth = mapFile.getString(path + "koth");
-			if (koth != null && !koth.isEmpty())
-				this.kothName = koth;
-			String location = mapFile.getString(path + "spawn");
-			if (location != null && !location.isEmpty())
-				this.spawnLocation = LocationUtil.deserializeLocation(location);
-		}
-	}
-	
+		
 	public void setWorld(World world) { this.world = world; }
 	public void setDisplay(ItemStack display) { this.display = display; }
 	public void setDescription(String desc) { this.description = desc; }
