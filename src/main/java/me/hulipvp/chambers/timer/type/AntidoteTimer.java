@@ -36,34 +36,46 @@ public class AntidoteTimer extends PlayerTimer implements Listener {
 		return null;
 	}
 	
-	@EventHandler
-	public void onInteractEvent(PlayerItemConsumeEvent event) {
-		ItemStack stack = event.getItem();		
-		if (ItemUtil.hasLore(stack, "Antidote")) {
-			Player player = event.getPlayer();
-			if (getRemaining(player) > 0) {
-				player.sendMessage(ChatColor.GREEN + "You have remaining cooldown of "+getRemaining(player));
-				event.setCancelled(true);
-				return;
-			}
-			setCooldown(player, player.getUniqueId());
-            new BukkitRunnable() {
+	 @EventHandler
+	    public void onConsume(PlayerItemConsumeEvent event) {
+	        ItemStack item = event.getItem();
+	        Player player = event.getPlayer();
 
-				@Override
-				public void run() {
-					player.getActivePotionEffects().forEach(effect -> {
-						if (potions.contains(effect.getType())) 
-							player.getActivePotionEffects().remove(effect);
-						
-					});	
-					if (getRemaining(player) <= 0) { 
-						cancel();
-					}
-				}
-            	
-            }.runTaskLater(Chambers.getInstance(), 20L);
-		}
-	}
+	        // Verificar si el ítem tiene el lore "antidote"
+	        if (!ItemUtil.hasLore(item, "antidote")) return;
+
+	        if (getRemaining(player) > 0) {
+	            long seconds = getRemaining(player);
+	            player.sendMessage(ChatColor.RED + "You still have " + seconds + "s of Antidote cooldown!");
+	            event.setCancelled(true);
+	            return;
+	        }
+
+
+	        setCooldown(player, player.getUniqueId());
+
+	        player.sendMessage(ChatColor.GREEN + "Antidote activated! You are protected for 15 seconds.");
+
+	   
+	        new BukkitRunnable() {
+	            @Override
+	            public void run() {
+
+	                if (getRemaining(player) <= 0 || !player.isOnline()) {
+	                    cancel();
+	                    return;
+	                }
+
+	                for (PotionEffectType type : potions) {
+	                    if (player.hasPotionEffect(type)) {
+	                        player.removePotionEffect(type);
+	                    }
+	                }
+	            }
+	        }.runTaskTimer(Chambers.getInstance(), 0L, 10L);
+	    }
+
+
 	@Override
 	public boolean setCooldown(Player player, UUID uniqueID) {
 		return super.setCooldown(player, uniqueID);

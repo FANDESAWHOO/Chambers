@@ -88,8 +88,8 @@ public class CombatMenu extends ChestMenu {
         // BARD HERE
         inventory.setItem(17, goldHelmet);
         inventory.setItem(26, goldChestplate);
-        inventory.setItem(34, goldLeggings);
-        inventory.setItem(45, goldBoots);
+        inventory.setItem(35, goldLeggings);
+        inventory.setItem(44, goldBoots);
         inventory.setItem(24, bardSet);
         for (int i = 0; i < 6 * 9; i++) {
             if (inventory.getItem(i) != null) continue;
@@ -150,19 +150,6 @@ public class CombatMenu extends ChestMenu {
                 cost = 150; toGive = new ItemStack(Material.GOLD_LEGGINGS);
             } else if (current.isSimilar(goldBoots)) {
                 cost = 65; toGive = new ItemStack(Material.GOLD_BOOTS);
-            }  else if (current.isSimilar(bardSet)) {
-                cost = 600;
-                if (balance < cost) {
-                    player.sendMessage(ChatColor.RED + "Not enough balance!");
-                    return;
-                }
-                player.getInventory().setHelmet(new ItemStack(Material.GOLD_HELMET));
-                player.getInventory().setChestplate(new ItemStack(Material.GOLD_CHESTPLATE));
-                player.getInventory().setLeggings(new ItemStack(Material.GOLD_LEGGINGS));
-                player.getInventory().setBoots(new ItemStack(Material.GOLD_BOOTS));
-                profile.setBalance(balance - cost);
-                player.sendMessage(ChatColor.GREEN + "You bought a full diamond set for $" + cost);
-                return;
             }
         } else if (ItemUtil.hasLore(current, "Potion")) {
         	if (current.isSimilar(speedPotion)) {
@@ -207,7 +194,20 @@ public class CombatMenu extends ChestMenu {
         		cost = 30; toGive = new ItemStack(Material.GHAST_TEAR);
         	} else if (current.isSimilar(jumpboost)) {
         		cost = 15; toGive = new ItemStack(Material.FEATHER);
-        	}
+        	}  else if (current.isSimilar(bardSet)) {
+                cost = 600;
+                if (balance < cost) {
+                    player.sendMessage(ChatColor.RED + "Not enough balance!");
+                    return;
+                }
+                player.getInventory().setHelmet(new ItemStack(Material.GOLD_HELMET));
+                player.getInventory().setChestplate(new ItemStack(Material.GOLD_CHESTPLATE));
+                player.getInventory().setLeggings(new ItemStack(Material.GOLD_LEGGINGS));
+                player.getInventory().setBoots(new ItemStack(Material.GOLD_BOOTS));
+                profile.setBalance(balance - cost);
+                player.sendMessage(ChatColor.GREEN + "You bought a full diamond set for $" + cost);
+                return;
+            }
         } else if (ItemUtil.hasLore(current, "Bow")) {
         	   cost = 150; toGive = new ItemStack(Material.BOW);
         } else if (ItemUtil.hasLore(current, "Arrow")) {

@@ -57,7 +57,13 @@ public class ProfileStatusListener implements Listener {
 		if (event.isCancelled()) {
 			return;
 		}
-		
+		if (event.getDamager() instanceof Player) {
+			Profile profile = Chambers.getInstance().getProfileManager().getProfileByUuid(event.getEntity().getUniqueId());
+			if (profile.getProfileStatus().equals(ProfileStatus.RESPAWNING) || profile.getProfileStatus().equals(ProfileStatus.SPECTATING)) {
+				event.setCancelled(true);
+				return;
+			}
+		}
 		if (event.getEntity() instanceof Player && event.getDamager() instanceof Player) {
 			Profile profile = Chambers.getInstance().getProfileManager().getProfileByUuid(event.getEntity().getUniqueId());
 			if (profile.getProfileStatus() != ProfileStatus.PLAYING && profile.getProfileStatus() != ProfileStatus.BUILDING) {
