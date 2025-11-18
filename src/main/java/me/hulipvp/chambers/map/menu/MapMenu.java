@@ -74,10 +74,8 @@ public class MapMenu extends ChestMenu {
         int slot = event.getRawSlot();
 
 
-      // bloqueo doble voto global
        if (plugin.getMapHandler().hasVoted(uuid)) {
-         player.sendMessage(ChatColor.RED + "Ya votaste un mapa.");
-         return;
+         plugin.getMapHandler().getVotes().remove(uuid);
      }
 
    
@@ -110,9 +108,7 @@ public class MapMenu extends ChestMenu {
         }
     }
 
-    public void vote(Player player, Map map) {
-    	
-    }
+
     
     @Override
     public String getTitle() {
